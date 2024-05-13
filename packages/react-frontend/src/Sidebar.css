@@ -1,0 +1,62 @@
+.sidebar {
+    background-color: #D2C0C0;
+    width: 200px;
+    height: 100vh; /* Set height to 100% of the viewport height */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dividers-folders {
+    padding: 20px;
+    flex-grow: 1; /* Allow the dividers-folders section to grow and take up the remaining height */
+    overflow-y: auto; /* Add scrollbar if the content exceeds the available height */
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+  }
+  
+  .home-button {
+    background-color: #F38D8D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .divider {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .folder-button {
+    background-color: #F38D8D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .add-button-container {
+    padding: 20px;
+  }
+  
+  .add-button {
+    background-color: #F38D8D;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    font-size: 24px;
+    cursor: pointer;
+  }
