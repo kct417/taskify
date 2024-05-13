@@ -1,17 +1,19 @@
-import './Sidebar.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <button className="home-button">Home</button>
+    <div className="d-flex flex-column" style={{ backgroundColor: '#D2C0C0', width: '200px', height: '100vh' }}>
+      <div className="p-3">
+        <button className="btn btn-primary rounded-pill" style={{ backgroundColor: '#F38D8D', borderColor: '#F38D8D' }}>Home</button>
       </div>
-      <div className="dividers-folders">
-        <div className="divider">Physics</div>
-        <button className="folder-button">Homework</button>
+      <div className="flex-grow-1 p-3 overflow-auto">
+        <div className="fw-bold mb-2">Physics</div>
+        <button className="btn btn-primary rounded-pill mb-2" style={{ backgroundColor: '#F38D8D', borderColor: '#F38D8D' }}>Homework</button>
       </div>
-      <div className="add-button-container">
-        <button className="add-button">+</button>
+      <div className="p-3 d-flex justify-content-left">
+        <button className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: '#F38D8D', borderColor: '#F38D8D', width: '50px', height: '50px' }}>
+          <span className="fs-3">+</span>
+        </button>
       </div>
     </div>
   );
