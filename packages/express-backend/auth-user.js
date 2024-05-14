@@ -86,7 +86,9 @@ export async function loginUser(req, res) {
 
 		if (!retrievedUser) {
 			// invalid username
-			return res.status(401).send('Unauthorized');
+			return res
+				.status(401)
+				.send('Unauthorized: Invalid username or password');
 		}
 
 		const matched = await bcrypt.compare(
@@ -99,11 +101,13 @@ export async function loginUser(req, res) {
 			return res.status(200).send({ token: token });
 		} else {
 			// invalid password
-			return res.status(401).send('Unauthorized');
+			return res
+				.status(401)
+				.send('Unauthorized: Invalid username or password');
 		}
 	} catch (error) {
 		console.error(error);
-		return res.status(401).send('Unauthorized');
+		return res.status(500).send('Internal Server Error');
 	}
 }
 

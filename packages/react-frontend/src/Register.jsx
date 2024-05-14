@@ -2,19 +2,19 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Login(props) {
+function Register(props) {
 	const [creds, setCreds] = useState({
 		username: '',
 		password: '',
 	});
-	const [loginSuccess, setLoginSuccess] = useState(false);
+	const [registrationSuccess, setRegistrationSuccess] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (loginSuccess) {
+		if (registrationSuccess) {
 			navigate('/tasks');
 		}
-	}, [loginSuccess, navigate]);
+	}, [registrationSuccess, navigate]);
 
 	function handleChange(event) {
 		const { name, value } = event.target;
@@ -28,8 +28,8 @@ function Login(props) {
 		}
 	}
 
-	function loginUser() {
-		const promise = fetch(`${props.API_PREFIX}/login`, {
+	function registerUser() {
+		const promise = fetch(`${props.API_PREFIX}/register`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -37,27 +37,27 @@ function Login(props) {
 			body: JSON.stringify(creds),
 		})
 			.then((response) => {
-				if (response.status === 200) {
+				if (response.status === 201) {
 					response
 						.json()
 						.then((payload) => props.setToken(payload.token));
 					console.log(
-						`Login successful for user: '${creds.username}'`,
+						`Registration successful for user: '${creds.username}'`,
 					);
 					console.log(`Auth token saved`);
-					setLoginSuccess(true);
+					setRegistrationSuccess(true);
 				} else {
 					response
 						.text()
 						.then((text) =>
 							console.log(
-								`Login Error ${response.status}: ${text}`,
+								`Registration Error ${response.status}: ${text}`,
 							),
 						);
 				}
 			})
 			.catch((error) => {
-				console.log(`Login Error: ${error}`);
+				console.log(`Registration Error: ${error}`);
 			});
 
 		return promise;
@@ -81,14 +81,14 @@ function Login(props) {
 				value={creds.password}
 				onChange={handleChange}
 			/>
-			<input type="button" value={'Log In'} onClick={loginUser} />
+			<input type="button" value={'Register'} onClick={registerUser} />
 		</form>
 	);
 }
 
-Login.propTypes = {
+Register.propTypes = {
 	API_PREFIX: PropTypes.string,
 	setToken: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default Register;
