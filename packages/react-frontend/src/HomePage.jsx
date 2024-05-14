@@ -1,6 +1,3 @@
-// import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 const HomePage = () => {
   const sidebarButtonColor = '#F38D8D'; // Define the sidebar button color as a variable
 

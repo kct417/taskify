@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Sidebar from "./Sidebar";
 import HomePage from "./HomePage";
 

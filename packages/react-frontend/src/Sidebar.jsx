@@ -1,5 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-
 const Sidebar = () => {
   return (
     <div className="d-flex flex-column" style={{ backgroundColor: '#D2C0C0', width: '200px', height: '100vh' }}>
