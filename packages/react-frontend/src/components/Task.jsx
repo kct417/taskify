@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import Table from './Table';
-import Form from './TaskForm';
+import Form from './Form';
 
 function Task(props) {
 	const [tasks, setTasks] = useState([]);

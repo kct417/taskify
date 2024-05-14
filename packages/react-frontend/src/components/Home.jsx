@@ -1,4 +1,4 @@
-const HomePage = () => {
+const Home = () => {
 	const sidebarButtonColor = '#F38D8D'; // Define the sidebar button color as a variable
 
 	return (
@@ -42,4 +42,4 @@ const HomePage = () => {
 	);
 };
 
-export default HomePage;
+export default Home;

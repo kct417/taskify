@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Register(props) {
@@ -7,14 +7,7 @@ function Register(props) {
 		username: '',
 		password: '',
 	});
-	const [registrationSuccess, setRegistrationSuccess] = useState(false);
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (registrationSuccess) {
-			navigate('/tasks');
-		}
-	}, [registrationSuccess, navigate]);
 
 	function handleChange(event) {
 		const { name, value } = event.target;
@@ -28,39 +21,34 @@ function Register(props) {
 		}
 	}
 
-	function registerUser() {
-		const promise = fetch(`${props.API_PREFIX}/register`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(creds),
-		})
-			.then((response) => {
-				if (response.status === 201) {
-					response
-						.json()
-						.then((payload) => props.setToken(payload.token));
+	async function registerUser() {
+		try {
+			const response = await fetch(`${props.API_PREFIX}/register`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(creds),
+			});
+
+			if (response.status === 201) {
+				const payload = await response.json();
+				props.handleLoginAndRegister(payload.token, () => {
 					console.log(
 						`Registration successful for user: '${creds.username}'`,
 					);
 					console.log(`Auth token saved`);
-					setRegistrationSuccess(true);
-				} else {
-					response
-						.text()
-						.then((text) =>
-							console.log(
-								`Registration Error ${response.status}: ${text}`,
-							),
-						);
-				}
-			})
-			.catch((error) => {
-				console.log(`Registration Error: ${error}`);
-			});
-
-		return promise;
+					navigate('/tasks');
+				});
+			} else {
+				const text = await response.text();
+				throw new Error(
+					`Registration Error ${response.status}: ${text}`,
+				);
+			}
+		} catch (error) {
+			console.log(`Registration Error: ${error.message}`);
+		}
 	}
 
 	return (
@@ -88,7 +76,7 @@ function Register(props) {
 
 Register.propTypes = {
 	API_PREFIX: PropTypes.string,
-	setToken: PropTypes.func.isRequired,
+	handleLoginAndRegister: PropTypes.func.isRequired,
 };
 
 export default Register;

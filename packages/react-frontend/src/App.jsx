@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import HomePage from './HomePage';
-import Register from './Register';
-import Login from './Login';
-import Task from './Task';
+import Register from './components/Register';
+import Login from './components/Login';
+import Sidebar from './components/Sidebar';
+import Home from './components/Home';
+import Task from './components/Task';
 
 const API_PREFIX = 'http://localhost:8000';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const [token, setToken] = useState(INVALID_TOKEN);
+
+	const handleLoginAndRegister = (newToken, callback) => {
+		setToken(newToken);
+		if (callback) {
+			callback();
+		}
+	};
 
 	return (
 		<BrowserRouter>
@@ -21,7 +28,7 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								setToken={setToken}
+								handleLoginAndRegister={handleLoginAndRegister}
 							/>
 						</div>
 					}
@@ -32,7 +39,7 @@ function App() {
 						<div>
 							<Register
 								API_PREFIX={API_PREFIX}
-								setToken={setToken}
+								handleLoginAndRegister={handleLoginAndRegister}
 							/>
 						</div>
 					}
@@ -42,7 +49,7 @@ function App() {
 					element={
 						<div>
 							<Sidebar />
-							<HomePage />
+							<Home />
 						</div>
 					}
 				/>
