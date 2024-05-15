@@ -1,12 +1,11 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Sidebar from "./Sidebar";
-import HomePage from "./HomePage";
+import Sidebar from "./components/Sidebar";
+import HomePage from "./components/HomePage";
 
 function App() {
   return (
     <div className="d-flex">
-      <Sidebar />
-      <HomePage />
+        <Sidebar />
+        <HomePage />
     </div>
   );
 }
