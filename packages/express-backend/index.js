@@ -11,7 +11,7 @@ const API_PREFIX = `http://localhost:${port}`;
 app.use(cors());
 app.use(express.json());
 
-app.post('/register', registerUser);
+app.post('/signup', registerUser);
 
 app.post('/login', loginUser);
 

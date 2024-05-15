@@ -11,12 +11,6 @@ const UserTasks = new mongoose.Schema(
 			type: String,
 			required: true,
 			trim: true,
-			validate(value) {
-				if (value.length < 1)
-					throw new Error(
-						'Invalid task, must be at least 1 character.',
-					);
-			},
 		},
 		description: {
 			type: String,

@@ -1,7 +1,7 @@
 // src/Table.jsx
 import PropTypes from 'prop-types';
 
-function TableHeader() {
+const TableHeader = () => {
 	return (
 		<thead>
 			<tr>
@@ -11,41 +11,36 @@ function TableHeader() {
 			</tr>
 		</thead>
 	);
-}
+};
 
-function TableBody(props) {
-	if (props.taskData === null) {
+const TableBody = ({ taskData, removeTask }) => {
+	if (taskData === null) {
 		return <caption>Data Unavailable</caption>;
 	}
 
-	const rows = props.taskData.map((row, index) => {
+	const rows = taskData.map((row, index) => {
 		return (
 			<tr key={index}>
 				<td>{row.taskname}</td>
 				<td>{row.description}</td>
 				<td>{row._id}</td>
 				<td>
-					<button onClick={() => props.removeTask(index)}>
-						Delete
-					</button>
+					<button onClick={() => removeTask(index)}>Delete</button>
 				</td>
 			</tr>
 		);
 	});
 	return <tbody>{rows}</tbody>;
-}
+};
 
-function Table(props) {
+const Table = ({ taskData, removeTask }) => {
 	return (
 		<table>
 			<TableHeader />
-			<TableBody
-				taskData={props.taskData}
-				removeTask={props.removeTask}
-			/>
+			<TableBody taskData={taskData} removeTask={removeTask} />
 		</table>
 	);
-}
+};
 
 TableBody.propTypes = {
 	taskData: PropTypes.array,

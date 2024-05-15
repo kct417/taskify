@@ -1,29 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Form from './Form';
 
-function Register(props) {
-	const [creds, setCreds] = useState({
-		username: '',
-		password: '',
-	});
+const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
-	function handleChange(event) {
-		const { name, value } = event.target;
-		switch (name) {
-			case 'username':
-				setCreds({ ...creds, username: value });
-				break;
-			case 'password':
-				setCreds({ ...creds, password: value });
-				break;
-		}
-	}
-
-	async function registerUser() {
+	async function registerUser(creds) {
 		try {
-			const response = await fetch(`${props.API_PREFIX}/register`, {
+			const response = await fetch(`${API_PREFIX}/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -33,7 +17,7 @@ function Register(props) {
 
 			if (response.status === 201) {
 				const payload = await response.json();
-				props.handleLoginAndRegister(payload.token, () => {
+				handleLoginAndRegister(payload.token, () => {
 					console.log(
 						`Registration successful for user: '${creds.username}'`,
 					);
@@ -52,31 +36,22 @@ function Register(props) {
 	}
 
 	return (
-		<form>
-			<label htmlFor="username">UserName</label>
-			<input
-				type="text"
-				name="username"
-				id="username"
-				value={creds.username}
-				onChange={handleChange}
-			/>
-			<label htmlFor="password">Password</label>
-			<input
-				type="password"
-				name="password"
-				id="password"
-				value={creds.password}
-				onChange={handleChange}
-			/>
-			<input type="button" value={'Register'} onClick={registerUser} />
-		</form>
+		<Form
+			fields={[
+				['firstName', 'Enter your firstname'],
+				['lastName', 'Enter your lastname'],
+				['username', 'Create your username'],
+				['password', 'Create your password'],
+			]}
+			submitFunc={registerUser}
+			buttonText={'Sign Up'}
+		/>
 	);
-}
+};
 
-Register.propTypes = {
+RegistrationForm.propTypes = {
 	API_PREFIX: PropTypes.string,
 	handleLoginAndRegister: PropTypes.func.isRequired,
 };
 
-export default Register;
+export default RegistrationForm;

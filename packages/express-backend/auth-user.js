@@ -6,7 +6,7 @@ import {
 } from '../mongoose-database/services/user-services.js';
 
 export async function registerUser(req, res) {
-	const { username, password } = req.body;
+	const { firstName, lastName, username, password } = req.body;
 
 	try {
 		if (!username || !password) {
@@ -24,6 +24,8 @@ export async function registerUser(req, res) {
 		console.log('Token:', token);
 
 		const userToAdd = {
+			firstName: firstName,
+			lastName: lastName,
 			username: username,
 			hashedPassword: hashedPassword,
 		};

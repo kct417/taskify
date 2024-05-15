@@ -2,9 +2,9 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import Table from './Table';
-import Form from './Form';
+import Form from './TaskList';
 
-function Task(props) {
+const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const [tasks, setTasks] = useState([]);
 
 	useEffect(() => {
@@ -57,7 +57,7 @@ function Task(props) {
 	}
 
 	function fetchTasks() {
-		const promise = fetch(`${props.API_PREFIX}/tasks`, {
+		const promise = fetch(`${API_PREFIX}/tasks`, {
 			headers: addAuthHeader(),
 		});
 
@@ -65,7 +65,7 @@ function Task(props) {
 	}
 
 	function postTask(task) {
-		const promise = fetch(`${props.API_PREFIX}/tasks`, {
+		const promise = fetch(`${API_PREFIX}/tasks`, {
 			method: 'POST',
 			headers: addAuthHeader({
 				'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function Task(props) {
 	}
 
 	function deleteTask(id) {
-		const promise = fetch(`${props.API_PREFIX}/tasks/${id}`, {
+		const promise = fetch(`${API_PREFIX}/tasks/${id}`, {
 			method: 'DELETE',
 			headers: addAuthHeader({
 				'Content-Type': 'application/json',
@@ -88,12 +88,12 @@ function Task(props) {
 	}
 
 	function addAuthHeader(otherHeaders = {}) {
-		if (props.token === props.INVALID_TOKEN) {
+		if (token === INVALID_TOKEN) {
 			return otherHeaders;
 		} else {
 			return {
 				...otherHeaders,
-				Authorization: `Bearer ${props.token}`,
+				Authorization: `Bearer ${token}`,
 			};
 		}
 	}
@@ -104,7 +104,7 @@ function Task(props) {
 			<Form handleSubmit={updateTask} />
 		</div>
 	);
-}
+};
 
 Task.propTypes = {
 	API_PREFIX: PropTypes.string,

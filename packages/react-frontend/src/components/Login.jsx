@@ -1,22 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Form from './Form';
 
-function Login(props) {
-	const [creds, setCreds] = useState({
-		username: '',
-		password: '',
-	});
+const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
-	function handleChange(event) {
-		const { name, value } = event.target;
-		setCreds({ ...creds, [name]: value });
-	}
-
-	async function loginUser() {
+	async function loginUser(creds) {
 		try {
-			const response = await fetch(`${props.API_PREFIX}/login`, {
+			const response = await fetch(`${API_PREFIX}/login`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -26,7 +17,7 @@ function Login(props) {
 
 			if (response.status === 200) {
 				const payload = await response.json();
-				props.handleLoginAndRegister(payload.token, () => {
+				handleLoginAndRegister(payload.token, () => {
 					console.log(
 						`Login successful for user: '${creds.username}'`,
 					);
@@ -43,46 +34,20 @@ function Login(props) {
 	}
 
 	return (
-		<div className="container">
-			<form className="vstack">
-				<div className="form-group text-left">
-					<label>Username</label>
-					<input
-						type="text"
-						className="form-control"
-						id="username"
-						name="username"
-						placeholder="Enter your username"
-						value={creds.username}
-						onChange={handleChange}
-					/>
-				</div>
-				<div className="form-group text-left">
-					<label>Password</label>
-					<input
-						type="password"
-						className="form-control"
-						id="password"
-						name="password"
-						placeholder="Enter your password"
-						value={creds.password}
-						onChange={handleChange}
-					/>
-				</div>
-				<button
-					type="button"
-					className="btn btn-primary"
-					onClick={loginUser}>
-					Log In
-				</button>
-			</form>
-		</div>
+		<Form
+			fields={[
+				['username', 'Create your username'],
+				['password', 'Create your password'],
+			]}
+			submitFunc={loginUser}
+			buttonText={'Log In'}
+		/>
 	);
-}
+};
 
-Login.propTypes = {
+LoginForm.propTypes = {
 	API_PREFIX: PropTypes.string,
 	handleLoginAndRegister: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default LoginForm;

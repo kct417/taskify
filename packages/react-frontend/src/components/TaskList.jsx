@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-// src/Form.jsx
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-function Form(props) {
+const TaskList = ({ handleSubmit }) => {
 	const [task, setTask] = useState({
 		taskname: '',
 		description: '',
@@ -20,8 +18,8 @@ function Form(props) {
 			});
 	}
 
-	function submitForm() {
-		props.handleSubmit(task);
+	function submitTaskList() {
+		handleSubmit(task);
 		setTask({ taskname: '', description: '' });
 	}
 
@@ -43,36 +41,13 @@ function Form(props) {
 				value={task.description}
 				onChange={handleChange}
 			/>
-			<input type="button" value="Submit" onClick={submitForm} />
+			<input type="button" value="Submit" onClick={submitTaskList} />
 		</form>
 	);
-}
-
-Form.propTypes = {
-	handleSubmit: PropTypes.func.isRequired,
-=======
-const Form = ({ fields }) => {
-	console.log(fields);
-	return (
-		<form className="vstack text-center">
-			{fields.map(([fieldname, placeholder]) => {
-				return (
-					<div className="form-group text-left">
-						<label>{fieldname}</label>
-						<input
-							type="text"
-							className="form-control"
-							placeholder={placeholder}
-						/>
-					</div>
-				);
-			})}
-			<button type="submit" className="btn btn-primary">
-				Submit
-			</button>
-		</form>
-	);
->>>>>>> 8f9c9f1e22fd67a89f63ce90db8fab6befda98e7
 };
 
-export default Form;
+TaskList.propTypes = {
+	handleSubmit: PropTypes.func.isRequired,
+};
+
+export default TaskList;
