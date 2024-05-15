@@ -6,7 +6,7 @@ import {
 } from '../mongoose-database/services/user-services.js';
 
 export async function registerUser(req, res) {
-	const { username, password } = req.body; // from form
+	const { username, password } = req.body;
 
 	try {
 		if (!username || !password) {
@@ -36,56 +36,13 @@ export async function registerUser(req, res) {
 	}
 }
 
-// export function registerUser(req, res) {
-// 	const { username, password } = req.body; // from form
-
-// 	if (!username || !password) {
-// 		res.status(400).send('Bad request: Invalid input data.');
-// 	} else {
-// 		userModel
-// 			.exists({ username: username })
-// 			.then((userExists) => {
-// 				if (userExists) {
-// 					res.status(409).send('Username already taken');
-// 				} else {
-// 					bcrypt
-// 						.genSalt(10)
-// 						.then((salt) => bcrypt.hash(password, salt))
-// 						.then((hashedPassword) => {
-// 							return generateAccessToken(username).then(
-// 								(token) => {
-// 									console.log('Token:', token);
-// 									const userToAdd = new userModel({
-// 										username: username,
-// 										hashedPassword: hashedPassword,
-// 									});
-// 									return userToAdd.save().then(() => {
-// 										res.status(201).send({ token: token });
-// 									});
-// 								},
-// 							);
-// 						})
-// 						.catch((error) => {
-// 							console.error(error);
-// 							res.status(500).send('Internal Server Error');
-// 						});
-// 				}
-// 			})
-// 			.catch((error) => {
-// 				console.error(error);
-// 				res.status(500).send('Internal Server Error');
-// 			});
-// 	}
-// }
-
 export async function loginUser(req, res) {
-	const { username, password } = req.body; // from form
+	const { username, password } = req.body;
 
 	try {
 		const retrievedUser = await findUserByName(username);
 
 		if (!retrievedUser) {
-			// invalid username
 			return res
 				.status(401)
 				.send('Unauthorized: Invalid username or password');
@@ -100,7 +57,6 @@ export async function loginUser(req, res) {
 			console.log('Token:', token);
 			return res.status(200).send({ token: token });
 		} else {
-			// invalid password
 			return res
 				.status(401)
 				.send('Unauthorized: Invalid username or password');
@@ -111,44 +67,8 @@ export async function loginUser(req, res) {
 	}
 }
 
-// export function loginUser(req, res) {
-// 	const { username, password } = req.body; // from form
-// 	userModel
-// 		.findOne({ username: username })
-// 		.lean()
-// 		.then((retrievedUser) => {
-// 			if (!retrievedUser) {
-// 				// invalid username
-// 				res.status(401).send('Unauthorized');
-// 			} else {
-// 				bcrypt
-// 					.compare(password, retrievedUser.hashedPassword)
-// 					.then((matched) => {
-// 						if (matched) {
-// 							generateAccessToken(username).then((token) => {
-// 								console.log('Token:', token);
-// 								res.status(200).send({ token: token });
-// 							});
-// 						} else {
-// 							// invalid password
-// 							res.status(401).send('Unauthorized');
-// 						}
-// 					})
-// 					.catch((error) => {
-// 						res.status(401).send('Unauthorized');
-// 						console.log(error);
-// 					});
-// 			}
-// 		})
-// 		.catch((error) => {
-// 			res.status(401).send('Unauthorized');
-// 			console.log(error);
-// 		});
-// }
-
 export function authenticateUser(req, res, next) {
 	const authHeader = req.headers['authorization'];
-	//Getting the 2nd part of the auth header (the token)
 	const token = authHeader && authHeader.split(' ')[1];
 
 	if (!token) {

@@ -43,25 +43,6 @@ function Login(props) {
 	}
 
 	return (
-		// <form>
-		// 	<label htmlFor="username">UserName</label>
-		// 	<input
-		// 		type="text"
-		// 		name="username"
-		// 		id="username"
-		// 		value={creds.username}
-		// 		onChange={handleChange}
-		// 	/>
-		// 	<label htmlFor="password">Password</label>
-		// 	<input
-		// 		type="password"
-		// 		name="password"
-		// 		id="password"
-		// 		value={creds.password}
-		// 		onChange={handleChange}
-		// 	/>
-		// 	<input type="button" value={'Log In'} onClick={loginUser} />
-		// </form>
 		<div className="container">
 			<form className="vstack">
 				<div className="form-group text-left">
