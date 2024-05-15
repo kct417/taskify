@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const UserTasks = new mongoose.Schema(
 	{
+		username: {
+			type: String,
+			required: true,
+			trim: true,
+		},
 		taskname: {
 			type: String,
 			required: true,

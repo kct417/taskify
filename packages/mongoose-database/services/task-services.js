@@ -1,7 +1,7 @@
 import taskModel from '../models/task.js';
 
-export function findTasks() {
-	return taskModel.find();
+export function findTasks(username) {
+	return taskModel.find({ username: username });
 }
 
 export function addTask(task) {

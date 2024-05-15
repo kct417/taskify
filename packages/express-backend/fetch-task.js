@@ -6,7 +6,8 @@ import {
 } from '../mongoose-database/services/task-services.js';
 
 export function getTasks(req, res) {
-	findTasks()
+	const { username } = req.body;
+	findTasks(username)
 		.then((result) => {
 			if (result) {
 				res.status(200).send(result);
