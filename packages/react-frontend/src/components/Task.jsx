@@ -20,7 +20,7 @@ const Task = ({ task, dueDate, handleCheckboxChange }) => {
         />
       </div>
       <div className="text-center flex-grow-1 text-white">
-        {task.name}
+        {task.desc}
       </div>
       <div className="text-end font-weight-bold">
         Due: {dueDate}

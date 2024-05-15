@@ -5,19 +5,19 @@ const HomePage = () => {
   const sidebarButtonColor = "#F38D8D";
 
   const generalTasks = [
-    { id: 1, name: 'Buy groceries', dueDate: '2024-05-15', completed: false },
-    { id: 2, name: 'Clean the house', dueDate: '2024-05-18', completed: false },
+    { id: 1, desc: 'Buy groceries', dueDate: '2024-05-15', completed: false },
+    { id: 2, desc: 'Clean the house', dueDate: '2024-05-18', completed: false },
   ];
   const topTasks = [
-    { id: 3, name: 'Finish project proposal', dueDate: '2024-05-20', completed: false },
-    { id: 4, name: 'Schedule team meeting', dueDate: '2024-05-22', completed: false },
+    { id: 3, desc: 'Finish project proposal', dueDate: '2024-05-20', completed: false },
+    { id: 4, desc: 'Schedule team meeting', dueDate: '2024-05-22', completed: false },
   ];
   const physicsTasks = [
-    { id: 5, name: 'Study for physics exam', dueDate: '2024-06-01', completed: false },
-    { id: 6, name: 'Complete physics lab report', dueDate: '2024-06-05', completed: false },
+    { id: 5, desc: 'Study for physics exam', dueDate: '2024-06-01', completed: false },
+    { id: 6, desc: 'Complete physics lab report', dueDate: '2024-06-05', completed: false },
   ];
   const mathTasks = [
-    { id: 7, name: 'Study for math exam', dueDate: '2024-06-01', completed: false },
+    { id: 7, desc: 'Study for math exam', dueDate: '2024-06-01', completed: false },
   ];
 
   const handleTaskUpdate = (taskId, newCompletedStatus) => {
