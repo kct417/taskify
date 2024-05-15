@@ -1,6 +1,9 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
-const Form = ({ fields, submitFunc }) => {
+
+const Form = ({ fields, submitFunc, buttonText }) => {
 	const [formFields, updateFields] = useState({});
+
 	return (
 		<form className="vstack text-center">
 			{fields.map(([fieldname, placeholder], idx) => {
@@ -11,9 +14,9 @@ const Form = ({ fields, submitFunc }) => {
 							type="text"
 							className="form-control"
 							placeholder={placeholder}
-							onChange={(value) => {
+							onChange={(event) => {
 								const newFields = formFields;
-								newFields[fieldname] = value;
+								newFields[fieldname] = event.target.value;
 								updateFields(newFields);
 							}}
 						/>
@@ -26,10 +29,16 @@ const Form = ({ fields, submitFunc }) => {
 				onClick={() => {
 					submitFunc(formFields);
 				}}>
-				Submit
+				{buttonText}
 			</button>
 		</form>
 	);
+};
+
+Form.propTypes = {
+	buttonText: PropTypes.string,
+	fields: PropTypes.arrayOf(PropTypes.array),
+	submitFunc: PropTypes.func.isRequired,
 };
 
 export default Form;
