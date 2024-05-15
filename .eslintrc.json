@@ -6,7 +6,8 @@
 	],
 	"env": {
 		"browser": true,
-		"es2023": true
+		"es2023": true,
+		"jest": true
 	},
 	"parserOptions": {
 		"ecmaFeatures": {
@@ -17,7 +18,8 @@
 	"rules": {
 		"consistent-return": "error",
 		"eqeqeq": "warn",
-		"react/prop-types": 0
+		"react/prop-types": 0,
+		"react/react-in-jsx-scope": "off"
 	},
 	"settings": {
 		"react": {
