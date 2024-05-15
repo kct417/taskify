@@ -2,22 +2,21 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 const Form = ({ fields, submitFunc, buttonText }) => {
-	const [formFields, updateFields] = useState({});
+	const [formFields] = useState({});
 
 	return (
 		<form className="vstack text-center">
-			{fields.map(([fieldname, placeholder], idx) => {
+			{fields.map((field, idx) => {
+				const { label, placeholder, key } = field;
 				return (
 					<div key={idx} className="form-group text-left">
-						<label>{fieldname}</label>
+						<label>{label}</label>
 						<input
 							type="text"
 							className="form-control"
 							placeholder={placeholder}
 							onChange={(event) => {
-								const newFields = formFields;
-								newFields[fieldname] = event.target.value;
-								updateFields(newFields);
+								formFields[key] = event.target.value;
 							}}
 						/>
 					</div>
@@ -37,7 +36,7 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 
 Form.propTypes = {
 	buttonText: PropTypes.string,
-	fields: PropTypes.arrayOf(PropTypes.array),
+	fields: PropTypes.arrayOf(PropTypes.object),
 	submitFunc: PropTypes.func.isRequired,
 };
 

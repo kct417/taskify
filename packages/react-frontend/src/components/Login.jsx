@@ -1,25 +1,26 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+
 import Form from './Form';
 
 const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
-	async function loginUser(creds) {
+	async function loginUser(credentials) {
 		try {
 			const response = await fetch(`${API_PREFIX}/login`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(creds),
+				body: JSON.stringify(credentials),
 			});
 
 			if (response.status === 200) {
 				const payload = await response.json();
 				handleLoginAndRegister(payload.token, () => {
 					console.log(
-						`Login successful for user: '${creds.username}'`,
+						`Login successful for user: '${credentials.username}'`,
 					);
 					console.log(`Auth token saved`);
 					navigate('/tasks');
@@ -36,8 +37,16 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	return (
 		<Form
 			fields={[
-				['username', 'Create your username'],
-				['password', 'Create your password'],
+				{
+					label: 'Username',
+					placeholder: 'Enter your username',
+					key: 'username',
+				},
+				{
+					label: 'Password',
+					placeholder: 'Enter your password',
+					key: 'password',
+				},
 			]}
 			submitFunc={loginUser}
 			buttonText={'Log In'}

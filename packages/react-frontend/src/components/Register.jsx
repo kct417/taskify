@@ -1,25 +1,26 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+
 import Form from './Form';
 
 const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
-	async function registerUser(creds) {
+	async function registerUser(credentials) {
 		try {
 			const response = await fetch(`${API_PREFIX}/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(creds),
+				body: JSON.stringify(credentials),
 			});
 
 			if (response.status === 201) {
 				const payload = await response.json();
 				handleLoginAndRegister(payload.token, () => {
 					console.log(
-						`Registration successful for user: '${creds.username}'`,
+						`Registration successful for user: '${credentials.username}'`,
 					);
 					console.log(`Auth token saved`);
 					navigate('/tasks');
@@ -38,10 +39,26 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	return (
 		<Form
 			fields={[
-				['firstName', 'Enter your firstname'],
-				['lastName', 'Enter your lastname'],
-				['username', 'Create your username'],
-				['password', 'Create your password'],
+				{
+					label: 'First Name',
+					placeholder: 'Enter your first name',
+					key: 'firstName',
+				},
+				{
+					label: 'Last Name',
+					placeholder: 'Enter your last name',
+					key: 'lastName',
+				},
+				{
+					label: 'Username',
+					placeholder: 'Enter your username',
+					key: 'username',
+				},
+				{
+					label: 'Password',
+					placeholder: 'Enter your password',
+					key: 'password',
+				},
 			]}
 			submitFunc={registerUser}
 			buttonText={'Sign Up'}

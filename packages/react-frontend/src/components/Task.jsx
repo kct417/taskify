@@ -1,13 +1,20 @@
-// src/MyApp.jsx
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import Table from './Table';
+import { useNavigate } from 'react-router-dom';
+
+import Table from './TaskTable';
 import Form from './TaskList';
 
 const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const [tasks, setTasks] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
+		if (token === INVALID_TOKEN) {
+			navigate('/');
+			return;
+		}
+
 		fetchTasks()
 			.then((res) => (res.status === 200 ? res.json() : undefined))
 			.then((json) => {
@@ -88,14 +95,10 @@ const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	}
 
 	function addAuthHeader(otherHeaders = {}) {
-		if (token === INVALID_TOKEN) {
-			return otherHeaders;
-		} else {
-			return {
-				...otherHeaders,
-				Authorization: `Bearer ${token}`,
-			};
-		}
+		return {
+			...otherHeaders,
+			Authorization: `Bearer ${token}`,
+		};
 	}
 
 	return (

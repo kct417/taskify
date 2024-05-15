@@ -1,4 +1,3 @@
-// src/Table.jsx
 import PropTypes from 'prop-types';
 
 const TableHeader = () => {
