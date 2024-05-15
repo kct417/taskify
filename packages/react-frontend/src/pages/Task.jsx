@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Table from './TaskTable';
-import Form from './TaskList';
+import Table from '../components/TaskTable';
+import Form from '../components/TaskList';
 
 const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const [tasks, setTasks] = useState([]);

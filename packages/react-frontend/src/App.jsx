@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Register from './components/Register';
-import Login from './components/Login';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Sidebar from './components/Sidebar';
-import Home from './components/Home';
-import Task from './components/Task';
+import Home from './components/Default';
+import Task from './pages/Task';
 
 const API_PREFIX = 'http://localhost:8000';
 

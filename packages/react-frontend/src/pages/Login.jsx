@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import Form from './Form';
+import Form from '../components/Form';
 
 const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
@@ -45,6 +45,7 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				{
 					label: 'Password',
 					placeholder: 'Enter your password',
+					type: 'password',
 					key: 'password',
 				},
 			]}

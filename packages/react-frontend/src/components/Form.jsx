@@ -7,12 +7,12 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 	return (
 		<form className="vstack text-center">
 			{fields.map((field, idx) => {
-				const { label, placeholder, key } = field;
+				const { label, placeholder, type, key } = field;
 				return (
 					<div key={idx} className="form-group text-left">
 						<label>{label}</label>
 						<input
-							type="text"
+							type={type}
 							className="form-control"
 							placeholder={placeholder}
 							onChange={(event) => {
