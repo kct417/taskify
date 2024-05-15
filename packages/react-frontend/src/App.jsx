@@ -45,11 +45,11 @@ function App() {
 				/>
 				<Route
 					path="/home"
-					element={<div>
-            <Home
-              API_PREFIX={API_PREFIX}
-            />
-          </div>}
+					element={
+						<div>
+							<Home API_PREFIX={API_PREFIX} />
+						</div>
+					}
 				/>
 				<Route
 					path="/tasks"
