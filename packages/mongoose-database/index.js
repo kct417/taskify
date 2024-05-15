@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { config } from 'dotenv';
 
-const ENV_PATH = '../.env';
+const ENV_PATH = '../../.env';
 
 config({ path: ENV_PATH });
 
