@@ -1,13 +1,73 @@
-import Sidebar from "./components/Sidebar";
-import HomePage from "./components/HomePage";
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Sidebar from './components/Sidebar';
+import Home from './components/Default';
+import Task from './pages/Task';
+
+const API_PREFIX = 'http://localhost:8000';
 
 function App() {
-  return (
-    <div className="d-flex">
-        <Sidebar />
-        <HomePage />
-    </div>
-  );
+	const INVALID_TOKEN = 'INVALID_TOKEN';
+	const [token, setToken] = useState(INVALID_TOKEN);
+
+	const handleLoginAndRegister = (newToken, callback) => {
+		setToken(newToken);
+		if (callback) {
+			callback();
+		}
+	};
+
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<div>
+							<Login
+								API_PREFIX={API_PREFIX}
+								handleLoginAndRegister={handleLoginAndRegister}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/signup"
+					element={
+						<div>
+							<Register
+								API_PREFIX={API_PREFIX}
+								handleLoginAndRegister={handleLoginAndRegister}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/home"
+					element={
+						<div>
+							<Sidebar />
+							<Home />
+						</div>
+					}
+				/>
+				<Route
+					path="/tasks"
+					element={
+						<div className="d-flex">
+							<Task
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
+						</div>
+					}
+				/>
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
 export default App;

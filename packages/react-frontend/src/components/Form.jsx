@@ -1,20 +1,22 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
-const Form = ({ fields, submitFunc }) => {
-	const [formFields, updateFields] = useState({});
+
+const Form = ({ fields, submitFunc, buttonText }) => {
+	const [formFields] = useState({});
+
 	return (
 		<form className="vstack text-center">
-			{fields.map(([fieldname, placeholder], idx) => {
+			{fields.map((field, idx) => {
+				const { label, placeholder, type, key } = field;
 				return (
 					<div key={idx} className="form-group text-left">
-						<label>{fieldname}</label>
+						<label>{label}</label>
 						<input
-							type="text"
+							type={type}
 							className="form-control"
 							placeholder={placeholder}
-							onChange={(value) => {
-								const newFields = formFields;
-								newFields[fieldname] = value;
-								updateFields(newFields);
+							onChange={(event) => {
+								formFields[key] = event.target.value;
 							}}
 						/>
 					</div>
@@ -26,10 +28,16 @@ const Form = ({ fields, submitFunc }) => {
 				onClick={() => {
 					submitFunc(formFields);
 				}}>
-				Submit
+				{buttonText}
 			</button>
 		</form>
 	);
+};
+
+Form.propTypes = {
+	buttonText: PropTypes.string,
+	fields: PropTypes.arrayOf(PropTypes.object),
+	submitFunc: PropTypes.func.isRequired,
 };
 
 export default Form;
