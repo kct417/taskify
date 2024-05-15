@@ -16,6 +16,9 @@ const HomePage = () => {
     { id: 5, name: 'Study for physics exam', dueDate: '2024-06-01', completed: false },
     { id: 6, name: 'Complete physics lab report', dueDate: '2024-06-05', completed: false },
   ];
+  const mathTasks = [
+    { id: 7, name: 'Study for math exam', dueDate: '2024-06-01', completed: false },
+  ];
 
   const handleTaskUpdate = (taskId, newCompletedStatus) => {
     console.log(`Task ${taskId} completed status updated to ${newCompletedStatus}`);
@@ -51,6 +54,12 @@ const HomePage = () => {
             <section className="mb-5 p-3 bg-white rounded">
               <h2 className="text-decoration-underline mb-3" style={{ color: sidebarButtonColor }}>Physics</h2>
               <TaskList tasks={physicsTasks} handleTaskUpdate={handleTaskUpdate} />
+            </section>
+          </div>
+          <div className="col-12">
+            <section className="mb-5 p-3 bg-white rounded">
+              <h2 className="text-decoration-underline mb-3" style={{ color: sidebarButtonColor }}>Math</h2>
+              <TaskList tasks={mathTasks} handleTaskUpdate={handleTaskUpdate} />
             </section>
           </div>
         </div>
