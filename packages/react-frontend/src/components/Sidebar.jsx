@@ -1,4 +1,8 @@
+import React, { useState } from 'react';
+import MenuPopup from './MenuPopup';
 const Sidebar = () => {
+	const [showPopup, setShowPopup] = useState(false);
+
 	return (
 		<div
 			className="d-flex flex-column position-relative pl-3"
@@ -9,6 +13,7 @@ const Sidebar = () => {
 				fontSize: '16px',
 				paddingTop: '20px',
 			}}>
+			{showPopup && <MenuPopup />}
 			<div className="p-3">
 				<button
 					className="btn btn-primary rounded-pill text-left"
@@ -48,7 +53,8 @@ const Sidebar = () => {
 						borderColor: '#F38D8D',
 						width: '50px',
 						height: '50px',
-					}}>
+					}}
+					onClick={() => setShowPopup(!showPopup)}>
 					<span
 						className="fs-3"
 						style={{ lineHeight: '0px', fontSize: '30px' }}>
