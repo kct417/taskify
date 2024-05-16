@@ -2,6 +2,7 @@
 	"name": "csc-307-todo-list-app",
 	"version": "1.0.0",
 	"description": "",
+	"type": "module",
 	"main": "index.js",
 	"scripts": {
 		"start": "conc --kill-others --handle-input \"npm run-script backend\" \"npm run-script frontend\"",
