@@ -1,0 +1,30 @@
+name: Continuous Integration
+
+on:
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                node-version: [20.x]
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: npm install
+              run: npm ci
+            - name: linting and prettier check
+              run: npm run lint
+            - name: build and test
+              run: |
+                  npm run -w react-frontend build --if-present
+                  npm test
