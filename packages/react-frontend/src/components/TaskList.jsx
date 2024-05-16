@@ -1,53 +1,21 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
+import React from 'react';
+import Task from './Task';
 
-const TaskList = ({ handleSubmit }) => {
-	const [task, setTask] = useState({
-		taskname: '',
-		description: '',
-	});
-
-	function handleChange(event) {
-		const { name, value } = event.target;
-		if (name === 'description')
-			setTask({ taskname: task['taskname'], description: value });
-		else
-			setTask({
-				taskname: value,
-				description: task['description'],
-			});
-	}
-
-	function submitTaskList() {
-		handleSubmit(task);
-		setTask({ taskname: '', description: '' });
-	}
-
+const TaskList = ({ tasks, handleTaskUpdate }) => {
 	return (
-		<form>
-			<label htmlFor="taskname">TaskName</label>
-			<input
-				type="text"
-				name="taskname"
-				id="taskname"
-				value={task.taskname}
-				onChange={handleChange}
-			/>
-			<label htmlFor="description">Description</label>
-			<input
-				type="text"
-				name="description"
-				id="description"
-				value={task.description}
-				onChange={handleChange}
-			/>
-			<input type="button" value="Submit" onClick={submitTaskList} />
-		</form>
+		<div>
+			{tasks.map((task) => (
+				<Task
+					key={task.id}
+					task={task}
+					dueDate={task.dueDate}
+					handleCheckboxChange={() =>
+						handleTaskUpdate(task.id, !task.completed)
+					}
+				/>
+			))}
+		</div>
 	);
-};
-
-TaskList.propTypes = {
-	handleSubmit: PropTypes.func.isRequired,
 };
 
 export default TaskList;
