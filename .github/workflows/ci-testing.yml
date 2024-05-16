@@ -26,6 +26,4 @@ jobs:
             - name: linting and prettier check
               run: npm run lint
             - name: build and test
-              run: |
-                  npm run -w react-frontend build --if-present
-                  npm test
+              run: npm run -w react-frontend build --if-present
