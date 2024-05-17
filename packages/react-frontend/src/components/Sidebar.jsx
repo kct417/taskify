@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
-import MenuPopup from './MenuPopup';
+import { useState } from 'react';
+
+import Overlay from './Overlay';
+
 const Sidebar = () => {
-	const [showPopup, setShowPopup] = useState(false);
+	const [show, setShow] = useState(false);
+
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
 
 	return (
 		<div
@@ -48,6 +53,8 @@ const Sidebar = () => {
 				style={{ bottom: '10px', left: '10px' }}>
 				<button
 					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
+					type="button"
+					onClick={handleShow}
 					style={{
 						backgroundColor: '#F38D8D',
 						borderColor: '#F38D8D',
@@ -60,8 +67,14 @@ const Sidebar = () => {
 						style={{ lineHeight: '0px', fontSize: '30px' }}>
 						+
 					</span>{' '}
-					{/* Adjust line height to match button height */}
 				</button>
+				<Overlay
+					context={{ title: 'Add Menu', text: 'This is an overlay!' }}
+					fields={[]}
+					buttons={[{ label: 'Folders' }]}
+					show={show}
+					handleClose={handleClose}
+				/>
 			</div>
 		</div>
 	);

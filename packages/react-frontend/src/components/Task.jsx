@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-const Task = ({ task, dueDate, handleCheckboxChange }) => {
+const Task = ({ task, handleCheckboxChange }) => {
 	const [checked, setChecked] = useState(task.completed);
 
 	const handleCheckboxClick = () => {
@@ -24,9 +25,14 @@ const Task = ({ task, dueDate, handleCheckboxChange }) => {
 			<div className="text-center flex-grow-1 text-white">
 				{task.desc}
 			</div>
-			<div className="text-end font-weight-bold">Due: {dueDate}</div>
+			<div className="text-end font-weight-bold">Due: {task.dueDate}</div>
 		</div>
 	);
+};
+
+Task.propTypes = {
+	task: PropTypes.object,
+	handleCheckboxChange: PropTypes.func.isRequired,
 };
 
 export default Task;
