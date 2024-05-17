@@ -1,4 +1,3 @@
-import React from 'react';
 import DefHome from '../components/Default';
 import Sidebar from '../components/Sidebar';
 
