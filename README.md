@@ -40,6 +40,8 @@ In this project, we adhere to the following coding standards to ensure consisten
 -   Use destructuring for object and array assignments where applicable.
 -   Use ES6 features like template literals, spread/rest operators, and default parameters where appropriate.
 -   Handle errors properly using try/catch or promise rejections.
+-   Only import necessary/used modules.
+-   Validate prop types for React componenents.
 
 ### Code Structure
 
@@ -109,10 +111,10 @@ By following these coding standards, we aim to maintain a high level of code qua
 
 ## Auth Sequence Diagram
 
-![Auth Sequence Diagram](https://github.com/kct417/taskify/assets/123007439/46f8b46d-54a3-4dfa-8b62-bef92ce3b027)
+![Auth Sequence Diagram](images/auth-sequence-diagram.jpg)
 
 ## Figma Prototype
 
 Taskify's UI design is prototyped in Figma. Click the image below to view the prototype:
 
-[![Figma Prototype](figma-prototype.png)](https://www.figma.com/design/7g5YAjZ3vnykjcdwRZiJTC/ToDo-List-UI?node-id=0%3A1&t=oC4kI5KMClifi8dm-1)
+[![Figma Prototype](images/figma-prototype.png)](https://www.figma.com/design/7g5YAjZ3vnykjcdwRZiJTC/ToDo-List-UI?node-id=0%3A1&t=oC4kI5KMClifi8dm-1)

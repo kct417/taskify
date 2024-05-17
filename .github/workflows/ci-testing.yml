@@ -21,9 +21,9 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node-version }}
-            - name: npm install
+            - name: Run npm clean install
               run: npm ci
-            - name: linting and prettier check
+            - name: Run linting and prettier check
               run: npm run lint
-            - name: build and test
-              run: npm run -w react-frontend build --if-present
+            - name: Run build
+              run: npm run -w react-frontend build
