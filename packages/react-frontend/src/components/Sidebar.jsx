@@ -19,7 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 const Sidebar = () => {
 	const [items, setItems] = React.useState({
 		Physics: ['Homework'],
-		SoftwareEngineering: [''],
+		SoftwareEngineering: ['Project', 'Assignment', 'Quiz', 'Midterm', 'Final'],
 	});
 
 	const sensors = useSensors(
@@ -37,48 +37,40 @@ const Sidebar = () => {
 	);
 
 	const handleDragEnd = (event) => {
-		const { active, over } = event;
+        const { active, over } = event;
+      
+        if (!over) return;
+      
+        const activeContainer = findContainer(active.id);
+        const overContainer = findContainer(over.id);
+      
+        if (
+          activeContainer !== undefined &&
+          overContainer !== undefined &&
+          activeContainer !== overContainer
+        ) {
+          setItems((prev) => {
+            const activeItems = prev[activeContainer].filter((i) => i !== active.id);
+            const overItems = [...prev[overContainer], active.id];
+      
+            return {
+              ...prev,
+              [activeContainer]: activeItems,
+              [overContainer]: overItems,
+            };
+          });
+        }
+      };
 
-		if (!over) return;
-
-		const activeContainer = findContainer(active.id);
-		const overContainer = findContainer(over.id);
-
-		if (
-			activeContainer &&
-			overContainer &&
-			activeContainer !== overContainer
-		) {
-			setItems((prev) => {
-				const activeItems = prev[activeContainer];
-				const overItems = prev[overContainer];
-				const activeIndex = activeItems.indexOf(active.id);
-				const newActiveItems = [...activeItems];
-				const newOverItems = [...overItems];
-
-				newActiveItems.splice(activeIndex, 1);
-				newOverItems.splice(
-					overItems.indexOf(over.id) + 1,
-					0,
-					active.id,
-				);
-
-				return {
-					...prev,
-					[activeContainer]: newActiveItems,
-					[overContainer]: newOverItems,
-				};
-			});
-		}
-	};
-
-	const findContainer = (id) => {
-		if (items.Physics.includes(id)) {
-			return 'Physics';
-		} else if (items.SoftwareEngineering.includes(id)) {
-			return 'SoftwareEngineering';
-		}
-	};
+      const findContainer = (id) => {
+        if (items.Physics.includes(id)) {
+          return 'Physics';
+        } else if (items.SoftwareEngineering.includes(id)) {
+          return 'SoftwareEngineering';
+        } else {
+          return undefined; // If the id is not present in either container, return undefined
+        }
+      };
 
 	return (
 		<div
