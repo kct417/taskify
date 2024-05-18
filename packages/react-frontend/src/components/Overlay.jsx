@@ -48,10 +48,13 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 					{buttons.map((button, idx) => {
 						const { label, type } = button;
 						return (
-							<div key={idx} className="form-group text-center">
+							<div
+								key={idx}
+								className="form-group text-center"
+								style={{ padding: '0 10px' }}>
 								<button
 									type={type}
-									className="btn btn-primary"
+									className="btn btn-primary btn-block"
 									onClick={handleClose}
 									style={{
 										backgroundColor: '#F38D8D',
