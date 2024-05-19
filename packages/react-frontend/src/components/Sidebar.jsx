@@ -6,6 +6,7 @@ import {
 	TouchSensor,
 	useSensor,
 	useSensors,
+	DragOverlay,
 } from '@dnd-kit/core';
 import {
 	arrayMove,
@@ -21,6 +22,7 @@ const Sidebar = () => {
 		Physics: ['Homework'],
 		SoftwareEngineering: ['Project', 'Assignment', 'Quiz', 'Midterm', 'Final'],
 	});
+	const [activeId, setActiveId] = React.useState(null);
 
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
@@ -30,47 +32,54 @@ const Sidebar = () => {
 		}),
 		useSensor(TouchSensor, {
 			activationConstraint: {
-				delay: 250,
+				delay: 10,
 				tolerance: 5,
 			},
 		}),
 	);
 
-	const handleDragEnd = (event) => {
-        const { active, over } = event;
-      
-        if (!over) return;
-      
-        const activeContainer = findContainer(active.id);
-        const overContainer = findContainer(over.id);
-      
-        if (
-          activeContainer !== undefined &&
-          overContainer !== undefined &&
-          activeContainer !== overContainer
-        ) {
-          setItems((prev) => {
-            const activeItems = prev[activeContainer].filter((i) => i !== active.id);
-            const overItems = [...prev[overContainer], active.id];
-      
-            return {
-              ...prev,
-              [activeContainer]: activeItems,
-              [overContainer]: overItems,
-            };
-          });
-        }
-      };
+	const handleDragStart = (event) => {
+		const { active } = event;
+		setActiveId(active.id);
+	};
 
-      const findContainer = (id) => {
-        if (items.Physics.includes(id)) {
-          return 'Physics';
-        } else if (items.SoftwareEngineering.includes(id)) {
-          return 'SoftwareEngineering';
-        } else {
-          return undefined; // If the id is not present in either container, return undefined
-        }
-      };
+	const handleDragEnd = (event) => {
+		const { active, over } = event;
+		setActiveId(null);
+
+		if (!over) return;
+
+		const activeContainer = findContainer(active.id);
+		const overContainer = over.id;
+
+		if (activeContainer === undefined) {
+			setItems((prev) => ({
+				...prev,
+				[overContainer]: [...(prev[overContainer] || []), active.id],
+			}));
+		} else if (overContainer !== undefined && activeContainer !== overContainer) {
+			setItems((prev) => {
+				const activeItems = prev[activeContainer].filter((i) => i !== active.id);
+				const overItems = [...(prev[overContainer] || []), active.id];
+
+				return {
+					...prev,
+					[activeContainer]: activeItems,
+					[overContainer]: overItems,
+				};
+			});
+		}
+	};
+
+	const findContainer = (id) => {
+		if (items.Physics.includes(id)) {
+			return 'Physics';
+		} else if (items.SoftwareEngineering.includes(id)) {
+			return 'SoftwareEngineering';
+		} else {
+			return undefined;
+		}
+	};
 
 	return (
 		<div
@@ -97,6 +106,7 @@ const Sidebar = () => {
 				<DndContext
 					sensors={sensors}
 					collisionDetection={closestCenter}
+					onDragStart={handleDragStart}
 					onDragEnd={handleDragEnd}>
 					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
 						Physics
@@ -108,6 +118,7 @@ const Sidebar = () => {
 							<SortableItem key={id} id={id} />
 						))}
 					</SortableContext>
+					{items.Physics.length === 0 && <EmptySection id="Physics" />}
 					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
 						Software Engineering
 					</div>
@@ -118,6 +129,10 @@ const Sidebar = () => {
 							<SortableItem key={id} id={id} />
 						))}
 					</SortableContext>
+					{items.SoftwareEngineering.length === 0 && <EmptySection id="SoftwareEngineering" />}
+					<DragOverlay>
+						{activeId ? <SortableItem id={activeId} isDragging /> : null}
+					</DragOverlay>
 				</DndContext>
 			</div>
 			<hr style={{ marginBottom: '20px' }} />
@@ -143,13 +158,15 @@ const Sidebar = () => {
 	);
 };
 
-const SortableItem = ({ id }) => {
-	const { attributes, listeners, setNodeRef, transform, transition } =
-		useSortable({ id });
+const SortableItem = ({ id, isDragging }) => {
+	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+		id,
+	});
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
+		opacity: isDragging ? 0.5 : 1,
 	};
 
 	return (
@@ -166,6 +183,19 @@ const SortableItem = ({ id }) => {
 			{...listeners}>
 			{id}
 		</button>
+	);
+};
+
+const EmptySection = ({ id }) => {
+	return (
+		<div
+			style={{
+				border: '2px dashed #ccc',
+				padding: '20px',
+				textAlign: 'center',
+			}}>
+			Drag items here to add to {id}
+		</div>
 	);
 };
 
