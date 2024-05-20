@@ -82,6 +82,14 @@ const Sidebar = () => {
 				break;
 			case 'Add Divider':
 				content = { title: 'Add Divider', text: '' };
+				fields = [
+					{
+						label: 'Divider',
+						placeholder: 'Enter your Divider',
+						type: 'text',
+						key: 'divider',
+					},
+				];
 				buttons = [
 					{
 						label: 'Add Divider',
