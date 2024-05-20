@@ -19,8 +19,8 @@ import { CSS } from '@dnd-kit/utilities';
 
 const Sidebar = () => {
 	const [items, setItems] = React.useState({
-		Physics: ['Homework'],
-		SoftwareEngineering: ['Project', 'Assignment', 'Quiz', 'Midterm', 'Final'],
+		Physics: ['Homework'], // temp data
+		SoftwareEngineering: ['Project', 'Assignment', 'Quiz', 'Midterm', 'Final'], // temp data
 	});
 	const [activeId, setActiveId] = React.useState(null);
 
@@ -82,6 +82,8 @@ const Sidebar = () => {
 			return 'Physics';
 		} else if (items.SoftwareEngineering.includes(id)) {
 			return 'SoftwareEngineering';
+		} else if (id === 'Physics' || id === 'SoftwareEngineering') {
+			return id;
 		} else {
 			return undefined;
 		}
@@ -123,8 +125,8 @@ const Sidebar = () => {
 						{items.Physics.map((id) => (
 							<SortableItem key={id} id={id} />
 						))}
+						{items.Physics.length === 0 && <EmptySection id="Physics" />}
 					</SortableContext>
-					{items.Physics.length === 0 && <EmptySection id="Physics" />}
 					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
 						Software Engineering
 					</div>
@@ -134,8 +136,8 @@ const Sidebar = () => {
 						{items.SoftwareEngineering.map((id) => (
 							<SortableItem key={id} id={id} />
 						))}
+						{items.SoftwareEngineering.length === 0 && <EmptySection id="SoftwareEngineering" />}
 					</SortableContext>
-					{items.SoftwareEngineering.length === 0 && <EmptySection id="SoftwareEngineering" />}
 					<DragOverlay>
 						{activeId ? <SortableItem id={activeId} isDragging /> : null}
 					</DragOverlay>
@@ -193,8 +195,13 @@ const SortableItem = ({ id, isDragging }) => {
 };
 
 const EmptySection = ({ id }) => {
+	const { setNodeRef } = useSortable({
+		id,
+	});
+
 	return (
 		<div
+			ref={setNodeRef}
 			style={{
 				border: '2px dashed #ccc',
 				padding: '20px',
