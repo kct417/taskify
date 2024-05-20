@@ -1,17 +1,21 @@
 import { useState } from 'react';
-
 import Overlay from './Overlay';
+import MenuPopup from './MenuPopup';
 
 const Sidebar = () => {
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
 		content: null,
+		fields: [],
+		buttons: [],
 	});
 
-	const handleShow = (content) => {
+	const handleShow = (content, fields = [], buttons = []) => {
 		setOverlayConfig({
 			show: true,
-			content: content,
+			content,
+			fields,
+			buttons,
 		});
 	};
 
@@ -19,39 +23,111 @@ const Sidebar = () => {
 		setOverlayConfig({
 			show: false,
 			content: null,
+			fields: [],
+			buttons: [],
 		});
 	};
 
-	const overlayButtons = [
-		{
-			label: 'Add Folders',
-			content: { title: 'Add Folders', text: 'Create a new folder.' },
-			onClick: () =>
-				handleShow({
-					title: 'Add Folders',
-					text: 'Create a new folder.',
-				}),
-		},
-		{
-			label: 'Add Task',
-			content: { title: 'Add Task', text: 'Create a new task.' },
-			onClick: () =>
-				handleShow({ title: 'Add Task', text: 'Create a new task.' }),
-		},
-		{
-			label: 'Add Divider',
-			content: { title: 'Add Divider', text: 'Insert a divider.' },
-			onClick: () =>
-				handleShow({ title: 'Add Divider', text: 'Insert a divider.' }),
-		},
-		{
-			label: 'Prompt AI',
-			content: { title: 'Prompt AI', text: 'Interact with AI.' },
-			onClick: () =>
-				handleShow({ title: 'Prompt AI', text: 'Interact with AI.' }),
-		},
-		{ label: 'Exit', onClick: handleClose },
-	];
+	const handleMenuButtonClick = (buttonType) => {
+		let content = {};
+		let fields = [];
+		let buttons = [];
+
+		switch (buttonType) {
+			case 'Add Folder':
+				content = { title: 'Add Folder', text: '' };
+				fields = [
+					{
+						label: 'Folder Name',
+						placeholder: 'Enter Folder Name',
+						type: 'text',
+						key: 'folderName',
+					},
+				];
+				buttons = [
+					{
+						label: 'Add Folder',
+						type: 'button',
+						onClick: () => alert('Folder added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Add Task':
+				content = { title: 'Add Task', text: '' };
+				fields = [
+					{
+						label: 'Task Name',
+						placeholder: 'Enter Task Name',
+						type: 'text',
+						key: 'taskName',
+					},
+				];
+				buttons = [
+					{
+						label: 'Add Task',
+						type: 'button',
+						onClick: () => alert('Task added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Add Divider':
+				content = { title: 'Add Divider', text: '' };
+				buttons = [
+					{
+						label: 'Add Divider',
+						type: 'button',
+						onClick: () => alert('Divider added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Prompt AI':
+				content = { title: 'Prompt AI', text: '' };
+				fields = [
+					{
+						label: 'Prompt',
+						placeholder: 'Enter your prompt',
+						type: 'text',
+						key: 'prompt',
+					},
+				];
+				buttons = [
+					{
+						label: 'Send Prompt',
+						type: 'button',
+						onClick: () => alert('Prompt sent!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Exit':
+				handleClose();
+				return;
+			default:
+				return;
+		}
+
+		handleShow(content, fields, buttons);
+	};
+
 	return (
 		<div
 			className="d-flex flex-column position-relative pl-3"
@@ -79,7 +155,7 @@ const Sidebar = () => {
 					Physics
 				</div>
 				<button
-					className="btn btn-primary rounded-pill mb-2 text-left ml-4" // Add left margin to indent the button
+					className="btn btn-primary rounded-pill mb-2 text-left ml-4"
 					style={{
 						backgroundColor: '#F38D8D',
 						borderColor: '#F38D8D',
@@ -92,12 +168,12 @@ const Sidebar = () => {
 			<hr style={{ marginBottom: '20px' }} />
 
 			<div
-				className="p-3 position-absolute d-flex justify-content-center" // Center the button horizontally
+				className="p-3 position-absolute d-flex justify-content-center"
 				style={{ bottom: '10px', left: '10px' }}>
 				<button
 					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
 					type="button"
-					onClick={handleShow}
+					onClick={() => handleShow({ title: 'Menu' })}
 					style={{
 						backgroundColor: '#F38D8D',
 						borderColor: '#F38D8D',
@@ -108,19 +184,23 @@ const Sidebar = () => {
 						className="fs-3"
 						style={{ lineHeight: '0px', fontSize: '30px' }}>
 						+
-					</span>{' '}
+					</span>
 				</button>
-
-				{overlayConfig.show && (
-					<Overlay
-						context={overlayConfig.content}
-						fields={[]}
-						buttons={overlayButtons}
-						show={overlayConfig.show}
-						handleClose={handleClose}
-					/>
-				)}
 			</div>
+
+			{overlayConfig.show && overlayConfig.content.title === 'Menu' && (
+				<MenuPopup onButtonClick={handleMenuButtonClick} />
+			)}
+
+			{overlayConfig.show && overlayConfig.content.title !== 'Menu' && (
+				<Overlay
+					context={overlayConfig.content}
+					fields={overlayConfig.fields}
+					buttons={overlayConfig.buttons}
+					show={overlayConfig.show}
+					handleClose={handleClose}
+				/>
+			)}
 		</div>
 	);
 };
