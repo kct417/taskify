@@ -193,13 +193,6 @@ const Sidebar = () => {
 						+
 					</span>
 				</button>
-				<Overlay
-					context={{ title: 'Add Menu', text: 'This is an overlay!' }}
-					fields={[]}
-					buttons={[{ label: 'Folders' }]}
-					show={show}
-					handleClose={handleClose}
-				/>
 			</div>
 		</div>
 	);
