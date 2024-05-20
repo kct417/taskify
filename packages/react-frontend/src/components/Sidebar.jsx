@@ -20,7 +20,13 @@ import { CSS } from '@dnd-kit/utilities';
 const Sidebar = () => {
 	const [items, setItems] = React.useState({
 		Physics: ['Homework'], // temp data
-		SoftwareEngineering: ['Project', 'Assignment', 'Quiz', 'Midterm', 'Final'], // temp data
+		SoftwareEngineering: [
+			'Project',
+			'Assignment',
+			'Quiz',
+			'Midterm',
+			'Final',
+		], // temp data
 	});
 	const [activeId, setActiveId] = React.useState(null);
 
@@ -52,7 +58,8 @@ const Sidebar = () => {
 		const activeContainer = findContainer(active.id);
 		const overContainer = findContainer(over.id);
 
-		if (activeContainer === undefined || overContainer === undefined) return;
+		if (activeContainer === undefined || overContainer === undefined)
+			return;
 
 		if (activeContainer === overContainer) {
 			const containerItems = items[activeContainer];
@@ -61,11 +68,17 @@ const Sidebar = () => {
 
 			setItems((prevItems) => ({
 				...prevItems,
-				[activeContainer]: arrayMove(containerItems, oldIndex, newIndex),
+				[activeContainer]: arrayMove(
+					containerItems,
+					oldIndex,
+					newIndex,
+				),
 			}));
 		} else {
 			setItems((prevItems) => {
-				const activeItems = prevItems[activeContainer].filter((item) => item !== active.id);
+				const activeItems = prevItems[activeContainer].filter(
+					(item) => item !== active.id,
+				);
 				const overItems = [...prevItems[overContainer], active.id];
 
 				return {
@@ -125,7 +138,9 @@ const Sidebar = () => {
 						{items.Physics.map((id) => (
 							<SortableItem key={id} id={id} />
 						))}
-						{items.Physics.length === 0 && <EmptySection id="Physics" />}
+						{items.Physics.length === 0 && (
+							<EmptySection id="Physics" />
+						)}
 					</SortableContext>
 					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
 						Software Engineering
@@ -136,10 +151,14 @@ const Sidebar = () => {
 						{items.SoftwareEngineering.map((id) => (
 							<SortableItem key={id} id={id} />
 						))}
-						{items.SoftwareEngineering.length === 0 && <EmptySection id="SoftwareEngineering" />}
+						{items.SoftwareEngineering.length === 0 && (
+							<EmptySection id="SoftwareEngineering" />
+						)}
 					</SortableContext>
 					<DragOverlay>
-						{activeId ? <SortableItem id={activeId} isDragging /> : null}
+						{activeId ? (
+							<SortableItem id={activeId} isDragging />
+						) : null}
 					</DragOverlay>
 				</DndContext>
 			</div>
@@ -167,9 +186,10 @@ const Sidebar = () => {
 };
 
 const SortableItem = ({ id, isDragging }) => {
-	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-		id,
-	});
+	const { attributes, listeners, setNodeRef, transform, transition } =
+		useSortable({
+			id,
+		});
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
