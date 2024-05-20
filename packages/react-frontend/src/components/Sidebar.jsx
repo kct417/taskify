@@ -19,14 +19,14 @@ import { CSS } from '@dnd-kit/utilities';
 
 const Sidebar = () => {
 	const [items, setItems] = React.useState({
-		Physics: ['Homework'], // temp data
+		Physics: ['Homework'],
 		SoftwareEngineering: [
 			'Project',
 			'Assignment',
 			'Quiz',
 			'Midterm',
 			'Final',
-		], // temp data
+		],
 	});
 	const [activeId, setActiveId] = React.useState(null);
 
@@ -104,7 +104,7 @@ const Sidebar = () => {
 
 	return (
 		<div
-			className="d-flex flex-column position-relative pl-3"
+			className="d-flex flex-column position-relative"
 			style={{
 				backgroundColor: '#D2C0C0',
 				width: '15vw',
@@ -123,60 +123,73 @@ const Sidebar = () => {
 					Home
 				</button>
 			</div>
-			<div className="flex-grow-1 p-3 overflow-auto">
-				<DndContext
-					sensors={sensors}
-					collisionDetection={closestCenter}
-					onDragStart={handleDragStart}
-					onDragEnd={handleDragEnd}>
-					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
-						Physics
-					</div>
-					<SortableContext
-						items={items.Physics}
-						strategy={verticalListSortingStrategy}>
-						{items.Physics.map((id) => (
-							<SortableItem key={id} id={id} />
-						))}
-						{items.Physics.length === 0 && (
-							<EmptySection id="Physics" />
-						)}
-					</SortableContext>
-					<div className="fw-bold mb-4" style={{ fontSize: '20px' }}>
-						Software Engineering
-					</div>
-					<SortableContext
-						items={items.SoftwareEngineering}
-						strategy={verticalListSortingStrategy}>
-						{items.SoftwareEngineering.map((id) => (
-							<SortableItem key={id} id={id} />
-						))}
-						{items.SoftwareEngineering.length === 0 && (
-							<EmptySection id="SoftwareEngineering" />
-						)}
-					</SortableContext>
-					<DragOverlay>
-						{activeId ? (
-							<SortableItem id={activeId} isDragging />
-						) : null}
-					</DragOverlay>
-				</DndContext>
+			<div
+				className="flex-grow-1 p-3"
+				style={{ maxHeight: 'calc(100vh - 140px)', overflowY: 'auto' }}>
+				{/* Wrapper div for scrollable content with background color */}
+				<div style={{ backgroundColor: '#D2C0C0' }}>
+					<DndContext
+						sensors={sensors}
+						collisionDetection={closestCenter}
+						onDragStart={handleDragStart}
+						onDragEnd={handleDragEnd}>
+						<div
+							className="fw-bold mb-4"
+							style={{ fontSize: '20px' }}>
+							Physics
+						</div>
+						<SortableContext
+							items={items.Physics}
+							strategy={verticalListSortingStrategy}>
+							{items.Physics.map((id) => (
+								<SortableItem key={id} id={id} />
+							))}
+							{items.Physics.length === 0 && (
+								<EmptySection id="Physics" />
+							)}
+						</SortableContext>
+						<div
+							className="fw-bold mb-4"
+							style={{ fontSize: '20px' }}>
+							Software Engineering
+						</div>
+						<SortableContext
+							items={items.SoftwareEngineering}
+							strategy={verticalListSortingStrategy}>
+							{items.SoftwareEngineering.map((id) => (
+								<SortableItem key={id} id={id} />
+							))}
+							{items.SoftwareEngineering.length === 0 && (
+								<EmptySection id="SoftwareEngineering" />
+							)}
+						</SortableContext>
+						<DragOverlay>
+							{activeId ? (
+								<SortableItem id={activeId} isDragging />
+							) : null}
+						</DragOverlay>
+					</DndContext>
+				</div>
 			</div>
 			<hr style={{ marginBottom: '20px' }} />
 			<div
 				className="p-3 position-absolute d-flex justify-content-center"
 				style={{ bottom: '10px', left: '10px' }}>
 				<button
-					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
+					className="btn rounded-circle d-flex justify-content-center align-items-center"
 					style={{
-						backgroundColor: '#F38D8D',
-						borderColor: '#F38D8D',
+						backgroundColor: '#FFFFFF',
+						borderColor: '#FFFFFF',
 						width: '50px',
 						height: '50px',
 					}}>
 					<span
 						className="fs-3"
-						style={{ lineHeight: '0px', fontSize: '30px' }}>
+						style={{
+							lineHeight: '0px',
+							fontSize: '30px',
+							color: '#F38D8D',
+						}}>
 						+
 					</span>
 				</button>
