@@ -50,20 +50,26 @@ const Sidebar = () => {
 		if (!over) return;
 
 		const activeContainer = findContainer(active.id);
-		const overContainer = over.id;
+		const overContainer = findContainer(over.id);
 
-		if (activeContainer === undefined) {
-			setItems((prev) => ({
-				...prev,
-				[overContainer]: [...(prev[overContainer] || []), active.id],
+		if (activeContainer === undefined || overContainer === undefined) return;
+
+		if (activeContainer === overContainer) {
+			const containerItems = items[activeContainer];
+			const oldIndex = containerItems.indexOf(active.id);
+			const newIndex = containerItems.indexOf(over.id);
+
+			setItems((prevItems) => ({
+				...prevItems,
+				[activeContainer]: arrayMove(containerItems, oldIndex, newIndex),
 			}));
-		} else if (overContainer !== undefined && activeContainer !== overContainer) {
-			setItems((prev) => {
-				const activeItems = prev[activeContainer].filter((i) => i !== active.id);
-				const overItems = [...(prev[overContainer] || []), active.id];
+		} else {
+			setItems((prevItems) => {
+				const activeItems = prevItems[activeContainer].filter((item) => item !== active.id);
+				const overItems = [...prevItems[overContainer], active.id];
 
 				return {
-					...prev,
+					...prevItems,
 					[activeContainer]: activeItems,
 					[overContainer]: overItems,
 				};
