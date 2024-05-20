@@ -3,11 +3,55 @@ import { useState } from 'react';
 import Overlay from './Overlay';
 
 const Sidebar = () => {
-	const [show, setShow] = useState(false);
+	const [overlayConfig, setOverlayConfig] = useState({
+		show: false,
+		content: null,
+	});
 
-	const handleShow = () => setShow(true);
-	const handleClose = () => setShow(false);
+	const handleShow = (content) => {
+		setOverlayConfig({
+			show: true,
+			content: content,
+		});
+	};
 
+	const handleClose = () => {
+		setOverlayConfig({
+			show: false,
+			content: null,
+		});
+	};
+
+	const overlayButtons = [
+		{
+			label: 'Add Folders',
+			content: { title: 'Add Folders', text: 'Create a new folder.' },
+			onClick: () =>
+				handleShow({
+					title: 'Add Folders',
+					text: 'Create a new folder.',
+				}),
+		},
+		{
+			label: 'Add Task',
+			content: { title: 'Add Task', text: 'Create a new task.' },
+			onClick: () =>
+				handleShow({ title: 'Add Task', text: 'Create a new task.' }),
+		},
+		{
+			label: 'Add Divider',
+			content: { title: 'Add Divider', text: 'Insert a divider.' },
+			onClick: () =>
+				handleShow({ title: 'Add Divider', text: 'Insert a divider.' }),
+		},
+		{
+			label: 'Prompt AI',
+			content: { title: 'Prompt AI', text: 'Interact with AI.' },
+			onClick: () =>
+				handleShow({ title: 'Prompt AI', text: 'Interact with AI.' }),
+		},
+		{ label: 'Exit', onClick: handleClose },
+	];
 	return (
 		<div
 			className="d-flex flex-column position-relative pl-3"
@@ -66,18 +110,16 @@ const Sidebar = () => {
 						+
 					</span>{' '}
 				</button>
-				<Overlay
-					context={{ title: 'Add Menu' }}
-					fields={[]}
-					buttons={[
-						{ label: 'Add Folders' },
-						{ label: 'Add Task' },
-						{ label: 'Add Divider' },
-						{ label: 'Prompt AI' },
-					]}
-					show={show}
-					handleClose={handleClose}
-				/>
+
+				{overlayConfig.show && (
+					<Overlay
+						context={overlayConfig.content}
+						fields={[]}
+						buttons={overlayButtons}
+						show={overlayConfig.show}
+						handleClose={handleClose}
+					/>
+				)}
 			</div>
 		</div>
 	);

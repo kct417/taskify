@@ -55,7 +55,7 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 								<button
 									type={type}
 									className="btn btn-primary btn-block"
-									onClick={handleClose}
+									onClick={button.onClick || handleClose}
 									style={{
 										backgroundColor: '#F38D8D',
 										borderColor: '#F38D8D',
