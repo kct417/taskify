@@ -1,6 +1,10 @@
 import React from 'react';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './header.css'
+
+import { Container } from 'react-bootstrap';
 
 const Folder_Form = () => {
 	const sidebarButtonColor = '#F38D8D';
@@ -18,6 +22,14 @@ const Folder_Form = () => {
 			dueDate: '2024-06-05',
 			completed: false,
 		},
+	];
+	const emptyTasks = [
+		{
+			id: 0,
+			desc: 'Add New Task',
+			dueDate: '',
+			completed: false,
+		}
 	];
 
 	const handleTaskUpdate = (taskId, newCompletedStatus) => {
@@ -39,7 +51,17 @@ const Folder_Form = () => {
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-				<h1>Physics <img src={fire_asset} alt="Fire" /></h1>
+				<h1>Physics</h1>
+				<Container>
+					<figure className="position-relative">
+				<img
+					src= {fire_asset}
+					className="fire_img"
+					alt="Fire"
+				/>
+				<figcaption>1</figcaption>
+				</figure>
+          		</Container>
 				<h5>Description: </h5>
 				<hr />
 			</header>
@@ -66,7 +88,7 @@ const Folder_Form = () => {
 								Upcoming
 							</h2>
 							<TaskList
-								tasks={physicsTasks}
+								tasks={emptyTasks}
 								handleTaskUpdate={handleTaskUpdate}
 							/>
 						</section>

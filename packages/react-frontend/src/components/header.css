@@ -1,0 +1,13 @@
+figcaption {
+    position: absolute;
+    color: black;
+    top: 25%;
+    left: 2%;
+    transform: translate(0%, 0%);
+    font-size: 1.5em;
+}
+.fire_img {
+    width: 50px;
+    height: 50px;
+    position: relative;
+}
