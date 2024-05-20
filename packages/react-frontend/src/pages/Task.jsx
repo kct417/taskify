@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Table from '../components/TaskTable';
-import Form from '../components/TaskList';
+// import Form from '../components/TaskList';
 
 const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const [tasks, setTasks] = useState([]);
@@ -104,7 +104,7 @@ const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	return (
 		<div className="container">
 			<Table taskData={tasks} removeTask={removeOneTask} />
-			<Form handleSubmit={updateTask} />
+			{/* <Form handleSubmit={updateTask} /> */}
 		</div>
 	);
 };
