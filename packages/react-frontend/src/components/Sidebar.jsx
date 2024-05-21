@@ -322,7 +322,6 @@ const Sidebar = () => {
 					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
 					type="button"
 					onClick={() => handleShow({ title: 'Menu' })}
-					className="btn rounded-circle d-flex justify-content-center align-items-center"
 					style={{
 						backgroundColor: '#FFFFFF',
 						borderColor: '#FFFFFF',
