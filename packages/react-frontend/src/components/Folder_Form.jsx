@@ -21,11 +21,23 @@ const Folder_Form = () => {
 			desc: 'Complete physics lab report',
 			dueDate: '2024-06-05',
 			completed: false,
-		},
+		}
 	];
 	const emptyTasks = [
 		{
 			id: 0,
+			desc: 'Add New Task',
+			dueDate: '',
+			completed: false,
+		},
+		{
+			id: 1,
+			desc: 'Add New Task',
+			dueDate: '',
+			completed: false,
+		},
+		{
+			id: 2,
 			desc: 'Add New Task',
 			dueDate: '',
 			completed: false,
@@ -62,7 +74,7 @@ const Folder_Form = () => {
 				<figcaption>1</figcaption>
 				</figure>
           		</Container>
-				<h5>Description: </h5>
+				<h5>Description: <h6>Lecture/Lab Monday, Wednesday, Friday (2:00 pm - 4:00 pm)</h6></h5>
 				<hr />
 			</header>
 			<main className="container-fluid">
@@ -80,6 +92,7 @@ const Folder_Form = () => {
 							/>
 						</section>
 					</div>
+					<hr />
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
 							<h2

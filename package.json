@@ -25,8 +25,7 @@
 		"pre-commit": "^1.2.2",
 		"prettier": "^3.2.5"
 	},
-	"pre-commit": "format"
-	,
+	"pre-commit": "format",
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.5.2",
 		"@fortawesome/free-brands-svg-icons": "^6.5.2",
@@ -34,6 +33,7 @@
 		"@fortawesome/free-solid-svg-icons": "^6.5.2",
 		"@fortawesome/react-fontawesome": "^0.2.0",
 		"bootstrap": "^5.3.3",
+		"dnd-kit": "^0.0.2",
 		"react-bootstrap": "^2.10.2"
 	}
 }
