@@ -63,11 +63,15 @@ const Folder_Form = () => {
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-					<div className="container">
-						<h3>Physics</h3>
+				<div className="container">
+					<h3>Physics</h3>
 					<Container>
 						<figure className="position-relative">
-							<img src={fire_asset} className="fire_img" alt="Fire" />
+							<img
+								src={fire_asset}
+								className="fire_img"
+								alt="Fire"
+							/>
 							<figcaption>1</figcaption>
 						</figure>
 					</Container>
@@ -82,10 +86,7 @@ const Folder_Form = () => {
 				<div className="row">
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
-							<h2
-								style={{ color: sidebarButtonColor }}>
-								Today
-							</h2>
+							<h2 style={{ color: sidebarButtonColor }}>Today</h2>
 							<TaskList
 								tasks={physicsTasks}
 								handleTaskUpdate={handleTaskUpdate}
@@ -95,8 +96,7 @@ const Folder_Form = () => {
 					<hr />
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
-							<h2
-								style={{ color: sidebarButtonColor }}>
+							<h2 style={{ color: sidebarButtonColor }}>
 								Upcoming
 							</h2>
 							<TaskList
