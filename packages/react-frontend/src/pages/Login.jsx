@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import BannerAlert from '../components/BannerAlert';
 
 import Form from '../components/Form';
 
@@ -35,23 +37,30 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	}
 
 	return (
-		<Form
-			fields={[
-				{
-					label: 'Username',
-					placeholder: 'Enter your username',
-					key: 'username',
-				},
-				{
-					label: 'Password',
-					placeholder: 'Enter your password',
-					type: 'password',
-					key: 'password',
-				},
-			]}
-			submitFunc={loginUser}
-			buttonText={'Log In'}
-		/>
+		<>
+			<BannerAlert
+				message={'This is a test'}
+				type={'primary'}
+				duration={6000}
+			/>
+			<Form
+				fields={[
+					{
+						label: 'Username',
+						placeholder: 'Enter your username',
+						key: 'username',
+					},
+					{
+						label: 'Password',
+						placeholder: 'Enter your password',
+						type: 'password',
+						key: 'password',
+					},
+				]}
+				submitFunc={loginUser}
+				buttonText={'Log In'}
+			/>
+		</>
 	);
 };
 
