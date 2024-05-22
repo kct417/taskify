@@ -13,7 +13,6 @@ import {
 	SortableContext,
 	verticalListSortingStrategy,
 	useSortable,
-	sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
@@ -21,6 +20,8 @@ import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
 const Sidebar = () => {
+
+    // Overlay Code
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
 		content: null,
@@ -178,6 +179,8 @@ const Sidebar = () => {
 
 		handleShow(content, fields, buttons);
 	};
+
+    // Drag and Drop Code
 	const handleDragStart = (event) => {
 		const { active } = event;
 		setActiveId(active.id);
@@ -304,15 +307,6 @@ const Sidebar = () => {
 						</DragOverlay>
 					</DndContext>
 				</div>
-				<button
-					className="btn btn-primary rounded-pill mb-2 text-left ml-4"
-					style={{
-						backgroundColor: '#F38D8D',
-						borderColor: '#F38D8D',
-						fontSize: '18px',
-					}}>
-					Homework
-				</button>
 			</div>
 			<hr style={{ marginBottom: '20px' }} />
 			<div
