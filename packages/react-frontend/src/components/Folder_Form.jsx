@@ -71,11 +71,8 @@ const Folder_Form = () => {
 					</figure>
 				</Container>
 				<h5>
-					Description:{' '}
-					<h6>
-						Lecture/Lab Monday, Wednesday, Friday (2:00 pm - 4:00
-						pm)
-					</h6>
+					Description:
+					<input type="text" class="textarea" />
 				</h5>
 				<hr />
 			</header>
@@ -84,7 +81,6 @@ const Folder_Form = () => {
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
 							<h2
-								className="text-decoration-underline mb-3"
 								style={{ color: sidebarButtonColor }}>
 								Today
 							</h2>
@@ -98,7 +94,6 @@ const Folder_Form = () => {
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
 							<h2
-								className="text-decoration-underline mb-3"
 								style={{ color: sidebarButtonColor }}>
 								Upcoming
 							</h2>
