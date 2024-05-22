@@ -8,8 +8,20 @@ import Form from '../components/Form';
 const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
+	const [showAlert, setShowAlert] = useState(false);
+	const [alertContent, setAlertContent] = useState({});
+	function alert(boldMessage, message, type) {
+		setAlertContent({
+			boldMessage,
+			message,
+			type,
+		});
+		setShowAlert(true);
+	}
+
 	async function loginUser(credentials) {
 		try {
+			// e.g., alert('Success!', 'Login successful.', 'success');
 			const response = await fetch(`${API_PREFIX}/login`, {
 				method: 'POST',
 				headers: {
@@ -17,7 +29,6 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				},
 				body: JSON.stringify(credentials),
 			});
-
 			if (response.status === 200) {
 				const payload = await response.json();
 				handleLoginAndRegister(payload.token, () => {
@@ -39,9 +50,11 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	return (
 		<>
 			<BannerAlert
-				message={'This is a test'}
-				type={'primary'}
-				duration={6000}
+				boldMessage={alertContent.boldMessage}
+				message={alertContent.message}
+				type={alertContent.type}
+				isShowing={showAlert}
+				setIsShowing={setShowAlert}
 			/>
 			<Form
 				fields={[
