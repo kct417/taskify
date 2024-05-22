@@ -2,7 +2,7 @@ import React from 'react';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './header.css'
+import './header.css';
 
 import { Container } from 'react-bootstrap';
 
@@ -21,7 +21,7 @@ const Folder_Form = () => {
 			desc: 'Complete physics lab report',
 			dueDate: '2024-06-05',
 			completed: false,
-		}
+		},
 	];
 	const emptyTasks = [
 		{
@@ -41,7 +41,7 @@ const Folder_Form = () => {
 			desc: 'Add New Task',
 			dueDate: '',
 			completed: false,
-		}
+		},
 	];
 
 	const handleTaskUpdate = (taskId, newCompletedStatus) => {
@@ -66,15 +66,17 @@ const Folder_Form = () => {
 				<h1>Physics</h1>
 				<Container>
 					<figure className="position-relative">
-				<img
-					src= {fire_asset}
-					className="fire_img"
-					alt="Fire"
-				/>
-				<figcaption>1</figcaption>
-				</figure>
-          		</Container>
-				<h5>Description: <h6>Lecture/Lab Monday, Wednesday, Friday (2:00 pm - 4:00 pm)</h6></h5>
+						<img src={fire_asset} className="fire_img" alt="Fire" />
+						<figcaption>1</figcaption>
+					</figure>
+				</Container>
+				<h5>
+					Description:{' '}
+					<h6>
+						Lecture/Lab Monday, Wednesday, Friday (2:00 pm - 4:00
+						pm)
+					</h6>
+				</h5>
 				<hr />
 			</header>
 			<main className="container-fluid">

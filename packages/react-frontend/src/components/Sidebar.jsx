@@ -70,7 +70,6 @@ const Sidebar = () => {
 			buttons: [],
 		});
 	};
-
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
