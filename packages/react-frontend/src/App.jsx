@@ -47,9 +47,11 @@ function App() {
 					path="/home"
 					element={
 						<div>
-							<Home API_PREFIX={API_PREFIX} 
-							token={token}
-							INVALID_TOKEN={INVALID_TOKEN}/>
+							<Home
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
 						</div>
 					}
 				/>

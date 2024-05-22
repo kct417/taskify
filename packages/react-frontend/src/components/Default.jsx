@@ -114,7 +114,6 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 		};
 	}
 
-	
 	// const topTasks = [
 	// 	{
 	// 		id: 3,
