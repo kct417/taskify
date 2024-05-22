@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Sidebar from './components/Sidebar';
-import Home from './components/Default';
+import Home from './pages/Home';
 import Task from './pages/Task';
 
 const API_PREFIX = 'http://localhost:8000';
@@ -48,8 +47,7 @@ function App() {
 					path="/home"
 					element={
 						<div>
-							<Sidebar />
-							<Home />
+							<Home API_PREFIX={API_PREFIX} />
 						</div>
 					}
 				/>

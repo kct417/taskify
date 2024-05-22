@@ -6,10 +6,10 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 
 	return (
 		<form className="vstack text-center">
-			{fields.map((field, idx) => {
+			{fields.map((field, index) => {
 				const { label, placeholder, type, key } = field;
 				return (
-					<div key={idx} className="form-group text-left">
+					<div key={index} className="form-group text-left">
 						<label>{label}</label>
 						<input
 							type={type}
