@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Task from './Task';
 
 const TaskList = ({ tasks }) => {
+
+
 	return (
 		<div>
 			{tasks.map((task) => (
@@ -18,9 +20,11 @@ const TaskList = ({ tasks }) => {
 	);
 };
 
+
 TaskList.propTypes = {
-	tasks: PropTypes.arrayOf(PropTypes.object),
+	tasks: PropTypes.array,
 	// handleTaskUpdate: PropTypes.func.isRequired,
 };
 
 export default TaskList;
+

@@ -18,7 +18,7 @@ const Task = ({ task, handleCheckboxChange }) => {
 					type="checkbox"
 					className="form-check-input"
 					id={`task-${task.taskname}`}
-					checked={checked}
+					// checked={checked}
 					// onChange={handleCheckboxClick}
 				/>
 			</div>
