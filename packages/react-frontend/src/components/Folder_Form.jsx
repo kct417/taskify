@@ -63,13 +63,15 @@ const Folder_Form = () => {
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-				<h1>Physics</h1>
-				<Container>
-					<figure className="position-relative">
-						<img src={fire_asset} className="fire_img" alt="Fire" />
-						<figcaption>1</figcaption>
-					</figure>
-				</Container>
+					<div className="container">
+						<h3>Physics</h3>
+					<Container>
+						<figure className="position-relative">
+							<img src={fire_asset} className="fire_img" alt="Fire" />
+							<figcaption>1</figcaption>
+						</figure>
+					</Container>
+				</div>
 				<h5>
 					Description:
 					<input type="text" class="textarea" />
