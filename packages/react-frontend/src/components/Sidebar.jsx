@@ -20,8 +20,7 @@ import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
 const Sidebar = () => {
-
-    // Overlay Code
+	// Overlay Code
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
 		content: null,
@@ -180,7 +179,7 @@ const Sidebar = () => {
 		handleShow(content, fields, buttons);
 	};
 
-    // Drag and Drop Code
+	// Drag and Drop Code
 	const handleDragStart = (event) => {
 		const { active } = event;
 		setActiveId(active.id);
