@@ -5,7 +5,11 @@ const Home = () => {
 	return (
 		<div className="d-flex">
 			<Sidebar />
-			<Default />
+			<div
+				className="flex-grow-1"
+				style={{ overflowY: 'auto', maxHeight: '100vh' }}>
+				<Default />
+			</div>
 		</div>
 	);
 };
