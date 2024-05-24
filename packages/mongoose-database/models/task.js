@@ -1,14 +1,15 @@
 import mongoose from 'mongoose';
+import Folder from './folder';
 
 const UserTasks = new mongoose.Schema(
 	{
-		username: {
+		taskname: {
 			type: String,
 			required: true,
 			trim: true,
 		},
-		taskname: {
-			type: String,
+		folder: {
+			type: Folder,
 			required: true,
 			trim: true,
 		},
