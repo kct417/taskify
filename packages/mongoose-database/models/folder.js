@@ -1,15 +1,19 @@
 import mongoose from 'mongoose';
-import Divider from './dividers';
 
 const UserFolders = new mongoose.Schema(
 	{
+		username: {
+			type: String,
+			required: true,
+			trim: true,
+		},
 		foldername: {
 			type: String,
 			required: true,
 			trim: true,
 		},
-		divider: {
-			type: Divider,
+		dividername: {
+			type: String,
 			required: true,
 			trim: true,
 		},

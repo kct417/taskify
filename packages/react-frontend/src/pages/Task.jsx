@@ -110,9 +110,9 @@ const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 };
 
 Task.propTypes = {
-	API_PREFIX: PropTypes.string,
-	token: PropTypes.string,
-	INVALID_TOKEN: PropTypes.string,
+	API_PREFIX: PropTypes.string.isRequired,
+	token: PropTypes.string.isRequired,
+	INVALID_TOKEN: PropTypes.string.isRequired,
 };
 
 export default Task;

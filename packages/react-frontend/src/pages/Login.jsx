@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BannerAlert from '../components/BannerAlert';
 
+import BannerAlert from '../components/BannerAlert';
 import Form from '../components/Form';
 
 const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
@@ -78,7 +78,7 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 };
 
 LoginForm.propTypes = {
-	API_PREFIX: PropTypes.string,
+	API_PREFIX: PropTypes.string.isRequired,
 	handleLoginAndRegister: PropTypes.func.isRequired,
 };
 

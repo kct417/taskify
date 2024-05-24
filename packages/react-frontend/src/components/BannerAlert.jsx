@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const BannerAlert = ({
 	boldMessage,
@@ -25,6 +24,14 @@ const BannerAlert = ({
 			</button>
 		</div>
 	);
+};
+
+BannerAlert.propTypes = {
+	boldMessage: PropTypes.string.isRequired,
+	message: PropTypes.string.isRequired,
+	type: PropTypes.string.isRequired,
+	isShowing: PropTypes.bool.isRequired,
+	setIsShowing: PropTypes.func.isRequired,
 };
 
 export default BannerAlert;
