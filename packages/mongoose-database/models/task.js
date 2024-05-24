@@ -11,6 +11,14 @@ const UserTasks = new mongoose.Schema(
 			type: String,
 			trim: true,
 		},
+		dueDate: {
+			type: String,
+			required: true,
+		},
+		completed: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	{ collection: 'tasks' },
 );
