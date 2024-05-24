@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 
 const UseDividers = new mongoose.Schema(
 	{
-		username: {
+		dividerName: {
 			type: String,
 			required: true,
 			trim: true,
 		},
-		dividername: {
-			type: String,
+		folders: {
+			type: Array,
 			required: true,
 			trim: true,
 		},
