@@ -5,20 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const sidebarButtonColor = '#F38D8D';
 
-	// const generalTasks = [
-	// 	{
-	// 		id: 1,
-	// 		desc: 'Buy groceries',
-	// 		dueDate: '2024-05-15',
-	// 		completed: false,
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		desc: 'Clean the house',
-	// 		dueDate: '2024-05-18',
-	// 		completed: false,
-	// 	},
-	// ];
 	const [tasks, setTasks] = useState([]);
 	const navigate = useNavigate();
 
@@ -40,7 +26,6 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 			.catch((error) => {
 				console.log(error);
 			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function updateTask(task) {
@@ -114,41 +99,7 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 		};
 	}
 
-	// const topTasks = [
-	// 	{
-	// 		id: 3,
-	// 		desc: 'Finish project proposal',
-	// 		dueDate: '2024-05-20',
-	// 		completed: false,
-	// 	},
-	// 	{
-	// 		id: 4,
-	// 		desc: 'Schedule team meeting',
-	// 		dueDate: '2024-05-22',
-	// 		completed: false,
-	// 	},
-	// ];
-	// const physicsTasks = [
-	// 	{
-	// 		id: 5,
-	// 		desc: 'Study for physics exam',
-	// 		dueDate: '2024-06-01',
-	// 		completed: false,
-	// 	},
-	// 	{
-	// 		id: 6,
-	// 		desc: 'Complete physics lab report',
-	// 		dueDate: '2024-06-05',
-	// 		completed: false,
-	// 	},
-	// ];
-
-	// const handleTaskUpdate = (taskId, newCompletedStatus) => {
-	// 	console.log(
-	// 		`Task ${taskId} completed status updated to ${newCompletedStatus}`,
-	// 	);
-	// };
-
+	
 	return (
 		<div
 			className="d-flex flex-column bg-light"

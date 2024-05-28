@@ -1,3 +1,5 @@
+// FOR DISPLAYING TASKS IN BACKEND, NOT USED IN FRONTEND
+
 import PropTypes from 'prop-types';
 
 const TableHeader = () => {
