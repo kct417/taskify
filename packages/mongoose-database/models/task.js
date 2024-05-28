@@ -19,6 +19,7 @@ const UserTasks = new mongoose.Schema(
 			type: Boolean,
 			required: true,
 		},
+		// completed, due date, folder
 	},
 	{ collection: 'tasks' },
 );

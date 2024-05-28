@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 const Task = ({ task, handleCheckboxChange }) => {
-	const [checked, setChecked] = useState(task.completed);
+	const [checked, setChecked] = useState([]);
 
-	const handleCheckboxClick = () => {
-		setChecked(!checked);
-		handleCheckboxChange();
-	};
+	// const handleCheckboxClick = () => {
+	// 	setChecked(!checked);
+	// 	handleCheckboxChange();
+	// };
 
 	return (
 		<div
@@ -17,22 +17,22 @@ const Task = ({ task, handleCheckboxChange }) => {
 				<input
 					type="checkbox"
 					className="form-check-input"
-					id={`task-${task.id}`}
-					checked={checked}
-					onChange={handleCheckboxClick}
+					id={`task-${task.taskname}`}
+					// checked={checked}
+					// onChange={handleCheckboxClick}
 				/>
 			</div>
 			<div className="text-center flex-grow-1 text-white">
-				{task.desc}
+				{task.description}
 			</div>
-			<div className="text-end font-weight-bold">Due: {task.dueDate}</div>
+			<div className="text-end font-weight-bold">Due: </div>
 		</div>
 	);
 };
 
 Task.propTypes = {
 	task: PropTypes.object,
-	handleCheckboxChange: PropTypes.func.isRequired,
+	// handleCheckboxChange: PropTypes.func.isRequired,
 };
 
 export default Task;
