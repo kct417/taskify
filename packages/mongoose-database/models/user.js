@@ -22,6 +22,11 @@ const UserCredentials = new mongoose.Schema(
 			required: true,
 			trim: true,
 		},
+		dividers: {
+			type: Array,
+			required: true,
+			trim: true,
+		},
 	},
 	{ collection: 'users' },
 );

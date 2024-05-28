@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	DndContext,
 	closestCenter,
@@ -27,7 +27,7 @@ const Sidebar = () => {
 		fields: [],
 		buttons: [],
 	});
-	const [items, setItems] = React.useState({
+	const [items, setItems] = useState({
 		Physics: ['Homework'],
 		SoftwareEngineering: [
 			'Project',
@@ -37,7 +37,7 @@ const Sidebar = () => {
 			'Final',
 		],
 	});
-	const [activeId, setActiveId] = React.useState(null);
+	const [activeId, setActiveId] = useState(null);
 
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
@@ -394,6 +394,15 @@ const EmptySection = ({ id }) => {
 			Drag items here to add to {id}
 		</div>
 	);
+};
+
+SortableItem.propTypes = {
+	id: PropTypes.string.isRequired,
+	isDragging: PropTypes.bool.isRequired,
+};
+
+EmptySection.propTypes = {
+	id: PropTypes.string.isRequired,
 };
 
 export default Sidebar;

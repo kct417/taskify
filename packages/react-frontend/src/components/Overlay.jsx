@@ -89,10 +89,10 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 }
 
 Overlay.propTypes = {
-	show: PropTypes.bool,
-	context: PropTypes.object,
-	fields: PropTypes.arrayOf(PropTypes.object),
-	buttons: PropTypes.arrayOf(PropTypes.object),
+	show: PropTypes.bool.isRequired,
+	context: PropTypes.object.isRequired,
+	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleClose: PropTypes.func.isRequired,
 };
 

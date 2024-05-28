@@ -1,3 +1,5 @@
+// All function are used index.js of the backend folder only
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

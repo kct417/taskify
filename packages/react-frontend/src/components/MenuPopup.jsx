@@ -69,11 +69,6 @@ class MenuButton extends React.Component {
 	}
 }
 
-MenuButton.propTypes = {
-	onClick: PropTypes.func.isRequired,
-	children: PropTypes.node.isRequired,
-};
-
 function MenuPopup({ onButtonClick }) {
 	return (
 		<div style={styles.menuPopup}>
@@ -94,6 +89,11 @@ function MenuPopup({ onButtonClick }) {
 		</div>
 	);
 }
+
+MenuButton.propTypes = {
+	onClick: PropTypes.func.isRequired,
+	children: PropTypes.node.isRequired,
+};
 
 MenuPopup.propTypes = {
 	onButtonClick: PropTypes.func.isRequired,
