@@ -8,6 +8,7 @@ Taskify is a project management tool designed to help teams organize tasks effic
 -   [Coding Standards](#coding-standards)
 -   [Auth Sequence Diagram](#auth-sequence-diagram)
 -   [Figma Prototype](#figma-prototype)
+-   [UML Class Diagram](#uml-class-diagram)
 
 ## How to Contribute
 
@@ -118,3 +119,7 @@ By following these coding standards, we aim to maintain a high level of code qua
 Taskify's UI design is prototyped in Figma. Click the image below to view the prototype:
 
 [![Figma Prototype](images/figma-prototype.png)](https://www.figma.com/design/7g5YAjZ3vnykjcdwRZiJTC/ToDo-List-UI?node-id=0%3A1&t=oC4kI5KMClifi8dm-1)
+
+## UML Class Diagram
+
+![UML Class Diagram](images/uml-class-diagram.jpg)

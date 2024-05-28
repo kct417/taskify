@@ -1,11 +1,61 @@
 // All function are used index.js of the backend folder only
 
 import {
+	findDividerByUsername,
+	findFolderById,
+	findTaskById,
 	findTasks,
 	addTask,
-	findTaskById,
 	deleteTaskById,
 } from '../mongoose-database/services/task-services.js';
+
+export function getDividers(req, res) {
+	const { username } = req.body;
+	findDividerByUsername(username)
+		.then((result) => {
+			if (result) {
+				res.status(200).send(result);
+			} else {
+				res.status(404).send('Resource not found.');
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).send(error);
+		});
+}
+
+export function getFolders(req, res) {
+	const { id } = req.body;
+	findFolderById(id)
+		.then((result) => {
+			if (result) {
+				res.status(200).send(result);
+			} else {
+				res.status(404).send('Resource not found.');
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).send(error);
+		});
+}
+
+export function getTasks2(req, res) {
+	const { id } = req.body;
+	findTaskById(id)
+		.then((result) => {
+			if (result) {
+				res.status(200).send(result);
+			} else {
+				res.status(404).send('Resource not found.');
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).send(error);
+		});
+}
 
 export function getTasks(req, res) {
 	const { username } = req.body;
