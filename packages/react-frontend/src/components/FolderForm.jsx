@@ -44,15 +44,7 @@ const FolderForm = () => {
 	const handleTaskUpdate = (taskId, newCompletedStatus) => {
 		console.log(
 			`Task ${taskId} completed status updated to ${newCompletedStatus}`,
-            // asdfasdkfi
-
-
-
-
-
-
-
-        
+			// asdfasdkfi
 		);
 	};
 
