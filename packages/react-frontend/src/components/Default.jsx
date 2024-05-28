@@ -99,7 +99,6 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 		};
 	}
 
-	
 	return (
 		<div
 			className="d-flex flex-column bg-light"
