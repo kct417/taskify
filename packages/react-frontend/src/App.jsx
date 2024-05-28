@@ -68,7 +68,7 @@ function App() {
 						</div>
 					}
 				/>
-                <Route
+				<Route
 					path="/folder"
 					element={
 						<div>
