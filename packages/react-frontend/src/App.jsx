@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Task from './pages/Task';
+import Folder from './pages/Folder';
 
 const API_PREFIX = 'http://localhost:8000';
 
@@ -64,6 +65,14 @@ function App() {
 								token={token}
 								INVALID_TOKEN={INVALID_TOKEN}
 							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/folder"
+					element={
+						<div>
+							<Folder API_PREFIX={API_PREFIX} />
 						</div>
 					}
 				/>
