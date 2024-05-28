@@ -1,3 +1,5 @@
+// All function are used index.js of the backend folder only
+
 import {
 	findTasks,
 	addTask,

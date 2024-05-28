@@ -68,7 +68,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 };
 
 RegistrationForm.propTypes = {
-	API_PREFIX: PropTypes.string,
+	API_PREFIX: PropTypes.string.isRequired,
 	handleLoginAndRegister: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,4 @@
-import DefHome from '../components/Default';
+import Default from '../components/Default';
 import Sidebar from '../components/Sidebar';
 
 const Home = ({ API_PREFIX, token, INVALID_TOKEN }) => {

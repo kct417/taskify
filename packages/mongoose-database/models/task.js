@@ -2,12 +2,7 @@ import mongoose from 'mongoose';
 
 const UserTasks = new mongoose.Schema(
 	{
-		username: {
-			type: String,
-			required: true,
-			trim: true,
-		},
-		taskname: {
+		taskName: {
 			type: String,
 			required: true,
 			trim: true,
@@ -15,6 +10,14 @@ const UserTasks = new mongoose.Schema(
 		description: {
 			type: String,
 			trim: true,
+		},
+		dueDate: {
+			type: String,
+			required: true,
+		},
+		completed: {
+			type: Boolean,
+			required: true,
 		},
 		// completed, due date, folder
 	},

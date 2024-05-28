@@ -27,51 +27,57 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 						</button>
 					</div>
 					<div className="modal-body">
-						<p>{context.text}</p>
+						{fields.map((field, idx) => {
+							const { label, placeholder, type, key } = field;
+							return (
+								<div key={idx} className="form-group text-left">
+									<label>{label}</label>
+									<input
+										type={type}
+										className="form-control"
+										placeholder={placeholder}
+										onChange={(event) => {
+											formFields[key] =
+												event.target.value;
+										}}
+									/>
+								</div>
+							);
+						})}
+						{buttons.map((button, idx) => {
+							const { label, type } = button;
+							return (
+								<div
+									key={idx}
+									className="form-group text-center"
+									style={{ padding: '10px 0' }}>
+									<button
+										type={type}
+										className="btn btn-block"
+										onClick={button.onClick || handleClose}
+										style={{
+											backgroundColor: '#F38D8D',
+											borderColor: '#F38D8D',
+											fontSize: '18px',
+											borderRadius: '8px',
+											marginBottom: '10px',
+										}}>
+										{label}
+									</button>
+								</div>
+							);
+						})}
 					</div>
-					{fields.map((field, idx) => {
-						const { label, placeholder, type, key } = field;
-						return (
-							<div key={idx} className="form-group text-left">
-								<label>{label}</label>
-								<input
-									type={type}
-									className="form-control"
-									placeholder={placeholder}
-									onChange={(event) => {
-										formFields[key] = event.target.value;
-									}}
-								/>
-							</div>
-						);
-					})}
-					{buttons.map((button, idx) => {
-						const { label, type } = button;
-						return (
-							<div key={idx} className="form-group text-center">
-								<button
-									type={type}
-									className="btn btn-primary"
-									onClick={handleClose}
-									style={{
-										backgroundColor: '#F38D8D',
-										borderColor: '#F38D8D',
-										fontSize: '18px',
-									}}>
-									{label}
-								</button>{' '}
-							</div>
-						);
-					})}
 					<div className="modal-footer">
 						<button
 							type="button"
-							className="btn btn-secondary"
+							className="btn btn-block"
 							onClick={handleClose}
 							style={{
 								backgroundColor: '#F38D8D',
 								borderColor: '#F38D8D',
 								fontSize: '18px',
+								borderRadius: '8px',
 							}}>
 							Close
 						</button>
@@ -83,10 +89,10 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 }
 
 Overlay.propTypes = {
-	show: PropTypes.bool,
-	context: PropTypes.object,
-	fields: PropTypes.arrayOf(PropTypes.object),
-	buttons: PropTypes.arrayOf(PropTypes.object),
+	show: PropTypes.bool.isRequired,
+	context: PropTypes.object.isRequired,
+	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleClose: PropTypes.func.isRequired,
 };
 

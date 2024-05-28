@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	DndContext,
 	closestCenter,
@@ -13,12 +13,21 @@ import {
 	SortableContext,
 	verticalListSortingStrategy,
 	useSortable,
-	sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
+import Overlay from './Overlay';
+import MenuPopup from './MenuPopup';
 
 const Sidebar = () => {
-	const [items, setItems] = React.useState({
+	// Overlay Code
+	const [overlayConfig, setOverlayConfig] = useState({
+		show: false,
+		content: null,
+		fields: [],
+		buttons: [],
+	});
+	const [items, setItems] = useState({
 		Physics: ['Homework'],
 		SoftwareEngineering: [
 			'Project',
@@ -28,7 +37,7 @@ const Sidebar = () => {
 			'Final',
 		],
 	});
-	const [activeId, setActiveId] = React.useState(null);
+	const [activeId, setActiveId] = useState(null);
 
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
@@ -44,6 +53,133 @@ const Sidebar = () => {
 		}),
 	);
 
+	const handleShow = (content, fields = [], buttons = []) => {
+		setOverlayConfig({
+			show: true,
+			content,
+			fields,
+			buttons,
+		});
+	};
+
+	const handleClose = () => {
+		setOverlayConfig({
+			show: false,
+			content: null,
+			fields: [],
+			buttons: [],
+		});
+	};
+
+	const handleMenuButtonClick = (buttonType) => {
+		let content = {};
+		let fields = [];
+		let buttons = [];
+
+		switch (buttonType) {
+			case 'Add Folder':
+				content = { title: 'Add Folder', text: '' };
+				fields = [
+					{
+						label: 'Folder Name',
+						placeholder: 'Enter Folder Name',
+						type: 'text',
+						key: 'folderName',
+					},
+				];
+				buttons = [
+					{
+						label: 'Add Folder',
+						type: 'button',
+						onClick: () => alert('Folder added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Add Task':
+				content = { title: 'Add Task', text: '' };
+				fields = [
+					{
+						label: 'Task Name',
+						placeholder: 'Enter Task Name',
+						type: 'text',
+						key: 'taskName',
+					},
+				];
+				buttons = [
+					{
+						label: 'Add Task',
+						type: 'button',
+						onClick: () => alert('Task added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Add Divider':
+				content = { title: 'Add Divider', text: '' };
+				fields = [
+					{
+						label: 'Divider',
+						placeholder: 'Enter your Divider',
+						type: 'text',
+						key: 'divider',
+					},
+				];
+				buttons = [
+					{
+						label: 'Add Divider',
+						type: 'button',
+						onClick: () => alert('Divider added!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Prompt AI':
+				content = { title: 'Prompt AI', text: '' };
+				fields = [
+					{
+						label: 'Prompt',
+						placeholder: 'Enter your prompt',
+						type: 'text',
+						key: 'prompt',
+					},
+				];
+				buttons = [
+					{
+						label: 'Send Prompt',
+						type: 'button',
+						onClick: () => alert('Prompt sent!'),
+					},
+					{
+						label: 'Back',
+						type: 'button',
+						onClick: () => handleShow({ title: 'Menu' }),
+					},
+				];
+				break;
+			case 'Exit':
+				handleClose();
+				return;
+			default:
+				return;
+		}
+
+		handleShow(content, fields, buttons);
+	};
+
+	// Drag and Drop Code
 	const handleDragStart = (event) => {
 		const { active } = event;
 		setActiveId(active.id);
@@ -176,7 +312,9 @@ const Sidebar = () => {
 				className="p-3 position-absolute d-flex justify-content-center"
 				style={{ bottom: '10px', left: '10px' }}>
 				<button
-					className="btn rounded-circle d-flex justify-content-center align-items-center"
+					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
+					type="button"
+					onClick={() => handleShow({ title: 'Menu' })}
 					style={{
 						backgroundColor: '#FFFFFF',
 						borderColor: '#FFFFFF',
@@ -194,6 +332,20 @@ const Sidebar = () => {
 					</span>
 				</button>
 			</div>
+
+			{overlayConfig.show && overlayConfig.content.title === 'Menu' && (
+				<MenuPopup onButtonClick={handleMenuButtonClick} />
+			)}
+
+			{overlayConfig.show && overlayConfig.content.title !== 'Menu' && (
+				<Overlay
+					context={overlayConfig.content}
+					fields={overlayConfig.fields}
+					buttons={overlayConfig.buttons}
+					show={overlayConfig.show}
+					handleClose={handleClose}
+				/>
+			)}
 		</div>
 	);
 };
@@ -243,6 +395,15 @@ const EmptySection = ({ id }) => {
 			Drag items here to add to {id}
 		</div>
 	);
+};
+
+SortableItem.propTypes = {
+	id: PropTypes.string.isRequired,
+	isDragging: PropTypes.bool.isRequired,
+};
+
+EmptySection.propTypes = {
+	id: PropTypes.string.isRequired,
 };
 
 export default Sidebar;
