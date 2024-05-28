@@ -3,7 +3,14 @@ import cors from 'cors';
 
 import '../mongoose-database/index.js';
 import { registerUser, loginUser, authenticateUser } from './auth-user.js';
-import { getTasks, createTask, deleteTask } from './fetch-task.js';
+import {
+	getUser,
+	getTasks,
+	createTask,
+	deleteTask,
+	getDividers,
+	getFolders,
+} from './fetch-task.js';
 
 const app = express();
 const port = 8000;
@@ -16,7 +23,13 @@ app.post('/signup', registerUser);
 
 app.post('/login', loginUser);
 
-app.get('/tasks', authenticateUser, getTasks);
+app.post('/users', authenticateUser, getUser);
+
+app.post('/dividers', authenticateUser, getDividers);
+
+app.post('/folders', authenticateUser, getFolders);
+
+app.post('/tasks', authenticateUser, getTasks);
 
 app.post('/tasks', authenticateUser, createTask);
 

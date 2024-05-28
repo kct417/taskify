@@ -1,9 +1,14 @@
+import userModel from '../models/user.js';
 import taskModel from '../models/task.js';
 import folderModel from '../models/folder.js';
 import dividerModel from '../models/dividers.js';
 
-export function findDividerByUsername(username) {
-	return dividerModel.find({ username: username });
+export function findUserByUsername(username) {
+	return userModel.findOne({ username: username });
+}
+
+export function findDividersById(id) {
+	return dividerModel.findById(id);
 }
 
 export function findFolderById(id) {
