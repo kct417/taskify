@@ -3,8 +3,6 @@ import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 import './header.css';
 
-import { Container } from 'react-bootstrap';
-
 const FolderForm = () => {
 	const sidebarButtonColor = '#F38D8D';
 
@@ -64,7 +62,7 @@ const FolderForm = () => {
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
 				<div className="container">
 					<h3>Physics</h3>
-					<Container>
+					<div className="container">
 						<figure className="position-relative">
 							<img
 								src={fire_asset}
@@ -73,7 +71,7 @@ const FolderForm = () => {
 							/>
 							<figcaption>1</figcaption>
 						</figure>
-					</Container>
+					</div>
 				</div>
 				<h5>
 					Description:
