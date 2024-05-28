@@ -3,12 +3,10 @@ import Sidebar from '../components/Sidebar';
 
 const Home = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	return (
-		<div className="d-flex">
+		<div className="d-flex" style={{ height: '100vh', overflowY: 'hidden' }}>
 			<Sidebar />
-
 			<div
-				className="flex-grow-1"
-				style={{ overflowY: 'auto', maxHeight: '100vh' }}>
+				className="container-fluid p-0 d-flex"style={{ overflowY: 'auto' }}>
 				<DefHome
 					API_PREFIX={API_PREFIX}
 					token={token}
