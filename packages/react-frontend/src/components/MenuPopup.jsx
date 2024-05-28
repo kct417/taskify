@@ -17,7 +17,6 @@ const styles = {
 		alignItems: 'center',
 		gap: '10px',
 		zIndex: 1000,
-		
 	},
 	title: {
 		margin: 0,
