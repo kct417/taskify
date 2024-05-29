@@ -1,8 +1,10 @@
-import TaskList from './TaskList';
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
+import TaskList from './TaskList';
+
+const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const sidebarButtonColor = '#F38D8D';
 
 	const [tasks, setTasks] = useState([]);
@@ -10,7 +12,7 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 
 	useEffect(() => {
 		if (token === INVALID_TOKEN) {
-			navigate('/');
+			navigate('/login');
 			return;
 		}
 
@@ -162,4 +164,10 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	);
 };
 
-export default DefHome;
+HomeList.propTypes = {
+	API_PREFIX: PropTypes.string.isRequired,
+	token: PropTypes.string.isRequired,
+	INVALID_TOKEN: PropTypes.string.isRequired,
+};
+
+export default HomeList;
