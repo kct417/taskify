@@ -86,6 +86,12 @@ const Sidebar = () => {
 						type: 'text',
 						key: 'folderName',
 					},
+                    {
+                        label: 'Divider',
+                        type: 'dropdown',
+                        key: 'divider',
+                        options: ['Divider 1', 'Divider 2', 'Divider 3'], // Add your divider options here
+                      },
 				];
 				buttons = [
 					{
