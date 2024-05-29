@@ -10,7 +10,7 @@ const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 
 	useEffect(() => {
 		if (token === INVALID_TOKEN) {
-			navigate('/');
+			navigate('/login');
 			return;
 		}
 

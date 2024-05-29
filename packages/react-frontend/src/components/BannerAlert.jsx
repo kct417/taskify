@@ -10,7 +10,7 @@ const BannerAlert = ({
 	if (!isShowing) return <></>;
 	return (
 		<div
-			className={`alert position-absolute width-full alert-${type} alert-dismissible fade show`}
+			className={`alert position-absolute fixed-top alert-${type} alert-dismissible fade show`}
 			role="alert">
 			<strong>{boldMessage}</strong>
 			{(boldMessage && ' ') + message}
@@ -27,9 +27,9 @@ const BannerAlert = ({
 };
 
 BannerAlert.propTypes = {
-	boldMessage: PropTypes.string.isRequired,
-	message: PropTypes.string.isRequired,
-	type: PropTypes.string.isRequired,
+	boldMessage: PropTypes.string,
+	message: PropTypes.string,
+	type: PropTypes.string,
 	isShowing: PropTypes.bool.isRequired,
 	setIsShowing: PropTypes.func.isRequired,
 };

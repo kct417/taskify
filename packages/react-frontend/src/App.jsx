@@ -23,7 +23,7 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route
-					path="/"
+					path="/login"
 					element={
 						<div>
 							<Login
@@ -45,7 +45,7 @@ function App() {
 					}
 				/>
 				<Route
-					path="/home"
+					path="/"
 					element={
 						<div>
 							<Home
