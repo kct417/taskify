@@ -7,7 +7,7 @@ export function findUserByUsername(username) {
 	return userModel.findOne({ username: username });
 }
 
-export function findDividersById(id) {
+export function findDividerById(id) {
 	return dividerModel.findById(id);
 }
 
