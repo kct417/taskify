@@ -26,6 +26,18 @@ function App() {
 					path="/"
 					element={
 						<div>
+							<Home
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/login"
+					element={
+						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
 								handleLoginAndRegister={handleLoginAndRegister}
@@ -40,18 +52,6 @@ function App() {
 							<Register
 								API_PREFIX={API_PREFIX}
 								handleLoginAndRegister={handleLoginAndRegister}
-							/>
-						</div>
-					}
-				/>
-				<Route
-					path="/home"
-					element={
-						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
 							/>
 						</div>
 					}
@@ -72,7 +72,11 @@ function App() {
 					path="/folder"
 					element={
 						<div>
-							<Folder API_PREFIX={API_PREFIX} />
+							<Folder
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
 						</div>
 					}
 				/>
