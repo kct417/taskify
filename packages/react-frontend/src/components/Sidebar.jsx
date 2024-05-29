@@ -110,17 +110,17 @@ const Sidebar = () => {
 						key: 'taskName',
 					},
 					{
-                        label: 'Divider',
-                        type: 'dropdown',
-                        key: 'divider',
-                        options: ['Divider 1', 'Divider 2', 'Divider 3'],
-                    },
+						label: 'Divider',
+						type: 'dropdown',
+						key: 'divider',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+					},
 					{
-                        label: 'Folder',
-                        type: 'dropdown',
-                        key: 'folder',
-                        options: ['Divider 1', 'Divider 2', 'Divider 3'],
-                    }
+						label: 'Folder',
+						type: 'dropdown',
+						key: 'folder',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+					},
 				];
 				buttons = [
 					{
