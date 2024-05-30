@@ -4,102 +4,46 @@ import { useNavigate } from 'react-router-dom';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
-	const sidebarButtonColor = '#F38D8D';
-
+const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	const [tasks, setTasks] = useState([]);
+	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (token === INVALID_TOKEN) {
-			navigate('/login');
-			return;
-		}
+		const fetchTasks = async () => {
+			try {
+				// Fetch user data'
+				const userResponse = await fetch(`${API_PREFIX}/${username}`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
 
-		fetchTasks()
-			.then((res) => (res.status === 200 ? res.json() : undefined))
-			.then((json) => {
-				if (json) {
-					setTasks(json);
-				} else {
-					setTasks(null);
+				if (userResponse.status === 401) {
+					navigate('/login');
+					return;
 				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
 
-	function updateTask(task) {
-		postTask(task)
-			.then((res) => {
-				if (res.status === 201) {
-					return res.json();
-				}
-			})
-			.then((json) => {
-				if (json) {
-					setTasks([...tasks, json]);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+				const userData = await userResponse.json();
 
-	function removeOneTask(index) {
-		const idToDelete = tasks[index]._id;
-		deleteTask(idToDelete)
-			.then((res) => {
-				if (res.status === 204) {
-					const updated = tasks.filter(
-						(character) => character['_id'] !== idToDelete,
-					);
-					setTasks(updated);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+				// Extract all tasks
+				const allTasks = [];
+				userData.dividers.forEach((divider) => {
+					divider.folders.forEach((folder) => {
+						folder.tasks.forEach((task) => {
+							allTasks.push(task);
+						});
+					});
+				});
 
-	function fetchTasks() {
-		const promise = fetch(`${API_PREFIX}/tasks`, {
-			headers: addAuthHeader(),
-		});
-
-		return promise;
-	}
-
-	function postTask(task) {
-		const promise = fetch(`${API_PREFIX}/tasks`, {
-			method: 'POST',
-			headers: addAuthHeader({
-				'Content-Type': 'application/json',
-			}),
-			body: JSON.stringify(task),
-		});
-
-		return promise;
-	}
-
-	function deleteTask(id) {
-		const promise = fetch(`${API_PREFIX}/tasks/${id}`, {
-			method: 'DELETE',
-			headers: addAuthHeader({
-				'Content-Type': 'application/json',
-			}),
-		});
-
-		return promise;
-	}
-
-	function addAuthHeader(otherHeaders = {}) {
-		return {
-			...otherHeaders,
-			Authorization: `Bearer ${token}`,
+				setTasks(allTasks);
+			} catch (error) {
+				console.error('Error fetching tasks:', error);
+			}
 		};
-	}
+
+		fetchTasks();
+	}, [API_PREFIX, token, navigate, INVALID_TOKEN, username]);
 
 	return (
 		<div
@@ -168,6 +112,7 @@ HomeList.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	token: PropTypes.string.isRequired,
 	INVALID_TOKEN: PropTypes.string.isRequired,
+	username: PropTypes.string.isRequired,
 };
 
 export default HomeList;

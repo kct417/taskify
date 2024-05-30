@@ -11,9 +11,11 @@ const API_PREFIX = 'http://localhost:8000';
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const [token, setToken] = useState(INVALID_TOKEN);
+	const [uname, setUname] = useState();
 
-	const handleLoginAndRegister = (newToken, callback) => {
+	const handleLoginAndRegister = (newToken, username, callback) => {
 		setToken(newToken);
+		setUname(username);
 		if (callback) {
 			callback();
 		}
@@ -30,6 +32,7 @@ function App() {
 								API_PREFIX={API_PREFIX}
 								token={token}
 								INVALID_TOKEN={INVALID_TOKEN}
+								username={uname}
 							/>
 						</div>
 					}
