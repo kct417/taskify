@@ -5,7 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 
 const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
-	const [tasks, setTasks] = useState([]);
+	//const [general_tasks, setGeneralTasks] = useState([]);
+	const [topTasks, setTopTasks] = useState([]);
+	const [dividers, setDividers] = useState([]);
 	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
 
@@ -27,16 +29,44 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 				const userData = await userResponse.json();
 
 				// Extract all tasks
-				const allTasks = [];
+				//const allTasks = [];
+
 				userData.dividers.forEach((divider) => {
-					divider.folders.forEach((folder) => {
-						folder.tasks.forEach((task) => {
-							allTasks.push(task);
-						});
+					divider.folders.sort((a, b) => {
+						if (a.folderName === 'General') return -1;
+						if (b.folderName === 'General') return 1;
+						return 0;
 					});
 				});
 
-				setTasks(allTasks);
+				setDividers(userData.dividers);
+
+				// userData.dividers.forEach((divider) => {
+				// 	divider.folders.forEach((folder) => {
+				// 		folder.tasks.forEach((task) => {
+				// 			allTasks.push(task);
+				// 		});
+				// 	});
+				// });
+
+				//setGeneralTasks(allTasks);
+
+				// Extract and sort tasks by due date
+				const allTasks = userData.dividers.flatMap((divider) =>
+					divider.folders.flatMap((folder) =>
+						folder.tasks.map((task) => ({
+							...task,
+							folderName: folder.folderName,
+						})),
+					),
+				);
+
+				const sortedTasks = allTasks
+					.filter((task) => task.dueDate)
+					.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+					.slice(0, 5);
+
+				setTopTasks(sortedTasks);
 			} catch (error) {
 				console.error('Error fetching tasks:', error);
 			}
@@ -64,6 +94,26 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 			<main className="container-fluid">
 				<div className="row">
 					<div className="col-12">
+						<section className="mb-5 p-3 bg-white shadow-sm rounded">
+							<h2>Top 5</h2>
+							<TaskList tasks={topTasks} />
+						</section>
+					</div>
+					{dividers.map((divider) =>
+						divider.folders.map((folder) => (
+							<div className="col-12" key={folder._id}>
+								<section className="mb-5 p-3 bg-white shadow-sm rounded">
+									<h2>{folder.folderName}</h2>
+									<TaskList tasks={folder.tasks} />
+								</section>
+							</div>
+						)),
+					)}
+				</div>
+			</main>
+			{/* <main className="container-fluid">
+				<div className="row">
+					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
 							<h2
 								className="text-decoration-underline mb-3"
@@ -71,21 +121,8 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 								General
 							</h2>
 							<TaskList
-								tasks={tasks}
+								tasks={general_tasks}
 								// handleTaskUpdate={handleTaskUpdate}
-							/>
-						</section>
-					</div>
-					{/* <div className="col-12">
-						<section className="mb-5 p-3 bg-white rounded">
-							<h2
-								className="text-decoration-underline mb-3"
-								style={{ color: sidebarButtonColor }}>
-								Top 5
-							</h2>
-							<TaskList
-								tasks={topTasks}
-								handleTaskUpdate={handleTaskUpdate}
 							/>
 						</section>
 					</div>
@@ -94,16 +131,18 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 							<h2
 								className="text-decoration-underline mb-3"
 								style={{ color: sidebarButtonColor }}>
-								Physics
+								Top 5
 							</h2>
 							<TaskList
-								tasks={physicsTasks}
-								handleTaskUpdate={handleTaskUpdate}
+								tasks={}
+								// handleTaskUpdate={handleTaskUpdate}
 							/>
 						</section>
-					</div> */}
+					</div>
+					
+					
 				</div>
-			</main>
+			</main> */}
 		</div>
 	);
 };
