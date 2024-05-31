@@ -1,8 +1,20 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-function Overlay({ show, context, fields, buttons, handleClose }) {
-	const [formFields] = useState({});
+function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
+	const [formFields, setFormFields] = useState({});
+
+	const handleFormFieldChange = (key, value) => {
+		setFormFields((prevFormFields) => ({
+			...prevFormFields,
+			[key]: value,
+		}));
+	};
+
+	const handleAddFolderClick = () => {
+		onAddFolder(formFields);
+		handleClose();
+	};
 
 	if (!show) {
 		return null;
@@ -38,10 +50,12 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 										<label>{label}</label>
 										<select
 											className="form-control"
-											onChange={(event) => {
-												formFields[key] =
-													event.target.value;
-											}}>
+											onChange={(event) =>
+												handleFormFieldChange(
+													key,
+													event.target.value,
+												)
+											}>
 											<option value="">
 												Select an option
 											</option>
@@ -66,10 +80,12 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 										type={type}
 										className="form-control"
 										placeholder={placeholder}
-										onChange={(event) => {
-											formFields[key] =
-												event.target.value;
-										}}
+										onChange={(event) =>
+											handleFormFieldChange(
+												key,
+												event.target.value,
+											)
+										}
 									/>
 								</div>
 							);
@@ -84,7 +100,11 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 									<button
 										type={type}
 										className="btn btn-block"
-										onClick={button.onClick || handleClose}
+										onClick={
+											button.onClick
+												? handleAddFolderClick
+												: handleClose
+										}
 										style={{
 											backgroundColor: '#F38D8D',
 											borderColor: '#F38D8D',
@@ -124,6 +144,7 @@ Overlay.propTypes = {
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
 	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleClose: PropTypes.func.isRequired,
+	onAddFolder: PropTypes.func.isRequired,
 };
 
 export default Overlay;
