@@ -14,7 +14,7 @@ const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 				INVALID_TOKEN={INVALID_TOKEN}
 				username={username}
 			/>
-			<div
+			{/* <div
 				className="container-fluid p-0 d-flex"
 				style={{ overflowY: 'auto' }}>
 				<HomeList
@@ -22,7 +22,7 @@ const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					token={token}
 					INVALID_TOKEN={INVALID_TOKEN}
 				/>
-			</div>
+			</div> */}
 		</div>
 	);
 };

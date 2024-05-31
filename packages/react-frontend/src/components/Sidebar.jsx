@@ -25,10 +25,14 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	const navigate = useNavigate();
 
 	const handleAddFolder = (formFields) => {
-		const folderName = formFields.folderName;
-		const dividerName = formFields.divider;
-		console.log('Folder Name:', folderName);
-		console.log('Divider Name:', dividerName);
+		const folderName = formFields.folderName?.trim();
+		const dividerName = formFields.divider?.trim();
+		// console.log('Folder Name:', folderName);
+		// console.log('Divider Name:', dividerName);
+		if (!folderName || !dividerName) {
+			alert('Please enter both folder name and divider name.');
+			return;
+		}
 		addFolder(folderName, dividerName);
 	};
 
