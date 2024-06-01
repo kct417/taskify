@@ -26,7 +26,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 						`Registration successful for user: '${credentials.username}'`,
 					);
 					console.log(`Auth token saved`);
-					navigate('/home');
+					navigate('/');
 				});
 			} else {
 				const text = await response.text();
