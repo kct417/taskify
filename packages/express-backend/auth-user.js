@@ -29,6 +29,12 @@ export async function registerUser(req, res) {
 			lastName: lastName,
 			username: username,
 			hashedPassword: hashedPassword,
+			dividers: [
+				{
+					dividerName: 'General',
+					folders: [{ folderName: 'General' }],
+				},
+			],
 		};
 		await addUser(userToAdd);
 

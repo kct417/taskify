@@ -14,17 +14,17 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	useEffect(() => {
 		const fetchTasks = async () => {
 			try {
+				if (token === INVALID_TOKEN) {
+					navigate('/login');
+					return;
+				}
+
 				// Fetch user data'
 				const userResponse = await fetch(`${API_PREFIX}/${username}`, {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				});
-
-				if (userResponse.status === 401) {
-					navigate('/login');
-					return;
-				}
 
 				const userData = await userResponse.json();
 
