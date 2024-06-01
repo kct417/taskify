@@ -8,7 +8,7 @@
 		"start": "conc --kill-others --handle-input \"npm run-script backend\" \"npm run-script frontend\"",
 		"frontend": "npm -w react-frontend run dev",
 		"backend": "npm -w express-backend run dev",
-		"format": "npx prettier . --write && git add .",
+		"format": "npx prettier . --write",
 		"lint": "npx eslint . && npx prettier --check .",
 		"test": "npx jest --passWithNoTests"
 	},

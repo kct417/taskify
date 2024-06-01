@@ -7,7 +7,6 @@ const TaskList = ({ tasks }) => {
 		<div>
 			{tasks.map((task) => (
 				<Task
-					key={task._id}
 					task={task}
 					// handleCheckboxChange={() => {
 					// 	task.completed = !task.completed;
