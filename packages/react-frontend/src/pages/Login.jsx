@@ -25,9 +25,8 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 					credentials.username,
 					() => {
 						console.log(
-							`Login successful for user: '${credentials.username}'`,
+							`Login successful for user: '${credentials.username}', Auth token saved`,
 						);
-						console.log(`Auth token saved`);
 						navigate('/');
 					},
 				);

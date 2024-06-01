@@ -146,29 +146,6 @@ const Sidebar = () => {
 					},
 				];
 				break;
-			case 'Prompt AI':
-				content = { title: 'Prompt AI', text: '' };
-				fields = [
-					{
-						label: 'Prompt',
-						placeholder: 'Enter your prompt',
-						type: 'text',
-						key: 'prompt',
-					},
-				];
-				buttons = [
-					{
-						label: 'Send Prompt',
-						type: 'button',
-						onClick: () => alert('Prompt sent!'),
-					},
-					{
-						label: 'Back',
-						type: 'button',
-						onClick: () => handleShow({ title: 'Menu' }),
-					},
-				];
-				break;
 			case 'Exit':
 				handleClose();
 				return;
@@ -270,7 +247,7 @@ const Sidebar = () => {
 						onDragStart={handleDragStart}
 						onDragEnd={handleDragEnd}>
 						<div
-							className="fw-bold mb-4"
+							className="fw-bold mb-4 text-center"
 							style={{ fontSize: '20px' }}>
 							Physics
 						</div>
@@ -285,7 +262,7 @@ const Sidebar = () => {
 							)}
 						</SortableContext>
 						<div
-							className="fw-bold mb-4"
+							className="fw-bold mb-4 text-center"
 							style={{ fontSize: '20px' }}>
 							Software Engineering
 						</div>

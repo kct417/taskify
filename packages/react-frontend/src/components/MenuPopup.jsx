@@ -82,9 +82,6 @@ function MenuPopup({ onButtonClick }) {
 			<MenuButton onClick={() => onButtonClick('Add Divider')}>
 				Add Divider
 			</MenuButton>
-			<MenuButton onClick={() => onButtonClick('Prompt AI')}>
-				Prompt AI
-			</MenuButton>
 			<MenuButton onClick={() => onButtonClick('Exit')}>Exit</MenuButton>
 		</div>
 	);
