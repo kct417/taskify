@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import AuthPageWrapper from '../components/AuthPageWrapper';
 
 import Form from '../components/Form';
-import BannerPageWrapper from '../components/BannerPageWrapper';
+import useBanner from '../hooks/UseBanner';
 
 const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
+	const { showBanner, bannerState } = useBanner();
 
 	async function registerUser(credentials) {
 		try {
@@ -34,7 +35,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				);
 			}
 		} catch (error) {
-			console.log(`Registration Error: ${error.message}`);
+			showBanner('Registration Error:', error.message, 'danger');
 		}
 	}
 
@@ -47,9 +48,10 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	return (
 		<AuthPageWrapper
 			header={header}
-			optionText={'Already have an account?'}
-			optionButtonText={'Login'}
-			optionButtonOnClick={() => navigate('/login')}>
+			alternateText={'Already have an account?'}
+			alternateButtonText={'Log In'}
+			alternateButtonOnClick={() => navigate('/login')}
+			bannerState={bannerState}>
 			<Form
 				fields={[
 					{

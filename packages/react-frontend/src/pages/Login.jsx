@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import BannerPageWrapper from '../components/BannerPageWrapper';
+import useBanner from '../hooks/UseBanner';
 import Form from '../components/Form';
 import AuthPageWrapper from '../components/AuthPageWrapper';
 
 const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
+	const { showBanner, bannerState } = useBanner();
 
 	async function loginUser(credentials) {
 		try {
@@ -30,7 +31,7 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				throw new Error(`Login Error ${response.status}: ${text}`);
 			}
 		} catch (error) {
-			alert('Error!', error.message, 'danger');
+			showBanner('Error!', error.message, 'danger');
 		}
 	}
 
@@ -42,9 +43,10 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	return (
 		<AuthPageWrapper
 			header={header}
-			optionText={"Don't have an account?"}
-			optionButtonText={'Sign up'}
-			optionButtonOnClick={() => navigate('/signup')}>
+			alternateText={"Don't have an account?"}
+			alternateButtonText={'Sign up'}
+			alternateButtonOnClick={() => navigate('/signup')}
+			bannerState={bannerState}>
 			<Form
 				fields={[
 					{

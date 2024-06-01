@@ -1,12 +1,6 @@
 import PropTypes from 'prop-types';
 
-const BannerAlert = ({
-	boldMessage,
-	message,
-	type,
-	isShowing,
-	setIsShowing,
-}) => {
+const BannerAlert = ({ boldMessage, message, type, isShowing, setShowing }) => {
 	if (!isShowing) return <></>;
 	return (
 		<div
@@ -18,7 +12,7 @@ const BannerAlert = ({
 				type="button"
 				className="close"
 				data-dismiss="alert"
-				onClick={() => setIsShowing(false)}
+				onClick={() => setShowing(false)}
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
@@ -31,7 +25,7 @@ BannerAlert.propTypes = {
 	message: PropTypes.string,
 	type: PropTypes.string,
 	isShowing: PropTypes.bool.isRequired,
-	setIsShowing: PropTypes.func.isRequired,
+	setShowing: PropTypes.func.isRequired,
 };
 
 export default BannerAlert;
