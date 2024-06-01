@@ -25,6 +25,19 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route
+					path="/"
+					element={
+						<div>
+							<Home
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+								username={uname}
+							/>
+						</div>
+					}
+				/>
+				<Route
 					path="/login"
 					element={
 						<div>
@@ -50,18 +63,6 @@ function App() {
 					}
 				/>
 				<Route
-					path="/"
-					element={
-						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
-						</div>
-					}
-				/>
-				<Route
 					path="/tasks"
 					element={
 						<div className="d-flex">
@@ -77,7 +78,11 @@ function App() {
 					path="/folder"
 					element={
 						<div>
-							<Folder API_PREFIX={API_PREFIX} />
+							<Folder
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
 						</div>
 					}
 				/>

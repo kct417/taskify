@@ -9,7 +9,11 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
 	const [showAlert, setShowAlert] = useState(false);
-	const [alertContent, setAlertContent] = useState({});
+	const [alertContent, setAlertContent] = useState({
+		boldMessage: '',
+		message: '',
+		type: '',
+	});
 	function alert(boldMessage, message, type) {
 		setAlertContent({
 			boldMessage,
@@ -40,7 +44,7 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 						console.log(`Auth token saved`);
 						navigate('/');
 					},
-				)
+				);
 			} else {
 				const text = await response.text();
 				throw new Error(`Login Error ${response.status}: ${text}`);
@@ -83,11 +87,10 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 						buttonText={'Log In'}
 					/>
 					<p className="mt-3 text-center">
-						Don't have an account?
+						Don&apos;t have an account?
 						<button
 							type="button"
 							style={{ borderColor: '#F38D8D', color: '#F38D8D' }}
-							
 							className="ml-2 btn"
 							onClick={() => navigate('/signup')}>
 							<strong>Sign up</strong>

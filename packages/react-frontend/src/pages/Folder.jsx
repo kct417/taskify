@@ -1,4 +1,5 @@
-import React from 'react';
+import PropTypes from 'prop-types';
+
 import FolderForm from '../components/FolderForm';
 import Sidebar from '../components/Sidebar';
 
@@ -19,6 +20,12 @@ const Folder = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 			</div>
 		</div>
 	);
+};
+
+Folder.propTypes = {
+	API_PREFIX: PropTypes.string.isRequired,
+	token: PropTypes.string.isRequired,
+	INVALID_TOKEN: PropTypes.string.isRequired,
 };
 
 export default Folder;

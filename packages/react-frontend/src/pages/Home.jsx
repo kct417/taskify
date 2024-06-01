@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import DefHome from '../components/Default';
+import HomeList from '../components/HomeList';
 import Sidebar from '../components/Sidebar';
 
 const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
@@ -17,7 +17,7 @@ const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 			<div
 				className="container-fluid p-0 d-flex"
 				style={{ overflowY: 'auto' }}>
-				<DefHome
+				<HomeList
 					API_PREFIX={API_PREFIX}
 					token={token}
 					INVALID_TOKEN={INVALID_TOKEN}
