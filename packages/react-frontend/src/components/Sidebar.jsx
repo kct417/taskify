@@ -27,13 +27,15 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	const handleAddFolder = (formFields) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
-		// console.log('Folder Name:', folderName);
-		// console.log('Divider Name:', dividerName);
+		console.log('Folder Name:', folderName);
+		console.log('Divider Name:', dividerName);
 		if (!folderName || !dividerName) {
-			alert('Please enter both folder name and divider name.');
+			alert('Please enter a folder name and select a divider');
 			return;
 		}
 		addFolder(folderName, dividerName);
+		alert('Folder added successfully');
+		handleClose();
 	};
 
 	function addFolder(folderEntered, dividerName) {
@@ -56,7 +58,6 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 			})
 			.catch((error) => {
 				console.error('Error:', error);
-				// Handle error
 			});
 
 		return promise;
@@ -183,7 +184,6 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					{
 						label: 'Add Folder',
 						type: 'button',
-						onClick: handleAddFolder,
 					},
 					{
 						label: 'Back',

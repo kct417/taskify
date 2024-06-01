@@ -13,7 +13,6 @@ function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
 
 	const handleAddFolderClick = () => {
 		onAddFolder(formFields);
-		handleClose();
 	};
 
 	if (!show) {
@@ -92,6 +91,10 @@ function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
 						})}
 						{buttons.map((button, idx) => {
 							const { label, type } = button;
+							let clickFunction = button.onClick || handleClose;
+							if (label === 'Add Folder') {
+								clickFunction = handleAddFolderClick;
+							}
 							return (
 								<div
 									key={idx}
@@ -100,11 +103,7 @@ function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
 									<button
 										type={type}
 										className="btn btn-block"
-										onClick={
-											button.onClick
-												? handleAddFolderClick
-												: handleClose
-										}
+										onClick={clickFunction}
 										style={{
 											backgroundColor: '#F38D8D',
 											borderColor: '#F38D8D',
