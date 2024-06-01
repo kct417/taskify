@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
+function Overlay({
+	show,
+	context,
+	fields,
+	buttons,
+	handleClose,
+	onAddFolder,
+	onAddDivider,
+}) {
 	const [formFields, setFormFields] = useState({});
 
 	const handleFormFieldChange = (key, value) => {
@@ -13,6 +21,10 @@ function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
 
 	const handleAddFolderClick = () => {
 		onAddFolder(formFields);
+	};
+
+	const handleAddDividerClick = () => {
+		onAddDivider(formFields);
 	};
 
 	if (!show) {
@@ -94,6 +106,8 @@ function Overlay({ show, context, fields, buttons, handleClose, onAddFolder }) {
 							let clickFunction = button.onClick || handleClose;
 							if (label === 'Add Folder') {
 								clickFunction = handleAddFolderClick;
+							} else if (label === 'Add Divider') {
+								clickFunction = handleAddDividerClick;
 							}
 							return (
 								<div
@@ -144,6 +158,7 @@ Overlay.propTypes = {
 	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleClose: PropTypes.func.isRequired,
 	onAddFolder: PropTypes.func.isRequired,
+	onAddDivider: PropTypes.func.isRequired,
 };
 
 export default Overlay;

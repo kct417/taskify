@@ -27,8 +27,6 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	const handleAddFolder = (formFields) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
-		console.log('Folder Name:', folderName);
-		console.log('Divider Name:', dividerName);
 		if (!folderName || !dividerName) {
 			alert('Please enter a folder name and select a divider');
 			return;
@@ -54,6 +52,42 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					return res.json();
 				} else {
 					throw new Error('Failed to add folder');
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+		return promise;
+	}
+
+	const handleAddDivider = (formFields) => {
+		const dividerName = formFields.divider?.trim();
+		if (!dividerName) {
+			alert('Please enter a divider name');
+			return;
+		}
+		addDivider(dividerName);
+		alert('Divider added successfully');
+		handleClose();
+	};
+
+	function addDivider(dividerEntered) {
+		// Make a POST request
+		const promise = fetch(`${API_PREFIX}/${username}`, {
+			method: 'POST',
+			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
+			body: JSON.stringify({
+				divider: {
+					dividerName: dividerEntered,
+				},
+			}),
+		})
+			.then((res) => {
+				if (res.status === 201) {
+					return res.json();
+				} else {
+					throw new Error('Failed to add divider');
 				}
 			})
 			.catch((error) => {
@@ -229,7 +263,6 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					{
 						label: 'Add Divider',
 						type: 'button',
-						onClick: () => alert('Divider added!'),
 					},
 					{
 						label: 'Back',
@@ -437,6 +470,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					show={overlayConfig.show}
 					handleClose={handleClose}
 					onAddFolder={handleAddFolder}
+					onAddDivider={handleAddDivider}
 				/>
 			)}
 		</div>
