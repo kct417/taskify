@@ -1,8 +1,31 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-function Overlay({ show, context, fields, buttons, handleClose }) {
-	const [formFields] = useState({});
+function Overlay({
+	show,
+	context,
+	fields,
+	buttons,
+	handleClose,
+	onAddFolder,
+	onAddDivider,
+}) {
+	const [formFields, setFormFields] = useState({});
+
+	const handleFormFieldChange = (key, value) => {
+		setFormFields((prevFormFields) => ({
+			...prevFormFields,
+			[key]: value,
+		}));
+	};
+
+	const handleAddFolderClick = () => {
+		onAddFolder(formFields);
+	};
+
+	const handleAddDividerClick = () => {
+		onAddDivider(formFields);
+	};
 
 	if (!show) {
 		return null;
@@ -28,7 +51,38 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 					</div>
 					<div className="modal-body">
 						{fields.map((field, idx) => {
-							const { label, placeholder, type, key } = field;
+							const { label, placeholder, type, key, options } =
+								field;
+							if (type === 'dropdown') {
+								return (
+									<div
+										key={idx}
+										className="form-group text-left">
+										<label>{label}</label>
+										<select
+											className="form-control"
+											onChange={(event) =>
+												handleFormFieldChange(
+													key,
+													event.target.value,
+												)
+											}>
+											<option value="">
+												Select an option
+											</option>
+											{options.map(
+												(option, optionIdx) => (
+													<option
+														key={optionIdx}
+														value={option}>
+														{option}
+													</option>
+												),
+											)}
+										</select>
+									</div>
+								);
+							}
 							return (
 								<div key={idx} className="form-group text-left">
 									<label>{label}</label>
@@ -36,16 +90,24 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 										type={type}
 										className="form-control"
 										placeholder={placeholder}
-										onChange={(event) => {
-											formFields[key] =
-												event.target.value;
-										}}
+										onChange={(event) =>
+											handleFormFieldChange(
+												key,
+												event.target.value,
+											)
+										}
 									/>
 								</div>
 							);
 						})}
 						{buttons.map((button, idx) => {
 							const { label, type } = button;
+							let clickFunction = button.onClick || handleClose;
+							if (label === 'Add Folder') {
+								clickFunction = handleAddFolderClick;
+							} else if (label === 'Add Divider') {
+								clickFunction = handleAddDividerClick;
+							}
 							return (
 								<div
 									key={idx}
@@ -54,7 +116,7 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 									<button
 										type={type}
 										className="btn btn-block"
-										onClick={button.onClick || handleClose}
+										onClick={clickFunction}
 										style={{
 											backgroundColor: '#F38D8D',
 											borderColor: '#F38D8D',
@@ -94,6 +156,8 @@ Overlay.propTypes = {
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
 	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
 	handleClose: PropTypes.func.isRequired,
+	onAddFolder: PropTypes.func.isRequired,
+	onAddDivider: PropTypes.func.isRequired,
 };
 
 export default Overlay;

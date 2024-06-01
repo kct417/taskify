@@ -15,11 +15,132 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
-const Sidebar = () => {
+const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
+	const [dividers, setDividers] = useState([]);
+	const navigate = useNavigate();
+
+	const handleAddFolder = (formFields) => {
+		const folderName = formFields.folderName?.trim();
+		const dividerName = formFields.divider?.trim();
+		if (!folderName || !dividerName) {
+			alert('Please enter a folder name and select a divider');
+			return;
+		}
+		addFolder(folderName, dividerName);
+		alert('Folder added successfully');
+		handleClose();
+	};
+
+	function addFolder(folderEntered, dividerName) {
+		// Make a POST request
+		const promise = fetch(`${API_PREFIX}/${username}/${dividerName}`, {
+			method: 'POST',
+			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
+			body: JSON.stringify({
+				folder: {
+					folderName: folderEntered,
+				},
+			}),
+		})
+			.then((res) => {
+				if (res.status === 201) {
+					return res.json();
+				} else {
+					throw new Error('Failed to add folder');
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+		return promise;
+	}
+
+	const handleAddDivider = (formFields) => {
+		const dividerName = formFields.divider?.trim();
+		if (!dividerName) {
+			alert('Please enter a divider name');
+			return;
+		}
+		addDivider(dividerName);
+		alert('Divider added successfully');
+		handleClose();
+	};
+
+	function addDivider(dividerEntered) {
+		// Make a POST request
+		const promise = fetch(`${API_PREFIX}/${username}`, {
+			method: 'POST',
+			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
+			body: JSON.stringify({
+				divider: {
+					dividerName: dividerEntered,
+				},
+			}),
+		})
+			.then((res) => {
+				if (res.status === 201) {
+					return res.json();
+				} else {
+					throw new Error('Failed to add divider');
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+		return promise;
+	}
+
+	useEffect(() => {
+		if (token === INVALID_TOKEN) {
+			navigate('/');
+			return;
+		}
+
+		fetchDividers()
+			.then((res) => (res.status === 200 ? res.json() : undefined))
+			.then((json) => setDividers(json['dividers']))
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
+
+	function fetchDividers() {
+		const promise = fetch(`${API_PREFIX}/${username}`, {
+			headers: addAuthHeader(),
+		});
+
+		return promise;
+	}
+
+	function addAuthHeader(otherHeaders = {}) {
+		return {
+			...otherHeaders,
+			Authorization: `Bearer ${token}`,
+		};
+	}
+
+	function getDividersNames() {
+		const dividerNames = dividers.map((divider) => divider['dividerName']);
+		return dividerNames;
+	}
+
+	// function getFoldersNames(dividerName) {
+	// 	for (let i = 0; i < dividers.length; i++) {
+	// 		if (dividers[i]['dividerName'] === dividerName) {
+	// 			return dividers[i]['folders'].map(
+	// 				(folder) => folder['folderName'],
+	// 			);
+	// 		}
+	// 	}
+	// }
+
 	// Overlay Code
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
@@ -86,12 +207,17 @@ const Sidebar = () => {
 						type: 'text',
 						key: 'folderName',
 					},
+					{
+						label: 'Divider',
+						type: 'dropdown',
+						key: 'divider',
+						options: getDividersNames(),
+					},
 				];
 				buttons = [
 					{
 						label: 'Add Folder',
 						type: 'button',
-						onClick: () => alert('Folder added!'),
 					},
 					{
 						label: 'Back',
@@ -108,6 +234,18 @@ const Sidebar = () => {
 						placeholder: 'Enter Task Name',
 						type: 'text',
 						key: 'taskName',
+					},
+					{
+						label: 'Divider',
+						type: 'dropdown',
+						key: 'divider',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+					},
+					{
+						label: 'Folder',
+						type: 'dropdown',
+						key: 'folder',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
 					},
 				];
 				buttons = [
@@ -137,7 +275,6 @@ const Sidebar = () => {
 					{
 						label: 'Add Divider',
 						type: 'button',
-						onClick: () => alert('Divider added!'),
 					},
 					{
 						label: 'Back',
@@ -344,6 +481,8 @@ const Sidebar = () => {
 					buttons={overlayConfig.buttons}
 					show={overlayConfig.show}
 					handleClose={handleClose}
+					onAddFolder={handleAddFolder}
+					onAddDivider={handleAddDivider}
 				/>
 			)}
 		</div>
@@ -404,6 +543,13 @@ SortableItem.propTypes = {
 
 EmptySection.propTypes = {
 	id: PropTypes.string.isRequired,
+};
+
+Sidebar.propTypes = {
+	API_PREFIX: PropTypes.string.isRequired,
+	token: PropTypes.string.isRequired,
+	INVALID_TOKEN: PropTypes.string.isRequired,
+	username: PropTypes.string.isRequired,
 };
 
 export default Sidebar;
