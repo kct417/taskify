@@ -411,7 +411,7 @@ const EmptySection = ({ id }) => {
 
 SortableItem.propTypes = {
 	id: PropTypes.string.isRequired,
-	isDragging: PropTypes.bool.isRequired,
+	isDragging: PropTypes.bool,
 };
 
 EmptySection.propTypes = {

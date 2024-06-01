@@ -4,102 +4,76 @@ import { useNavigate } from 'react-router-dom';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
+const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
+	//const [general_tasks, setGeneralTasks] = useState([]);
+	const [topTasks, setTopTasks] = useState([]);
+	const [dividers, setDividers] = useState([]);
 	const sidebarButtonColor = '#F38D8D';
-
-	const [tasks, setTasks] = useState([]);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (token === INVALID_TOKEN) {
-			navigate('/login');
-			return;
-		}
-
-		fetchTasks()
-			.then((res) => (res.status === 200 ? res.json() : undefined))
-			.then((json) => {
-				if (json) {
-					setTasks(json);
-				} else {
-					setTasks(null);
+		const fetchTasks = async () => {
+			try {
+				if (token === INVALID_TOKEN) {
+					navigate('/login');
+					return;
 				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
 
-	function updateTask(task) {
-		postTask(task)
-			.then((res) => {
-				if (res.status === 201) {
-					return res.json();
-				}
-			})
-			.then((json) => {
-				if (json) {
-					setTasks([...tasks, json]);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+				// Fetch user data'
+				const userResponse = await fetch(`${API_PREFIX}/${username}`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
 
-	function removeOneTask(index) {
-		const idToDelete = tasks[index]._id;
-		deleteTask(idToDelete)
-			.then((res) => {
-				if (res.status === 204) {
-					const updated = tasks.filter(
-						(character) => character['_id'] !== idToDelete,
-					);
-					setTasks(updated);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
+				const userData = await userResponse.json();
 
-	function fetchTasks() {
-		const promise = fetch(`${API_PREFIX}/tasks`, {
-			headers: addAuthHeader(),
-		});
+				// Extract all tasks
+				//const allTasks = [];
 
-		return promise;
-	}
+				userData.dividers.forEach((divider) => {
+					divider.folders.sort((a, b) => {
+						if (a.folderName === 'General') return -1;
+						if (b.folderName === 'General') return 1;
+						return 0;
+					});
+				});
 
-	function postTask(task) {
-		const promise = fetch(`${API_PREFIX}/tasks`, {
-			method: 'POST',
-			headers: addAuthHeader({
-				'Content-Type': 'application/json',
-			}),
-			body: JSON.stringify(task),
-		});
+				setDividers(userData.dividers);
 
-		return promise;
-	}
+				// userData.dividers.forEach((divider) => {
+				// 	divider.folders.forEach((folder) => {
+				// 		folder.tasks.forEach((task) => {
+				// 			allTasks.push(task);
+				// 		});
+				// 	});
+				// });
 
-	function deleteTask(id) {
-		const promise = fetch(`${API_PREFIX}/tasks/${id}`, {
-			method: 'DELETE',
-			headers: addAuthHeader({
-				'Content-Type': 'application/json',
-			}),
-		});
+				//setGeneralTasks(allTasks);
 
-		return promise;
-	}
+				// Extract and sort tasks by due date
+				const allTasks = userData.dividers.flatMap((divider) =>
+					divider.folders.flatMap((folder) =>
+						folder.tasks.map((task) => ({
+							...task,
+							folderName: folder.folderName,
+						})),
+					),
+				);
 
-	function addAuthHeader(otherHeaders = {}) {
-		return {
-			...otherHeaders,
-			Authorization: `Bearer ${token}`,
+				const sortedTasks = allTasks
+					.filter((task) => task.dueDate)
+					.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+					.slice(0, 5);
+
+				setTopTasks(sortedTasks);
+			} catch (error) {
+				console.error('Error fetching tasks:', error);
+			}
 		};
-	}
+
+		fetchTasks();
+	}, [API_PREFIX, token, navigate, INVALID_TOKEN, username]);
 
 	return (
 		<div
@@ -120,6 +94,26 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 			<main className="container-fluid">
 				<div className="row">
 					<div className="col-12">
+						<section className="mb-5 p-3 bg-white shadow-sm rounded">
+							<h2>Top 5</h2>
+							<TaskList tasks={topTasks} />
+						</section>
+					</div>
+					{dividers.map((divider) =>
+						divider.folders.map((folder) => (
+							<div className="col-12" key={folder._id}>
+								<section className="mb-5 p-3 bg-white shadow-sm rounded">
+									<h2>{folder.folderName}</h2>
+									<TaskList tasks={folder.tasks} />
+								</section>
+							</div>
+						)),
+					)}
+				</div>
+			</main>
+			{/* <main className="container-fluid">
+				<div className="row">
+					<div className="col-12">
 						<section className="mb-5 p-3 bg-white rounded">
 							<h2
 								className="text-decoration-underline mb-3"
@@ -127,21 +121,8 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 								General
 							</h2>
 							<TaskList
-								tasks={tasks}
+								tasks={general_tasks}
 								// handleTaskUpdate={handleTaskUpdate}
-							/>
-						</section>
-					</div>
-					{/* <div className="col-12">
-						<section className="mb-5 p-3 bg-white rounded">
-							<h2
-								className="text-decoration-underline mb-3"
-								style={{ color: sidebarButtonColor }}>
-								Top 5
-							</h2>
-							<TaskList
-								tasks={topTasks}
-								handleTaskUpdate={handleTaskUpdate}
 							/>
 						</section>
 					</div>
@@ -150,16 +131,18 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 							<h2
 								className="text-decoration-underline mb-3"
 								style={{ color: sidebarButtonColor }}>
-								Physics
+								Top 5
 							</h2>
 							<TaskList
-								tasks={physicsTasks}
-								handleTaskUpdate={handleTaskUpdate}
+								tasks={}
+								// handleTaskUpdate={handleTaskUpdate}
 							/>
 						</section>
-					</div> */}
+					</div>
+					
+					
 				</div>
-			</main>
+			</main> */}
 		</div>
 	);
 };
@@ -168,6 +151,7 @@ HomeList.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	token: PropTypes.string.isRequired,
 	INVALID_TOKEN: PropTypes.string.isRequired,
+	username: PropTypes.string.isRequired,
 };
 
 export default HomeList;
