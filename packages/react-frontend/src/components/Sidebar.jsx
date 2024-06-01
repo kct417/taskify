@@ -235,6 +235,18 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 						type: 'text',
 						key: 'taskName',
 					},
+					{
+						label: 'Divider',
+						type: 'dropdown',
+						key: 'divider',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+					},
+					{
+						label: 'Folder',
+						type: 'dropdown',
+						key: 'folder',
+						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+					},
 				];
 				buttons = [
 					{
@@ -526,7 +538,7 @@ const EmptySection = ({ id }) => {
 
 SortableItem.propTypes = {
 	id: PropTypes.string.isRequired,
-	isDragging: PropTypes.bool.isRequired,
+	isDragging: PropTypes.bool,
 };
 
 EmptySection.propTypes = {

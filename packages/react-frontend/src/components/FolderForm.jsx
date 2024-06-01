@@ -1,5 +1,7 @@
+import React from 'react';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
+import './header.css';
 
 const FolderForm = () => {
 	const sidebarButtonColor = '#F38D8D';
@@ -18,7 +20,6 @@ const FolderForm = () => {
 			completed: false,
 		},
 	];
-
 	const emptyTasks = [
 		{
 			id: 0,
@@ -43,47 +44,46 @@ const FolderForm = () => {
 	const handleTaskUpdate = (taskId, newCompletedStatus) => {
 		console.log(
 			`Task ${taskId} completed status updated to ${newCompletedStatus}`,
+			// asdfasdkfi
 		);
 	};
 
 	return (
 		<div
-			className="container-fluid bg-light p-3"
-			style={{ backgroundColor: '#FFF5F5', height: '100vh' }}>
+			className="d-flex flex-column bg-light"
+			style={{
+				backgroundColor: '#FFF5F5',
+				paddingLeft: '20px',
+				flex: 1,
+				paddingTop: '20px',
+				paddingRight: '20px',
+			}}>
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-				<div className="d-flex justify-content-between align-items-center">
+				<div className="container">
 					<h3>Physics</h3>
-					<div className="position-relative">
-						<img
-							src={fire_asset}
-							className="img-fluid"
-							style={{ width: '50px', height: '50px' }}
-							alt="Fire"
-						/>
-						<figcaption
-							className="position-absolute"
-							style={{
-								top: '35%',
-								left: '40%',
-								color: 'black',
-								fontSize: '1.25em',
-							}}>
-							1
-						</figcaption>
+					<div className="container">
+						<figure className="position-relative">
+							<img
+								src={fire_asset}
+								className="fire_img"
+								alt="Fire"
+							/>
+							<figcaption>1</figcaption>
+						</figure>
 					</div>
 				</div>
-				<h5 className="mt-3">
+				<h5>
 					Description:
-					<input type="text" className="form-control mt-2" />
+					<input type="text" className="textarea" />
 				</h5>
 				<hr />
 			</header>
 			<main className="container-fluid">
 				<div className="row">
-					<div className="col-12 mb-4">
-						<section className="p-3 bg-white rounded">
+					<div className="col-12">
+						<section className="mb-5 p-3 bg-white rounded">
 							<h2 style={{ color: sidebarButtonColor }}>Today</h2>
 							<TaskList
 								tasks={physicsTasks}
@@ -91,8 +91,9 @@ const FolderForm = () => {
 							/>
 						</section>
 					</div>
+					<hr />
 					<div className="col-12">
-						<section className="p-3 bg-white rounded">
+						<section className="mb-5 p-3 bg-white rounded">
 							<h2 style={{ color: sidebarButtonColor }}>
 								Upcoming
 							</h2>

@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types';
+import TaskList from './TaskList';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import TaskList from './TaskList';
-
-const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
+const DefHome = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const sidebarButtonColor = '#F38D8D';
 
 	const [tasks, setTasks] = useState([]);
@@ -164,10 +162,4 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	);
 };
 
-HomeList.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
-	token: PropTypes.string.isRequired,
-	INVALID_TOKEN: PropTypes.string.isRequired,
-};
-
-export default HomeList;
+export default DefHome;

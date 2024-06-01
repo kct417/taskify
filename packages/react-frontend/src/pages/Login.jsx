@@ -21,7 +21,6 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 
 	async function loginUser(credentials) {
 		try {
-			// e.g., alert('Success!', 'Login successful.', 'success');
 			const response = await fetch(`${API_PREFIX}/login`, {
 				method: 'POST',
 				headers: {
@@ -41,13 +40,13 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 						console.log(`Auth token saved`);
 						navigate('/');
 					},
-				);
+				)
 			} else {
 				const text = await response.text();
 				throw new Error(`Login Error ${response.status}: ${text}`);
 			}
 		} catch (error) {
-			console.log(`Login Error: ${error.message}`);
+			alert('Error!', error.message, 'danger');
 		}
 	}
 
@@ -60,23 +59,42 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				isShowing={showAlert}
 				setIsShowing={setShowAlert}
 			/>
-			<Form
-				fields={[
-					{
-						label: 'Username',
-						placeholder: 'Enter your username',
-						key: 'username',
-					},
-					{
-						label: 'Password',
-						placeholder: 'Enter your password',
-						type: 'password',
-						key: 'password',
-					},
-				]}
-				submitFunc={loginUser}
-				buttonText={'Log In'}
-			/>
+			<div className="d-flex justify-content-center align-items-center">
+				<div className="w-50 mt-5">
+					<h1 className="mb-5 text-center">
+						Welcome to{' '}
+						<strong style={{ color: '#F38D8D' }}>Taskify</strong>
+					</h1>
+					<Form
+						fields={[
+							{
+								label: 'Username',
+								placeholder: 'Enter your username',
+								key: 'username',
+							},
+							{
+								label: 'Password',
+								placeholder: 'Enter your password',
+								type: 'password',
+								key: 'password',
+							},
+						]}
+						submitFunc={loginUser}
+						buttonText={'Log In'}
+					/>
+					<p className="mt-3 text-center">
+						Don't have an account?
+						<button
+							type="button"
+							style={{ borderColor: '#F38D8D', color: '#F38D8D' }}
+							
+							className="ml-2 btn"
+							onClick={() => navigate('/signup')}>
+							<strong>Sign up</strong>
+						</button>
+					</p>
+				</div>
+			</div>
 		</>
 	);
 };

@@ -83,7 +83,6 @@ function Overlay({
 									</div>
 								);
 							}
-
 							return (
 								<div key={idx} className="form-group text-left">
 									<label>{label}</label>
