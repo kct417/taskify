@@ -1,11 +1,9 @@
-// All function are used index.js of the backend folder only
-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import {
 	addUser,
-	findUserByName,
+	findUser,
 } from '../mongoose-database/services/user-services.js';
 
 export async function registerUser(req, res) {
@@ -16,7 +14,7 @@ export async function registerUser(req, res) {
 			return res.status(400).send('Bad request: Invalid input data.');
 		}
 
-		const userExists = await findUserByName(username);
+		const userExists = await findUser(username);
 		if (userExists) {
 			return res.status(409).send('Username already taken');
 		}
@@ -31,6 +29,12 @@ export async function registerUser(req, res) {
 			lastName: lastName,
 			username: username,
 			hashedPassword: hashedPassword,
+			dividers: [
+				{
+					dividerName: 'General',
+					folders: [{ folderName: 'General' }],
+				},
+			],
 		};
 		await addUser(userToAdd);
 
@@ -45,7 +49,7 @@ export async function loginUser(req, res) {
 	const { username, password } = req.body;
 
 	try {
-		const retrievedUser = await findUserByName(username);
+		const retrievedUser = await findUser(username);
 
 		if (!retrievedUser) {
 			return res

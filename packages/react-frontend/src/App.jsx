@@ -11,9 +11,11 @@ const API_PREFIX = 'http://localhost:8000';
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const [token, setToken] = useState(INVALID_TOKEN);
+	const [uname, setUname] = useState('');
 
-	const handleLoginAndRegister = (newToken, callback) => {
+	const handleLoginAndRegister = (newToken, username, callback) => {
 		setToken(newToken);
+		setUname(username);
 		if (callback) {
 			callback();
 		}
@@ -22,6 +24,19 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
+				<Route
+					path="/"
+					element={
+						<div>
+							<Home
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+								username={uname}
+							/>
+						</div>
+					}
+				/>
 				<Route
 					path="/login"
 					element={
@@ -45,18 +60,6 @@ function App() {
 					}
 				/>
 				<Route
-					path="/"
-					element={
-						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
-						</div>
-					}
-				/>
-				<Route
 					path="/tasks"
 					element={
 						<div className="d-flex">
@@ -72,7 +75,11 @@ function App() {
 					path="/folder"
 					element={
 						<div>
-							<Folder API_PREFIX={API_PREFIX} />
+							<Folder
+								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+							/>
 						</div>
 					}
 				/>
