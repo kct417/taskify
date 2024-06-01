@@ -28,7 +28,36 @@ function Overlay({ show, context, fields, buttons, handleClose }) {
 					</div>
 					<div className="modal-body">
 						{fields.map((field, idx) => {
-							const { label, placeholder, type, key } = field;
+							const { label, placeholder, type, key, options } =
+								field;
+							if (type === 'dropdown') {
+								return (
+									<div
+										key={idx}
+										className="form-group text-left">
+										<label>{label}</label>
+										<select
+											className="form-control"
+											onChange={(event) => {
+												formFields[key] =
+													event.target.value;
+											}}>
+											<option value="">
+												Select an option
+											</option>
+											{options.map(
+												(option, optionIdx) => (
+													<option
+														key={optionIdx}
+														value={option}>
+														{option}
+													</option>
+												),
+											)}
+										</select>
+									</div>
+								);
+							}
 							return (
 								<div key={idx} className="form-group text-left">
 									<label>{label}</label>
