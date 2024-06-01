@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import AuthPageWrapper from '../components/AuthPageWrapper';
 
 import Form from '../components/Form';
+import BannerPageWrapper from '../components/BannerPageWrapper';
 
-// TODO: extract reused code for wrapper component or something
 const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 	const navigate = useNavigate();
 
@@ -37,53 +38,46 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 		}
 	}
 
+	const header = (
+		<>
+			Create your <strong style={{ color: '#F38D8D' }}>Taskify</strong>{' '}
+			account
+		</>
+	);
 	return (
-		<div className="d-flex justify-content-center align-items-center">
-			<div className="w-50 mt-5">
-				<h1 className="mb-5 text-center">
-					Create your{' '}
-					<strong style={{ color: '#F38D8D' }}>Taskify</strong>{' '}
-					account
-				</h1>
-				<Form
-					fields={[
-						{
-							label: 'First Name',
-							placeholder: 'Enter your first name',
-							key: 'firstName',
-						},
-						{
-							label: 'Last Name',
-							placeholder: 'Enter your last name',
-							key: 'lastName',
-						},
-						{
-							label: 'Username',
-							placeholder: 'Enter your username',
-							key: 'username',
-						},
-						{
-							label: 'Password',
-							placeholder: 'Enter your password',
-							type: 'password',
-							key: 'password',
-						},
-					]}
-					submitFunc={registerUser}
-					buttonText={'Sign Up'}
-				/>
-				<p className="mt-3 text-center">
-					Already have an account?
-					<button
-						type="button"
-						style={{ borderColor: '#F38D8D', color: '#F38D8D' }}
-						className="ml-2 btn btn-outline-primary"
-						onClick={() => navigate('/login')}>
-						<strong>Log in</strong>
-					</button>
-				</p>
-			</div>
-		</div>
+		<AuthPageWrapper
+			header={header}
+			optionText={'Already have an account?'}
+			optionButtonText={'Login'}
+			optionButtonOnClick={() => navigate('/login')}>
+			<Form
+				fields={[
+					{
+						label: 'First Name',
+						placeholder: 'Enter your first name',
+						key: 'firstName',
+					},
+					{
+						label: 'Last Name',
+						placeholder: 'Enter your last name',
+						key: 'lastName',
+					},
+					{
+						label: 'Username',
+						placeholder: 'Enter your username',
+						key: 'username',
+					},
+					{
+						label: 'Password',
+						placeholder: 'Enter your password',
+						type: 'password',
+						key: 'password',
+					},
+				]}
+				submitFunc={registerUser}
+				buttonText={'Sign Up'}
+			/>
+		</AuthPageWrapper>
 	);
 };
 
