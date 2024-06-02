@@ -3,26 +3,16 @@ import PropTypes from 'prop-types';
 import HomeList from '../components/HomeList';
 import Sidebar from '../components/Sidebar';
 
-const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
+const Home = ({ API_PREFIX, user, setUser }) => {
 	return (
 		<div
 			className="d-flex"
 			style={{ height: '100vh', overflowY: 'hidden' }}>
-			<Sidebar
-				API_PREFIX={API_PREFIX}
-				token={token}
-				INVALID_TOKEN={INVALID_TOKEN}
-				username={username}
-			/>
+			<Sidebar API_PREFIX={API_PREFIX} user={user} setUser={setUser} />
 			<div
 				className="container-fluid p-0 d-flex"
 				style={{ overflowY: 'auto' }}>
-				<HomeList
-					API_PREFIX={API_PREFIX}
-					token={token}
-					INVALID_TOKEN={INVALID_TOKEN}
-					username={username}
-				/>
+				<HomeList API_PREFIX={API_PREFIX} user={user} />
 			</div>
 		</div>
 	);
@@ -30,8 +20,8 @@ const Home = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 Home.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
-	token: PropTypes.string.isRequired,
-	INVALID_TOKEN: PropTypes.string.isRequired,
-	username: PropTypes.string.isRequired,
+	user: PropTypes.object.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
+
 export default Home;

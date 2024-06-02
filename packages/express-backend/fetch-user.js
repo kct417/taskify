@@ -5,12 +5,12 @@ import {
 	updateTasks,
 } from '../mongoose-database/services/user-services.js';
 
-export const getUser = (req, res) => {
+export const getDividers = (req, res) => {
 	const { username } = req.params;
 	findUser(username)
 		.then((result) => {
 			if (result) {
-				res.status(200).send(result);
+				res.status(200).send(result.dividers);
 			} else {
 				res.status(404).send('Resource not found.');
 			}
@@ -121,7 +121,7 @@ export const setTask = (req, res) => {
 };
 
 export default {
-	getUser,
+	getDividers,
 	createDivider,
 	deleteDivider,
 	setDivider,

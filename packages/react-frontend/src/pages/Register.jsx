@@ -19,13 +19,29 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 
 			if (response.status === 201) {
 				const payload = await response.json();
-				handleLoginAndRegister(payload.token, () => {
-					console.log(
-						`Registration successful for user: '${credentials.username}'`,
-					);
-					console.log(`Auth token saved`);
-					navigate('/');
-				});
+				const dividers = await fetch(
+					`${API_PREFIX}/${payload.username}`,
+					{
+						headers: addAuthHeader(
+							{
+								'Content-Type': 'application/json',
+							},
+							payload.token,
+						),
+					},
+				);
+				handleLoginAndRegister(
+					payload.token,
+					payload.username,
+					dividers,
+					() => {
+						console.log(
+							`Registration successful for user: '${credentials.username}'`,
+						);
+						console.log(`Auth token saved`);
+						navigate('/');
+					},
+				);
 			} else {
 				const text = await response.text();
 				throw new Error(
@@ -35,6 +51,13 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 		} catch (error) {
 			console.log(`Registration Error: ${error.message}`);
 		}
+	}
+
+	function addAuthHeader(otherHeaders = {}, token) {
+		return {
+			...otherHeaders,
+			Authorization: `Bearer ${token}`,
+		};
 	}
 
 	return (

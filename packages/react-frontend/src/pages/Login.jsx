@@ -34,13 +34,29 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 			});
 			if (response.status === 200) {
 				const payload = await response.json();
-				handleLoginAndRegister(payload.token, payload.username, () => {
-					console.log(
-						`Login successful for user: '${payload.username}'`,
-					);
-					console.log(`Auth token saved`);
-					navigate('/');
-				});
+				const dividers = await fetch(
+					`${API_PREFIX}/${payload.username}`,
+					{
+						headers: addAuthHeader(
+							{
+								'Content-Type': 'application/json',
+							},
+							payload.token,
+						),
+					},
+				);
+				handleLoginAndRegister(
+					payload.token,
+					payload.username,
+					dividers,
+					() => {
+						console.log(
+							`Login successful for user: '${payload.username}'`,
+						);
+						console.log(`Auth token saved`);
+						navigate('/');
+					},
+				);
 			} else {
 				const text = await response.text();
 				throw new Error(`Login Error ${response.status}: ${text}`);
@@ -48,6 +64,13 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 		} catch (error) {
 			alert('Error!', error.message, 'danger');
 		}
+	}
+
+	function addAuthHeader(otherHeaders = {}, token) {
+		return {
+			...otherHeaders,
+			Authorization: `Bearer ${token}`,
+		};
 	}
 
 	return (

@@ -15,7 +15,7 @@ app.use(express.json());
 app.post('/signup', registerUser);
 app.post('/login', loginUser);
 
-app.get('/:username', authenticateUser, User.getUser);
+app.get('/:username', authenticateUser, User.getDividers);
 
 app.post('/:username', authenticateUser, User.createDivider);
 app.post('/:username/:dividerName', authenticateUser, User.createFolder);

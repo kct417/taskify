@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Task from './pages/Task';
 import Folder from './pages/Folder';
 
 const API_PREFIX = 'http://localhost:8000';
@@ -17,11 +17,11 @@ function App() {
 		dividers: [],
 	});
 
-	const handleLoginAndRegister = (newToken, username, callback) => {
+	const populateUser = (newToken, username, dividers, callback) => {
 		setUser({
 			token: newToken,
 			username: username,
-			dividers: [],
+			dividers: dividers,
 		});
 		if (callback) {
 			callback();
@@ -35,7 +35,11 @@ function App() {
 					path="/"
 					element={
 						<div>
-							<Home API_PREFIX={API_PREFIX} user={user} />
+							<Home
+								API_PREFIX={API_PREFIX}
+								user={user}
+								setUser={populateUser}
+							/>
 						</div>
 					}
 				/>
@@ -45,7 +49,7 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={handleLoginAndRegister}
+								handleLoginAndRegister={populateUser}
 							/>
 						</div>
 					}
@@ -56,21 +60,13 @@ function App() {
 						<div>
 							<Register
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={handleLoginAndRegister}
+								handleLoginAndRegister={populateUser}
 							/>
 						</div>
 					}
 				/>
 				<Route
-					path="/tasks"
-					element={
-						<div className="d-flex">
-							<Task API_PREFIX={API_PREFIX} user={user} />
-						</div>
-					}
-				/>
-				<Route
-					path="/folder"
+					path="/folders/:id"
 					element={
 						<div>
 							<Folder API_PREFIX={API_PREFIX} user={user} />
