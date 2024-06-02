@@ -20,17 +20,13 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 			});
 			if (response.status === 200) {
 				const payload = await response.json();
-				handleLoginAndRegister(
-					payload.token,
-					payload.username,
-					payload.dividers,
-					() => {
-						console.log(
-							`Login successful for user: '${payload.username}'`,
-						);
-						navigate('/');
-					},
-				);
+				handleLoginAndRegister(payload.token, payload.username, () => {
+					console.log(
+						`Login successful for user: '${payload.username}'`,
+					);
+					console.log(`Auth token saved`);
+					navigate('/');
+				});
 			} else {
 				const text = await response.text();
 				throw new Error(`Login Error ${response.status}: ${text}`);

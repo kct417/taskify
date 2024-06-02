@@ -17,11 +17,11 @@ function App() {
 		dividers: [],
 	});
 
-	const handleLoginAndRegister = (newToken, username, dividers, callback) => {
+	const handleLoginAndRegister = (newToken, username, callback) => {
 		setUser({
 			token: newToken,
 			username: username,
-			dividers: dividers,
+			dividers: [],
 		});
 		if (callback) {
 			callback();
