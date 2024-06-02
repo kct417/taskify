@@ -6,13 +6,15 @@ const formatDate = (dateString) => {
 	return date.toISOString().split('T')[0];
 };
 
-const Task = ({ task }) => {
-	const [checked, setChecked] = useState([]);
+const Task = ({ task, onDelete, dividerName, folderName }) => {
+	const [checked, setChecked] = useState(false);
 
-	// const handleCheckboxClick = () => {
-	// 	setChecked(!checked);
-	// 	handleCheckboxChange();
-	// };
+	const handleCheckboxClick = () => {
+		setChecked(!checked);
+		if (!checked) {
+			onDelete(task, dividerName, folderName);
+		}
+	};
 
 	return (
 		<div
@@ -22,13 +24,12 @@ const Task = ({ task }) => {
 				<input
 					type="checkbox"
 					className="form-check-input"
-					//id={key}
-					// checked={checked}
-					// onChange={handleCheckboxClick}
+					checked={checked}
+					onChange={handleCheckboxClick}
 				/>
 			</div>
 			<div className="text-center flex-grow-1 text-white">
-				{task.taskName}
+				{task.description}
 			</div>
 			<div className="text-end font-weight-bold">
 				Due: {task.dueDate ? formatDate(task.dueDate) : 'No due date'}
@@ -45,7 +46,9 @@ Task.propTypes = {
 		dueDate: PropTypes.string,
 		completed: PropTypes.bool,
 	}).isRequired,
-
-	// handleCheckboxChange: PropTypes.func.isRequired,
+	onDelete: PropTypes.func.isRequired,
+	dividerName: PropTypes.string,
+	folderName: PropTypes.string,
 };
+
 export default Task;

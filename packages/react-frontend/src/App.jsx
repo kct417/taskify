@@ -43,6 +43,9 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
+								token={token}
+								INVALID_TOKEN={INVALID_TOKEN}
+								username={uname}
 								handleLoginAndRegister={handleLoginAndRegister}
 							/>
 						</div>

@@ -2,17 +2,16 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-const TaskList = ({ tasks }) => {
+const TaskList = ({ tasks, onDelete, dividerName, folderName }) => {
 	return (
 		<div>
 			{tasks.map((task) => (
 				<Task
 					key={task._id}
 					task={task}
-					// handleCheckboxChange={() => {
-					// 	task.completed = !task.completed;
-					// 	handleTaskUpdate(task.id, task.completed);
-					// }}
+					onDelete={onDelete}
+					dividerName={dividerName}
+					folderName={folderName}
 				/>
 			))}
 		</div>
@@ -21,7 +20,9 @@ const TaskList = ({ tasks }) => {
 
 TaskList.propTypes = {
 	tasks: PropTypes.array,
-	// handleTaskUpdate: PropTypes.func.isRequired,
+	onDelete: PropTypes.func.isRequired,
+	dividerName: PropTypes.string,
+	folderName: PropTypes.string,
 };
 
 export default TaskList;
