@@ -35,12 +35,7 @@ function App() {
 					path="/"
 					element={
 						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-								username={uname}
-							/>
+							<Home API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>
@@ -50,9 +45,6 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-								username={uname}
 								handleLoginAndRegister={handleLoginAndRegister}
 							/>
 						</div>
@@ -73,11 +65,7 @@ function App() {
 					path="/tasks"
 					element={
 						<div className="d-flex">
-							<Task
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
+							<Task API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>
@@ -85,11 +73,7 @@ function App() {
 					path="/folder"
 					element={
 						<div>
-							<Folder
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
+							<Folder API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>
