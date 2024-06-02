@@ -15,7 +15,7 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
@@ -27,38 +27,44 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			alert('Please enter a folder name and select a divider');
 			return;
 		}
-		addFolder(folderName, dividerName);
-		alert('Folder added successfully');
-		handleClose();
-	};
-
-	function addFolder(folderEntered, dividerName) {
-		// Make a POST request
-		const promise = fetch(`${API_PREFIX}/${user.username}/${dividerName}`, {
-			method: 'POST',
-			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
-			body: JSON.stringify({
-				folder: {
-					folderName: folderEntered,
-				},
-			}),
-		})
-			.then((res) => {
-				if (res.status === 201) {
-					setUser({
-						token: user.token,
-						username: user.username,
-						dividers: res.json(),
-					});
-				} else {
-					throw new Error('Failed to add folder');
-				}
+		addFolder(folderName, dividerName)
+			.then(() => {
+				alert('Folder added successfully');
+				handleClose();
 			})
 			.catch((error) => {
-				console.error('Error:', error);
+				console.error('Error adding folder:', error);
+				alert('Failed to add folder');
 			});
+	};
 
-		return promise;
+	async function addFolder(folderEntered, dividerName) {
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/${dividerName}`,
+				{
+					method: 'POST',
+					headers: addAuthHeader({
+						'Content-Type': 'application/json',
+					}),
+					body: JSON.stringify({
+						folder: {
+							folderName: folderEntered,
+						},
+					}),
+				},
+			);
+
+			if (response.status === 201) {
+				const data = await response.json();
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to add folder');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
 	}
 
 	const handleAddDivider = (formFields) => {
@@ -67,38 +73,39 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			alert('Please enter a divider name');
 			return;
 		}
-		addDivider(dividerName);
-		alert('Divider added successfully');
-		handleClose();
-	};
-
-	function addDivider(dividerEntered) {
-		// Make a POST request
-		const promise = fetch(`${API_PREFIX}/${user.username}`, {
-			method: 'POST',
-			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
-			body: JSON.stringify({
-				divider: {
-					dividerName: dividerEntered,
-				},
-			}),
-		})
-			.then((res) => {
-				if (res.status === 201) {
-					setUser({
-						token: user.token,
-						username: user.username,
-						dividers: res.json(),
-					});
-				} else {
-					throw new Error('Failed to add divider');
-				}
+		addDivider(dividerName)
+			.then(() => {
+				alert('Divider added successfully');
+				handleClose();
 			})
 			.catch((error) => {
-				console.error('Error:', error);
+				console.error('Error adding divider:', error);
+				alert('Failed to add divider');
+			});
+	};
+
+	async function addDivider(dividerEntered) {
+		try {
+			const response = await fetch(`${API_PREFIX}/${user.username}`, {
+				method: 'POST',
+				headers: addAuthHeader({ 'Content-Type': 'application/json' }),
+				body: JSON.stringify({
+					divider: {
+						dividerName: dividerEntered,
+					},
+				}),
 			});
 
-		return promise;
+			if (response.status === 201) {
+				const data = await response.json();
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to add divider');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
 	}
 
 	function addAuthHeader(otherHeaders = {}) {
@@ -107,6 +114,22 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			Authorization: `Bearer ${user.token}`,
 		};
 	}
+
+	const [dividerNames, setDividerNames] = useState([]);
+	useEffect(() => {
+		const fetchDividerNames = async () => {
+			try {
+				const names = user.dividers.map(
+					(divider) => divider['dividerName'],
+				);
+				setDividerNames(names);
+			} catch (error) {
+				console.error('Error fetching dividers:', error);
+			}
+		};
+
+		fetchDividerNames();
+	}, [user, setUser]);
 
 	// function getFoldersNames(dividerName) {
 	// 	for (let i = 0; i < dividers.length; i++) {
@@ -188,7 +211,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						label: 'Divider',
 						type: 'dropdown',
 						key: 'divider',
-						options: 'dividerNames',
+						options: dividerNames,
 					},
 				];
 				buttons = [
