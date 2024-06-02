@@ -22,10 +22,11 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				const payload = await response.json();
 				handleLoginAndRegister(
 					payload.token,
-					credentials.username,
+					payload.username,
+					payload.dividers,
 					() => {
 						console.log(
-							`Login successful for user: '${credentials.username}', Auth token saved`,
+							`Login successful for user: '${payload.username}'`,
 						);
 						navigate('/');
 					},
