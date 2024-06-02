@@ -37,22 +37,6 @@ app.put('/:username', authenticateUser, User.setDivider);
 app.put('/:username/:dividerName', authenticateUser, User.setFolder);
 app.put('/:username/:dividerName/:folderName', authenticateUser, User.setTask);
 
-// Routes without authentication for testing
-
-// app.get('/:username', User.getUser);
-
-// app.post('/:username', User.createDivider);
-// app.post('/:username/:dividerName', User.createFolder);
-// app.post('/:username/:dividerName/:folderName', User.createTask);
-
-// app.delete('/:username', User.deleteDivider);
-// app.delete('/:username/:dividerName', User.deleteFolder);
-// app.delete('/:username/:dividerName/:folderName', User.deleteTask);
-
-// app.put('/:username', User.setDivider);
-// app.put('/:username/:dividerName', User.setFolder);
-// app.put('/:username/:dividerName/:folderName', User.setTask);
-
 app.listen(port, () => {
 	console.log(`Example app listening at ${API_PREFIX}`);
 });

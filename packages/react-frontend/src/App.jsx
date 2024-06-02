@@ -10,12 +10,19 @@ const API_PREFIX = 'http://localhost:8000';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
-	const [token, setToken] = useState(INVALID_TOKEN);
-	const [uname, setUname] = useState('');
+	const INVALID_USERNAME = 'INVALID_USERNAME';
+	const [user, setUser] = useState({
+		token: INVALID_TOKEN,
+		username: INVALID_USERNAME,
+		dividers: [],
+	});
 
 	const handleLoginAndRegister = (newToken, username, callback) => {
-		setToken(newToken);
-		setUname(username);
+		setUser({
+			token: newToken,
+			username: username,
+			dividers: [],
+		});
 		if (callback) {
 			callback();
 		}
@@ -28,12 +35,7 @@ function App() {
 					path="/"
 					element={
 						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-								username={uname}
-							/>
+							<Home API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>
@@ -43,9 +45,6 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-								username={uname}
 								handleLoginAndRegister={handleLoginAndRegister}
 							/>
 						</div>
@@ -66,11 +65,7 @@ function App() {
 					path="/tasks"
 					element={
 						<div className="d-flex">
-							<Task
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
+							<Task API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>
@@ -78,11 +73,7 @@ function App() {
 					path="/folder"
 					element={
 						<div>
-							<Folder
-								API_PREFIX={API_PREFIX}
-								token={token}
-								INVALID_TOKEN={INVALID_TOKEN}
-							/>
+							<Folder API_PREFIX={API_PREFIX} user={user} />
 						</div>
 					}
 				/>

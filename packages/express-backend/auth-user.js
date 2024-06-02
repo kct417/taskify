@@ -38,7 +38,7 @@ export async function registerUser(req, res) {
 		};
 		await addUser(userToAdd);
 
-		return res.status(201).send({ token: token });
+		return res.status(201).send({ token: token, username: username });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send('Internal Server Error');
@@ -64,7 +64,7 @@ export async function loginUser(req, res) {
 		if (matched) {
 			const token = await generateAccessToken(username);
 			console.log('Token:', token);
-			return res.status(200).send({ token: token });
+			return res.status(200).send({ token: token, username: username });
 		} else {
 			return res
 				.status(401)
@@ -87,6 +87,7 @@ export function authenticateUser(req, res, next) {
 		jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
 			if (decoded) {
 				req.body['username'] = decoded.username;
+				req.body['dividers'] = decoded.dividers;
 				next();
 			} else {
 				console.log('JWT error:', error);
