@@ -15,15 +15,11 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
-const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
-	const [dividers, setDividers] = useState([]);
-	const navigate = useNavigate();
-
+const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	const handleAddFolder = (formFields) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
@@ -38,7 +34,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 	function addFolder(folderEntered, dividerName) {
 		// Make a POST request
-		const promise = fetch(`${API_PREFIX}/${username}/${dividerName}`, {
+		const promise = fetch(`${API_PREFIX}/${user.username}/${dividerName}`, {
 			method: 'POST',
 			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
 			body: JSON.stringify({
@@ -49,7 +45,11 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 		})
 			.then((res) => {
 				if (res.status === 201) {
-					return res.json();
+					setUser({
+						token: user.token,
+						username: user.username,
+						dividers: res.json(),
+					});
 				} else {
 					throw new Error('Failed to add folder');
 				}
@@ -74,7 +74,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 	function addDivider(dividerEntered) {
 		// Make a POST request
-		const promise = fetch(`${API_PREFIX}/${username}`, {
+		const promise = fetch(`${API_PREFIX}/${user.username}`, {
 			method: 'POST',
 			headers: addAuthHeader({ 'Content-Type': 'application/json' }),
 			body: JSON.stringify({
@@ -85,7 +85,11 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 		})
 			.then((res) => {
 				if (res.status === 201) {
-					return res.json();
+					setUser({
+						token: user.token,
+						username: user.username,
+						dividers: res.json(),
+					});
 				} else {
 					throw new Error('Failed to add divider');
 				}
@@ -97,38 +101,11 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 		return promise;
 	}
 
-	useEffect(() => {
-		if (token === INVALID_TOKEN) {
-			navigate('/');
-			return;
-		}
-
-		fetchDividers()
-			.then((res) => (res.status === 200 ? res.json() : undefined))
-			.then((json) => setDividers(json['dividers']))
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-
-	function fetchDividers() {
-		const promise = fetch(`${API_PREFIX}/${username}`, {
-			headers: addAuthHeader(),
-		});
-
-		return promise;
-	}
-
 	function addAuthHeader(otherHeaders = {}) {
 		return {
 			...otherHeaders,
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${user.token}`,
 		};
-	}
-
-	function getDividersNames() {
-		const dividerNames = dividers.map((divider) => divider['dividerName']);
-		return dividerNames;
 	}
 
 	// function getFoldersNames(dividerName) {
@@ -211,7 +188,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 						label: 'Divider',
 						type: 'dropdown',
 						key: 'divider',
-						options: getDividersNames(),
+						options: 'dividerNames',
 					},
 				];
 				buttons = [
@@ -476,6 +453,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 			{overlayConfig.show && overlayConfig.content.title !== 'Menu' && (
 				<Overlay
+					user={user}
 					context={overlayConfig.content}
 					fields={overlayConfig.fields}
 					buttons={overlayConfig.buttons}
@@ -547,9 +525,8 @@ EmptySection.propTypes = {
 
 Sidebar.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
-	token: PropTypes.string.isRequired,
-	INVALID_TOKEN: PropTypes.string.isRequired,
-	username: PropTypes.string.isRequired,
+	user: PropTypes.object.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

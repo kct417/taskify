@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Overlay({
+	user,
 	show,
 	context,
 	fields,
@@ -11,6 +12,25 @@ function Overlay({
 	onAddDivider,
 }) {
 	const [formFields, setFormFields] = useState({});
+	const [dividerNames, setDividerNames] = useState([]);
+
+	useEffect(() => {
+		if (user.dividers) {
+			const fetchDividerNames = async () => {
+				try {
+					const clonedResponse = user.dividers.clone();
+					const dividersData = await clonedResponse.json();
+					const names = dividersData.map(
+						(divider) => divider['dividerName'],
+					);
+					setDividerNames(names);
+				} catch (error) {
+					console.error('Error fetching dividers:', error);
+				}
+			};
+			fetchDividerNames();
+		}
+	}, [user.dividers]);
 
 	const handleFormFieldChange = (key, value) => {
 		setFormFields((prevFormFields) => ({
@@ -70,15 +90,16 @@ function Overlay({
 											<option value="">
 												Select an option
 											</option>
-											{options.map(
-												(option, optionIdx) => (
-													<option
-														key={optionIdx}
-														value={option}>
-														{option}
-													</option>
-												),
-											)}
+											{options === 'dividerNames' &&
+												dividerNames.map(
+													(name, optionIdx) => (
+														<option
+															key={optionIdx}
+															value={name}>
+															{name}
+														</option>
+													),
+												)}
 										</select>
 									</div>
 								);
@@ -151,6 +172,7 @@ function Overlay({
 }
 
 Overlay.propTypes = {
+	user: PropTypes.object.isRequired,
 	show: PropTypes.bool.isRequired,
 	context: PropTypes.object.isRequired,
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
