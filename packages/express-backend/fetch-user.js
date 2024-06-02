@@ -25,7 +25,7 @@ export const createDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
 	updateDividers(username, divider, 'push')
-		.then((result) => res.status(201).send(result))
+		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -58,7 +58,7 @@ export const createFolder = (req, res) => {
 	const { username, dividerName } = req.params;
 	const { folder } = req.body;
 	updateFolders(username, dividerName, folder, 'push')
-		.then((result) => res.status(201).send(result))
+		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -91,7 +91,7 @@ export const createTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
 	updateTasks(username, dividerName, folderName, task, 'push')
-		.then((result) => res.status(201).send(result))
+		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
