@@ -20,7 +20,13 @@ import { useNavigate } from 'react-router-dom';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
-const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
+const Sidebar = ({
+	API_PREFIX,
+	token,
+	INVALID_TOKEN,
+	username,
+	showBanner,
+}) => {
 	const [dividers, setDividers] = useState([]);
 	const navigate = useNavigate();
 
@@ -28,11 +34,19 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
 		if (!folderName || !dividerName) {
-			alert('Please enter a folder name and select a divider');
+			showBanner(
+				'Please',
+				'enter a folder name and select a divider',
+				'danger',
+			);
 			return;
 		}
 		addFolder(folderName, dividerName);
-		alert('Folder added successfully');
+		showBanner(
+			'Folder added successfully:',
+			`${dividerName}/${folderName}`,
+			'success',
+		);
 		handleClose();
 	};
 
@@ -64,11 +78,11 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 	const handleAddDivider = (formFields) => {
 		const dividerName = formFields.divider?.trim();
 		if (!dividerName) {
-			alert('Please enter a divider name');
+			showBanner('Please', 'enter a divider name', 'danger');
 			return;
 		}
 		addDivider(dividerName);
-		alert('Divider added successfully');
+		showBanner('Divider added successfully:', dividerName, 'success');
 		handleClose();
 	};
 
@@ -252,7 +266,7 @@ const Sidebar = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 					{
 						label: 'Add Task',
 						type: 'button',
-						onClick: () => alert('Task added!'),
+						onClick: () => showBanner('Task added!', '', 'success'),
 					},
 					{
 						label: 'Back',
