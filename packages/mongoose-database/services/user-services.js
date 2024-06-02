@@ -40,7 +40,7 @@ export const updateDividers = async (username, divider, updateType) => {
 				new: true,
 			},
 		);
-		return updatedUser.dividers;
+		return updatedUser;
 	} catch (err) {
 		console.error(err);
 		return null;

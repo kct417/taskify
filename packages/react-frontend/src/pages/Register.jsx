@@ -22,12 +22,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				const dividers = await fetch(
 					`${API_PREFIX}/${payload.username}`,
 					{
-						headers: addAuthHeader(
-							{
-								'Content-Type': 'application/json',
-							},
-							payload.token,
-						),
+						headers: addAuthHeader(payload.token),
 					},
 				);
 				handleLoginAndRegister(
@@ -53,9 +48,8 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 		}
 	}
 
-	function addAuthHeader(otherHeaders = {}, token) {
+	function addAuthHeader(token) {
 		return {
-			...otherHeaders,
 			Authorization: `Bearer ${token}`,
 		};
 	}

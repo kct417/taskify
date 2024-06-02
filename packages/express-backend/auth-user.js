@@ -87,7 +87,6 @@ export function authenticateUser(req, res, next) {
 		jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
 			if (decoded) {
 				req.body['username'] = decoded.username;
-				req.body['dividers'] = decoded.dividers;
 				next();
 			} else {
 				console.log('JWT error:', error);
