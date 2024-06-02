@@ -10,12 +10,19 @@ const API_PREFIX = 'http://localhost:8000';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
-	const [token, setToken] = useState(INVALID_TOKEN);
-	const [uname, setUname] = useState('');
+	const INVALID_USERNAME = 'INVALID_USERNAME';
+	const [user, setUser] = useState({
+		token: INVALID_TOKEN,
+		username: INVALID_USERNAME,
+		dividers: [],
+	});
 
-	const handleLoginAndRegister = (newToken, username, callback) => {
-		setToken(newToken);
-		setUname(username);
+	const handleLoginAndRegister = (newToken, username, dividers, callback) => {
+		setUser({
+			token: newToken,
+			username: username,
+			dividers: dividers,
+		});
 		if (callback) {
 			callback();
 		}

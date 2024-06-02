@@ -59,6 +59,7 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 	useEffect(() => {
 		fetchTasks();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [API_PREFIX, token, navigate, INVALID_TOKEN, username]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
