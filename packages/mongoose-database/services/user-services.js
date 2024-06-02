@@ -40,7 +40,7 @@ export const updateDividers = async (username, divider, updateType) => {
 				new: true,
 			},
 		);
-		return updatedUser;
+		return updatedUser.dividers;
 	} catch (err) {
 		console.error(err);
 		return null;
@@ -87,7 +87,7 @@ export const updateFolders = async (
 				new: true,
 			},
 		);
-		return updatedUser;
+		return updatedUser.dividers;
 	} catch (err) {
 		console.error(err);
 		return null;
@@ -145,7 +145,7 @@ export const updateTasks = async (
 				new: true,
 			},
 		);
-		return updatedUser;
+		return updatedUser.dividers;
 	} catch (err) {
 		console.error(err);
 		return null;
