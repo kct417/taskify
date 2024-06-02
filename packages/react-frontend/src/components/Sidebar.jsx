@@ -20,178 +20,6 @@ import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
 const Sidebar = ({ API_PREFIX, user, setUser }) => {
-	const handleAddFolder = (formFields) => {
-		const folderName = formFields.folderName?.trim();
-		const dividerName = formFields.divider?.trim();
-		if (!folderName || !dividerName) {
-			alert('Please enter a folder name and select a divider');
-			return;
-		}
-		addFolder(folderName, dividerName)
-			.then(() => {
-				alert('Folder added successfully');
-				handleClose();
-			})
-			.catch((error) => {
-				console.error('Error adding folder:', error);
-				alert('Failed to add folder');
-			});
-	};
-
-	async function addFolder(folderEntered, dividerName) {
-		try {
-			const response = await fetch(
-				`${API_PREFIX}/${user.username}/${dividerName}`,
-				{
-					method: 'POST',
-					headers: addAuthHeader({
-						'Content-Type': 'application/json',
-					}),
-					body: JSON.stringify({
-						folder: {
-							folderName: folderEntered,
-						},
-					}),
-				},
-			);
-
-			if (response.status === 201) {
-				const data = await response.json();
-				setUser(user.token, user.username, data);
-			} else {
-				throw new Error('Failed to add folder');
-			}
-		} catch (error) {
-			console.error('Error:', error);
-			throw error; // re-throw the error so the caller can handle it
-		}
-	}
-
-	const handleAddDivider = (formFields) => {
-		const dividerName = formFields.divider?.trim();
-		if (!dividerName) {
-			alert('Please enter a divider name');
-			return;
-		}
-		addDivider(dividerName)
-			.then(() => {
-				alert('Divider added successfully');
-				handleClose();
-			})
-			.catch((error) => {
-				console.error('Error adding divider:', error);
-				alert('Failed to add divider');
-			});
-	};
-
-	async function addDivider(dividerEntered) {
-		try {
-			const response = await fetch(`${API_PREFIX}/${user.username}`, {
-				method: 'POST',
-				headers: addAuthHeader({ 'Content-Type': 'application/json' }),
-				body: JSON.stringify({
-					divider: {
-						dividerName: dividerEntered,
-					},
-				}),
-			});
-
-			if (response.status === 201) {
-				const data = await response.json();
-				setUser(user.token, user.username, data);
-			} else {
-				throw new Error('Failed to add divider');
-			}
-		} catch (error) {
-			console.error('Error:', error);
-			throw error; // re-throw the error so the caller can handle it
-		}
-	}
-
-	function addAuthHeader(otherHeaders = {}) {
-		return {
-			...otherHeaders,
-			Authorization: `Bearer ${user.token}`,
-		};
-	}
-
-	const [dividerNames, setDividerNames] = useState([]);
-	useEffect(() => {
-		const fetchDividerNames = async () => {
-			try {
-				const names = user.dividers.map(
-					(divider) => divider['dividerName'],
-				);
-				setDividerNames(names);
-			} catch (error) {
-				console.error('Error fetching dividers:', error);
-			}
-		};
-
-		fetchDividerNames();
-	}, [user, setUser]);
-
-	// function getFoldersNames(dividerName) {
-	// 	for (let i = 0; i < dividers.length; i++) {
-	// 		if (dividers[i]['dividerName'] === dividerName) {
-	// 			return dividers[i]['folders'].map(
-	// 				(folder) => folder['folderName'],
-	// 			);
-	// 		}
-	// 	}
-	// }
-
-	// Overlay Code
-	const [overlayConfig, setOverlayConfig] = useState({
-		show: false,
-		content: null,
-		fields: [],
-		buttons: [],
-	});
-	const [items, setItems] = useState({
-		Physics: ['Homework'],
-		SoftwareEngineering: [
-			'Project',
-			'Assignment',
-			'Quiz',
-			'Midterm',
-			'Final',
-		],
-	});
-	const [activeId, setActiveId] = useState(null);
-
-	const sensors = useSensors(
-		useSensor(MouseSensor, {
-			activationConstraint: {
-				distance: 5,
-			},
-		}),
-		useSensor(TouchSensor, {
-			activationConstraint: {
-				delay: 10,
-				tolerance: 5,
-			},
-		}),
-	);
-
-	const handleShow = (content, fields = [], buttons = []) => {
-		setOverlayConfig({
-			show: true,
-			content,
-			fields,
-			buttons,
-		});
-	};
-
-	const handleClose = () => {
-		setOverlayConfig({
-			show: false,
-			content: null,
-			fields: [],
-			buttons: [],
-		});
-	};
-
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
@@ -316,7 +144,170 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		handleShow(content, fields, buttons);
 	};
 
+	const handleAddFolder = (formFields) => {
+		const folderName = formFields.folderName?.trim();
+		const dividerName = formFields.divider?.trim();
+		if (!folderName || !dividerName) {
+			alert('Please enter a folder name and select a divider');
+			return;
+		}
+		addFolder(folderName, dividerName)
+			.then(() => {
+				alert('Folder added successfully');
+				handleClose();
+			})
+			.catch((error) => {
+				console.error('Error adding folder:', error);
+				alert('Failed to add folder');
+			});
+	};
+
+	async function addFolder(folderEntered, dividerName) {
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/${dividerName}`,
+				{
+					method: 'POST',
+					headers: addAuthHeader({
+						'Content-Type': 'application/json',
+					}),
+					body: JSON.stringify({
+						folder: {
+							folderName: folderEntered,
+						},
+					}),
+				},
+			);
+
+			if (response.status === 201) {
+				const data = await response.json();
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to add folder');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
+	}
+
+	const handleAddDivider = (formFields) => {
+		const dividerName = formFields.divider?.trim();
+		if (!dividerName) {
+			alert('Please enter a divider name');
+			return;
+		}
+		addDivider(dividerName)
+			.then(() => {
+				alert('Divider added successfully');
+				handleClose();
+			})
+			.catch((error) => {
+				console.error('Error adding divider:', error);
+				alert('Failed to add divider');
+			});
+	};
+
+	async function addDivider(dividerEntered) {
+		try {
+			const response = await fetch(`${API_PREFIX}/${user.username}`, {
+				method: 'POST',
+				headers: addAuthHeader({ 'Content-Type': 'application/json' }),
+				body: JSON.stringify({
+					divider: {
+						dividerName: dividerEntered,
+					},
+				}),
+			});
+
+			if (response.status === 201) {
+				const data = await response.json();
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to add divider');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
+	}
+
+	function addAuthHeader(otherHeaders = {}) {
+		return {
+			...otherHeaders,
+			Authorization: `Bearer ${user.token}`,
+		};
+	}
+
+	const [dividerNames, setDividerNames] = useState([]);
+	useEffect(() => {
+		const fetchDividerNames = async () => {
+			try {
+				const dnames = user.dividers.map(
+					(divider) => divider['dividerName'],
+				);
+				setDividerNames(dnames);
+			} catch (error) {
+				console.error('Error fetching dividers:', error);
+			}
+		};
+
+		fetchDividerNames();
+	}, [user, setUser]);
+
+	// Overlay Code
+	const [overlayConfig, setOverlayConfig] = useState({
+		show: false,
+		content: null,
+		fields: [],
+		buttons: [],
+	});
+
+	const handleShow = (content, fields = [], buttons = []) => {
+		setOverlayConfig({
+			show: true,
+			content,
+			fields,
+			buttons,
+		});
+	};
+
+	const handleClose = () => {
+		setOverlayConfig({
+			show: false,
+			content: null,
+			fields: [],
+			buttons: [],
+		});
+	};
+
 	// Drag and Drop Code
+	const [items, setItems] = useState({
+		Physics: ['Homework'],
+		SoftwareEngineering: [
+			'Project',
+			'Assignment',
+			'Quiz',
+			'Midterm',
+			'Final',
+		],
+	});
+	const [activeId, setActiveId] = useState(null);
+
+	const sensors = useSensors(
+		useSensor(MouseSensor, {
+			activationConstraint: {
+				distance: 5,
+			},
+		}),
+		useSensor(TouchSensor, {
+			activationConstraint: {
+				delay: 10,
+				tolerance: 5,
+			},
+		}),
+	);
+
 	const handleDragStart = (event) => {
 		const { active } = event;
 		setActiveId(active.id);
