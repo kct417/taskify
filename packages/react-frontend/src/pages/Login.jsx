@@ -34,12 +34,13 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 			});
 			if (response.status === 200) {
 				const payload = await response.json();
-				const dividers = await fetch(
+				const divResp = await fetch(
 					`${API_PREFIX}/${payload.username}`,
 					{
 						headers: addAuthHeader(payload.token),
 					},
 				);
+				const dividers = await divResp.json();
 				handleLoginAndRegister(
 					payload.token,
 					payload.username,
