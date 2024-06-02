@@ -10,11 +10,6 @@ const Task = ({ API_PREFIX, token, INVALID_TOKEN }) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (token === INVALID_TOKEN) {
-			navigate('/');
-			return;
-		}
-
 		fetchTasks()
 			.then((res) => (res.status === 200 ? res.json() : undefined))
 			.then((json) => {

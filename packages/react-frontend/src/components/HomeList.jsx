@@ -12,10 +12,10 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 	const fetchTasks = async () => {
 		try {
-			if (token === INVALID_TOKEN) {
-				navigate('/login');
-				return;
-			}
+			// if (token === INVALID_TOKEN) {
+			// 	navigate('/login');
+			// 	return;
+			// }
 
 			// Fetch user data'
 			const userResponse = await fetch(`${API_PREFIX}/${username}`, {

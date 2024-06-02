@@ -112,11 +112,6 @@ const Sidebar = ({
 	}
 
 	useEffect(() => {
-		if (token === INVALID_TOKEN) {
-			navigate('/');
-			return;
-		}
-
 		fetchDividers()
 			.then((res) => (res.status === 200 ? res.json() : undefined))
 			.then((json) => setDividers(json['dividers']))
