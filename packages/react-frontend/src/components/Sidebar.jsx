@@ -39,11 +39,6 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			);
 			return;
 		}
-		console.log(folderName);
-		console.log(dividerName);
-		console.log(taskName);
-		console.log(dueDate);
-		console.log(description);
 
 		addTask(taskName, dueDate, description, folderName, dividerName)
 			.then(() => {

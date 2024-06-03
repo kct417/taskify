@@ -65,22 +65,17 @@ function Overlay({
 							const { label, placeholder, type, key, options } =
 								field;
 							if (type === 'dropdown') {
-								console.log('dropdown options:', options);
 								let folderOptions = [];
-								console.log(selectedDivider);
 								if (label === 'Folder' && selectedDivider) {
 									const divData = user.dividers.find(
 										(divider) =>
 											divider.dividerName ===
 											selectedDivider,
 									);
-									console.log('in this hoe');
 									folderOptions = divData.folders.map(
 										(folder) => folder.folderName,
 									);
 								}
-
-								console.log(folderOptions);
 								return (
 									<div
 										key={idx}
