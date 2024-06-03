@@ -18,6 +18,7 @@ function App() {
 	});
 
 	const populateUser = (newToken, username, dividers, callback) => {
+		console.log('App.jsx:', newToken, username, dividers);
 		setUser({
 			token: newToken,
 			username: username,

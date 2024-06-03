@@ -32,7 +32,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 					dividers,
 					() => {
 						console.log(
-							`Registration successful for user: '${credentials.username}'`,
+							`Registration successful for user: '${payload.username}'`,
 						);
 						console.log(`Auth token saved`);
 						navigate('/');

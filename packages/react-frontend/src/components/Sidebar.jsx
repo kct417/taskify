@@ -151,7 +151,10 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			alert('Please enter a folder name and select a divider');
 			return;
 		}
-		addFolder(folderName, dividerName)
+		const folderObject = {
+			folderName: folderName,
+		};
+		addFolder(folderObject, dividerName)
 			.then(() => {
 				alert('Folder added successfully');
 				handleClose();
@@ -173,7 +176,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 					}),
 					body: JSON.stringify({
 						folder: {
-							folderName: folderEntered,
+							folderName: folderEntered.folderName,
 						},
 					}),
 				},
@@ -191,49 +194,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	}
 
-	// const deleteTask = async (task, dividerName, folderName) => {
-	// 	console.log(task, dividerName, folderName);
-	// 	try {
-	// 		const response = await fetch(
-	// 			`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
-	// 			{
-	// 				method: 'DELETE',
-	// 				headers: {
-	// 					'Content-Type': 'application/json',
-	// 					Authorization: `Bearer ${user.token}`,
-	// 				},
-	// 				body: JSON.stringify({ task: task }),
-	// 			},
-	// 		);
-	// 		if (response.ok) {
-	// 			// Refresh tasks after deletion
-	// 			const updatedUserResponse = await fetch(
-	// 				`${API_PREFIX}/${user.username}`,
-	// 				{
-	// 					headers: {
-	// 						Authorization: `Bearer ${user.token}`,
-	// 					},
-	// 				},
-	// 			);
-	// 			const updatedUserData = await updatedUserResponse.json();
-	// 			updateUserData(user.token, user.username, updatedUserData);
-	// 		} else {
-	// 			console.error('Failed to delete task');
-	// 		}
-	// 	} catch (error) {
-	// 		console.error('Error deleting task:', error);
-	// 	}
-	// };
-
 	async function deleteFolder(folderName, dividerName, folderId) {
-		// console.log(folderName, dividerName);
-		// console.log(
-		// 	`Deleting folder from URL: ${API_PREFIX}/${user.username}/${dividerName}`,
-		// );
-		// console.log(
-		// 	user.dividers.find((d) => d.dividerName === dividerName).folders,
-		// );
-		console.log(folderName, dividerName, folderId);
 		try {
 			const response = await fetch(
 				`${API_PREFIX}/${user.username}/${dividerName}`,
@@ -246,15 +207,13 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 					body: JSON.stringify({
 						folder: {
 							folderName: folderName,
-							folderId: folderId,
+							_id: folderId,
 						},
 					}),
 				},
 			);
-			console.log(response);
 			if (response.status === 200) {
 				const data = await response.json();
-				console.log(data);
 				setUser(user.token, user.username, data);
 			} else {
 				throw new Error('Failed to delete folder');
@@ -433,6 +392,9 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		} else {
 			try {
 				// Delete the folder from the old divider
+				// console.log("Sidebar User:" + user);
+				// console.log("Sidebar User Divider:" + user.dividers);
+				// console.log("Sidebar Dragged Folder:" + draggedFolder);
 				await deleteFolder(
 					draggedFolder.folderName,
 					activeContainer,
@@ -440,7 +402,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 				);
 
 				// Add the folder to the new divider
-				// await addFolder(draggedFolder.folderName, overContainer);
+				await addFolder(draggedFolder, overContainer);
 
 				setItems((prevItems) => {
 					const activeItems = prevItems[activeContainer].filter(
