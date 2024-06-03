@@ -17,15 +17,6 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 				return;
 			}
 
-			// Fetch user data'
-			// const userResponse = await fetch(`${API_PREFIX}/${user.username}`, {
-			// 	headers: {
-			// 		Authorization: `Bearer ${user.token}`,
-			// 	},
-			// });
-
-			// userDivs = await userResponse.json()
-
 			const allTasks = await user.dividers.flatMap((divider) =>
 				divider.folders.flatMap((folder) =>
 					folder.tasks.map((task) => ({
@@ -35,16 +26,6 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 					})),
 				),
 			);
-
-			// const allTasks = user.dividers.flatMap((divider) =>
-			// 	divider.folders.flatMap((folder) =>
-			// 		folder.tasks.map((task) => ({
-			// 			...task,
-			// 			folderName: folder.folderName,
-			// 			dividerName: divider.dividerName,
-			// 		})),
-			// 	),
-			// );
 
 			const sortedTasks = allTasks
 				.filter((task) => task.dueDate)
