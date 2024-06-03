@@ -129,7 +129,9 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 													},
 												)
 											}>
-											<strong>{folder.folderName}</strong>
+											<strong>
+												{folder.folderName}{' '}
+											</strong>
 										</button>
 										{' - '}
 										{divider.dividerName}
