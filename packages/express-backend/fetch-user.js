@@ -36,7 +36,7 @@ export const deleteDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
 	updateDividers(username, divider, 'pull')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -47,7 +47,7 @@ export const setDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
 	updateDividers(username, divider, 'set')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -69,7 +69,7 @@ export const deleteFolder = (req, res) => {
 	const { username, dividerName } = req.params;
 	const { folder } = req.body;
 	updateFolders(username, dividerName, folder, 'pull')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -80,7 +80,7 @@ export const setFolder = (req, res) => {
 	const { username, dividerName } = req.params;
 	const { folder } = req.body;
 	updateFolders(username, dividerName, folder, 'set')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -102,7 +102,7 @@ export const deleteTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
 	updateTasks(username, dividerName, folderName, task, 'pull')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
@@ -113,7 +113,7 @@ export const setTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
 	updateTasks(username, dividerName, folderName, task, 'set')
-		.then(() => res.status(204).send())
+		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
 			console.log(error);
 			res.status(500).send(error);
