@@ -9,11 +9,11 @@ const Home = ({ API_PREFIX, user, setUser }) => {
 			className="d-flex"
 			style={{ height: '100vh', overflowY: 'hidden' }}>
 			<Sidebar API_PREFIX={API_PREFIX} user={user} setUser={setUser} />
-			{/* <div
+			<div
 				className="container-fluid p-0 d-flex"
 				style={{ overflowY: 'auto' }}>
 				<HomeList API_PREFIX={API_PREFIX} user={user} />
-			</div> */}
+			</div>
 		</div>
 	);
 };
