@@ -191,6 +191,80 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	}
 
+	// const deleteTask = async (task, dividerName, folderName) => {
+	// 	console.log(task, dividerName, folderName);
+	// 	try {
+	// 		const response = await fetch(
+	// 			`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
+	// 			{
+	// 				method: 'DELETE',
+	// 				headers: {
+	// 					'Content-Type': 'application/json',
+	// 					Authorization: `Bearer ${user.token}`,
+	// 				},
+	// 				body: JSON.stringify({ task: task }),
+	// 			},
+	// 		);
+	// 		if (response.ok) {
+	// 			// Refresh tasks after deletion
+	// 			const updatedUserResponse = await fetch(
+	// 				`${API_PREFIX}/${user.username}`,
+	// 				{
+	// 					headers: {
+	// 						Authorization: `Bearer ${user.token}`,
+	// 					},
+	// 				},
+	// 			);
+	// 			const updatedUserData = await updatedUserResponse.json();
+	// 			updateUserData(user.token, user.username, updatedUserData);
+	// 		} else {
+	// 			console.error('Failed to delete task');
+	// 		}
+	// 	} catch (error) {
+	// 		console.error('Error deleting task:', error);
+	// 	}
+	// };
+
+	async function deleteFolder(folderName, dividerName, folderId) {
+		// console.log(folderName, dividerName);
+		// console.log(
+		// 	`Deleting folder from URL: ${API_PREFIX}/${user.username}/${dividerName}`,
+		// );
+		// console.log(
+		// 	user.dividers.find((d) => d.dividerName === dividerName).folders,
+		// );
+		console.log(folderName, dividerName, folderId);
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/${dividerName}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${user.token}`,
+					},
+					body: JSON.stringify({
+						folder: {
+							folderName: folderName,
+							folderId: folderId,
+						},
+					}),
+				},
+			);
+			console.log(response);
+			if (response.status === 200) {
+				const data = await response.json();
+				console.log(data);
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to delete folder');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
+	}
+
 	const handleAddDivider = (formFields) => {
 		const dividerName = formFields.divider?.trim();
 		if (!dividerName) {
@@ -282,17 +356,23 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	};
 
 	// Drag and Drop Code
-	const [items, setItems] = useState({
-		Physics: ['Homework'],
-		SoftwareEngineering: [
-			'Project',
-			'Assignment',
-			'Quiz',
-			'Midterm',
-			'Final',
-		],
-	});
-	const [activeId, setActiveId] = useState(null);
+	const [items, setItems] = useState({}); // track items in each divider
+	const [activeId, setActiveId] = useState(null); // track active item being dragged
+	const [draggedFolder, setDraggedFolder] = useState(null); // track folder being dragged
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const dividerData = {};
+			for (const divider of user.dividers) {
+				const folderNames = divider.folders.map(
+					(folder) => folder.folderName,
+				);
+				dividerData[divider.dividerName] = folderNames;
+			}
+			setItems(dividerData);
+		};
+		fetchData();
+	}, [user, setUser]);
 
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
@@ -308,12 +388,24 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}),
 	);
 
-	const handleDragStart = (event) => {
+	const handleDragStart = async (event) => {
 		const { active } = event;
 		setActiveId(active.id);
+
+		// Find the divider and folder object for the active id
+		const dividerName = findContainer(active.id);
+		if (dividerName) {
+			const divider = user.dividers.find(
+				(div) => div.dividerName === dividerName,
+			);
+			const folder = divider.folders.find(
+				(folder) => folder.folderName === active.id,
+			);
+			setDraggedFolder(folder);
+		}
 	};
 
-	const handleDragEnd = (event) => {
+	const handleDragEnd = async (event) => {
 		const { active, over } = event;
 		setActiveId(null);
 
@@ -339,31 +431,46 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 				),
 			}));
 		} else {
-			setItems((prevItems) => {
-				const activeItems = prevItems[activeContainer].filter(
-					(item) => item !== active.id,
+			try {
+				// Delete the folder from the old divider
+				await deleteFolder(
+					draggedFolder.folderName,
+					activeContainer,
+					draggedFolder._id,
 				);
-				const overItems = [...prevItems[overContainer], active.id];
 
-				return {
-					...prevItems,
-					[activeContainer]: activeItems,
-					[overContainer]: overItems,
-				};
-			});
+				// Add the folder to the new divider
+				// await addFolder(draggedFolder.folderName, overContainer);
+
+				setItems((prevItems) => {
+					const activeItems = prevItems[activeContainer].filter(
+						(item) => item !== active.id,
+					);
+					const overItems = [...prevItems[overContainer], active.id];
+
+					return {
+						...prevItems,
+						[activeContainer]: activeItems,
+						[overContainer]: overItems,
+					};
+				});
+			} catch (error) {
+				console.error('Error moving folder:', error);
+			} finally {
+				setDraggedFolder(null);
+			}
 		}
 	};
 
 	const findContainer = (id) => {
-		if (items.Physics.includes(id)) {
-			return 'Physics';
-		} else if (items.SoftwareEngineering.includes(id)) {
-			return 'SoftwareEngineering';
-		} else if (id === 'Physics' || id === 'SoftwareEngineering') {
-			return id;
-		} else {
-			return undefined;
+		for (const dividerName in items) {
+			if (items[dividerName].includes(id)) {
+				return dividerName;
+			} else if (dividerName === id) {
+				return dividerName;
+			}
 		}
+		return undefined;
 	};
 
 	return (
@@ -397,36 +504,25 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						collisionDetection={closestCenter}
 						onDragStart={handleDragStart}
 						onDragEnd={handleDragEnd}>
-						<div
-							className="fw-bold mb-4"
-							style={{ fontSize: '20px' }}>
-							Physics
-						</div>
-						<SortableContext
-							items={items.Physics}
-							strategy={verticalListSortingStrategy}>
-							{items.Physics.map((id) => (
-								<SortableItem key={id} id={id} />
-							))}
-							{items.Physics.length === 0 && (
-								<EmptySection id="Physics" />
-							)}
-						</SortableContext>
-						<div
-							className="fw-bold mb-4"
-							style={{ fontSize: '20px' }}>
-							Software Engineering
-						</div>
-						<SortableContext
-							items={items.SoftwareEngineering}
-							strategy={verticalListSortingStrategy}>
-							{items.SoftwareEngineering.map((id) => (
-								<SortableItem key={id} id={id} />
-							))}
-							{items.SoftwareEngineering.length === 0 && (
-								<EmptySection id="SoftwareEngineering" />
-							)}
-						</SortableContext>
+						{Object.keys(items).map((dividerName) => (
+							<div key={dividerName}>
+								<div
+									className="fw-bold mb-4"
+									style={{ fontSize: '20px' }}>
+									{dividerName}
+								</div>
+								<SortableContext
+									items={items[dividerName]}
+									strategy={verticalListSortingStrategy}>
+									{items[dividerName].map((id) => (
+										<SortableItem key={id} id={id} />
+									))}
+									{items[dividerName].length === 0 && (
+										<EmptySection id={dividerName} />
+									)}
+								</SortableContext>
+							</div>
+						))}
 						<DragOverlay>
 							{activeId ? (
 								<SortableItem id={activeId} isDragging />
@@ -460,11 +556,9 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 					</span>
 				</button>
 			</div>
-
 			{overlayConfig.show && overlayConfig.content.title === 'Menu' && (
 				<MenuPopup onButtonClick={handleMenuButtonClick} />
 			)}
-
 			{overlayConfig.show && overlayConfig.content.title !== 'Menu' && (
 				<Overlay
 					user={user}
