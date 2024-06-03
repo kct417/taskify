@@ -29,7 +29,7 @@ const Task = ({ task, onDelete, dividerName, folderName }) => {
 				/>
 			</div>
 			<div className="text-center flex-grow-1 text-white">
-				{task.description}
+				{task.taskName}
 			</div>
 			<div className="text-end font-weight-bold">
 				Due: {task.dueDate ? formatDate(task.dueDate) : 'No due date'}

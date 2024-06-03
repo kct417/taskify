@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Overlay({
-	// user,
+	user,
 	show,
 	context,
 	fields,
@@ -10,10 +10,16 @@ function Overlay({
 	handleClose,
 	onAddFolder,
 	onAddDivider,
+	onAddTask,
 }) {
 	const [formFields, setFormFields] = useState({});
+	const [selectedDivider, setSelectedDivider] = useState();
 
 	const handleFormFieldChange = (key, value) => {
+		if (key === 'divider') {
+			setSelectedDivider(value);
+		}
+
 		setFormFields((prevFormFields) => ({
 			...prevFormFields,
 			[key]: value,
@@ -26,6 +32,10 @@ function Overlay({
 
 	const handleAddDividerClick = () => {
 		onAddDivider(formFields);
+	};
+
+	const handleAddTaskClick = () => {
+		onAddTask(formFields);
 	};
 
 	if (!show) {
@@ -55,6 +65,22 @@ function Overlay({
 							const { label, placeholder, type, key, options } =
 								field;
 							if (type === 'dropdown') {
+								console.log('dropdown options:', options);
+								let folderOptions = [];
+								console.log(selectedDivider);
+								if (label === 'Folder' && selectedDivider) {
+									const divData = user.dividers.find(
+										(divider) =>
+											divider.dividerName ===
+											selectedDivider,
+									);
+									console.log('in this hoe');
+									folderOptions = divData.folders.map(
+										(folder) => folder.folderName,
+									);
+								}
+
+								console.log(folderOptions);
 								return (
 									<div
 										key={idx}
@@ -71,14 +97,32 @@ function Overlay({
 											<option value="">
 												Select an option
 											</option>
-											{options.map(
-												(option, optionIdx) => (
-													<option
-														key={optionIdx}
-														value={option}>
-														{option}
+											{label === 'Folder' ? (
+												folderOptions.length > 0 ? (
+													folderOptions.map(
+														(folder, folderIdx) => (
+															<option
+																key={folderIdx}
+																value={folder}>
+																{folder}
+															</option>
+														),
+													)
+												) : (
+													<option value="" disabled>
+														No folders available
 													</option>
-												),
+												)
+											) : (
+												options.map(
+													(option, optionIdx) => (
+														<option
+															key={optionIdx}
+															value={option}>
+															{option}
+														</option>
+													),
+												)
 											)}
 										</select>
 									</div>
@@ -108,6 +152,8 @@ function Overlay({
 								clickFunction = handleAddFolderClick;
 							} else if (label === 'Add Divider') {
 								clickFunction = handleAddDividerClick;
+							} else if (label === 'Add Task') {
+								clickFunction = handleAddTaskClick;
 							}
 							return (
 								<div
@@ -152,7 +198,7 @@ function Overlay({
 }
 
 Overlay.propTypes = {
-	// user: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired,
 	show: PropTypes.bool.isRequired,
 	context: PropTypes.object.isRequired,
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -160,6 +206,7 @@ Overlay.propTypes = {
 	handleClose: PropTypes.func.isRequired,
 	onAddFolder: PropTypes.func.isRequired,
 	onAddDivider: PropTypes.func.isRequired,
+	onAddTask: PropTypes.func.isRequired,
 };
 
 export default Overlay;

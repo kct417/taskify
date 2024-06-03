@@ -20,6 +20,80 @@ import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 
 const Sidebar = ({ API_PREFIX, user, setUser }) => {
+	const handleAddTask = (formFields) => {
+		const folderName = formFields.folder?.trim();
+		const dividerName = formFields.divider?.trim();
+		const taskName = formFields.taskName?.trim();
+		const dueDate = formFields.dueDate?.trim();
+		const description = formFields.description?.trim();
+
+		if (
+			!folderName ||
+			!dividerName ||
+			!taskName ||
+			!dueDate ||
+			!description
+		) {
+			alert(
+				'Please select a folder and select a divider and populate all task fields',
+			);
+			return;
+		}
+		console.log(folderName);
+		console.log(dividerName);
+		console.log(taskName);
+		console.log(dueDate);
+		console.log(description);
+
+		addTask(taskName, dueDate, description, folderName, dividerName)
+			.then(() => {
+				alert('Task added successfully');
+				handleClose();
+			})
+			.catch((error) => {
+				console.error('Error adding task:', error);
+				alert('Failed to add task');
+			});
+	};
+
+	async function addTask(
+		taskName,
+		dueDate,
+		description,
+		folderName,
+		dividerName,
+	) {
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
+				{
+					method: 'POST',
+					headers: addAuthHeader({
+						'Content-Type': 'application/json',
+					}),
+					body: JSON.stringify({
+						task: {
+							taskName: taskName,
+							dueDate: dueDate,
+							description: description,
+							completed: false,
+						},
+					}),
+				},
+			);
+
+			if (response.status === 201) {
+				const data = await response.json();
+				setUser(user.token, user.username, data);
+			} else {
+				throw new Error('Failed to add task');
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			throw error; // re-throw the error so the caller can handle it
+		}
+	}
+
 	const handleAddFolder = (formFields) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
@@ -116,6 +190,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	}
 
 	const [dividerNames, setDividerNames] = useState([]);
+
 	useEffect(() => {
 		const fetchDividerNames = async () => {
 			try {
@@ -130,16 +205,6 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 		fetchDividerNames();
 	}, [user, setUser]);
-
-	// function getFoldersNames(dividerName) {
-	// 	for (let i = 0; i < dividers.length; i++) {
-	// 		if (dividers[i]['dividerName'] === dividerName) {
-	// 			return dividers[i]['folders'].map(
-	// 				(folder) => folder['folderName'],
-	// 			);
-	// 		}
-	// 	}
-	// }
 
 	// Overlay Code
 	const [overlayConfig, setOverlayConfig] = useState({
@@ -236,23 +301,34 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						key: 'taskName',
 					},
 					{
+						label: 'Task Due Date',
+						placeholder: 'Enter Due Date',
+						type: 'date',
+						key: 'dueDate',
+					},
+					{
+						label: 'Task Description',
+						placeholder: 'Enter Description',
+						type: 'text',
+						key: 'description',
+					},
+					{
 						label: 'Divider',
 						type: 'dropdown',
 						key: 'divider',
-						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+						options: dividerNames,
 					},
 					{
 						label: 'Folder',
 						type: 'dropdown',
 						key: 'folder',
-						options: ['Divider 1', 'Divider 2', 'Divider 3'],
+						options: [],
 					},
 				];
 				buttons = [
 					{
 						label: 'Add Task',
 						type: 'button',
-						onClick: () => alert('Task added!'),
 					},
 					{
 						label: 'Back',
@@ -484,6 +560,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 					handleClose={handleClose}
 					onAddFolder={handleAddFolder}
 					onAddDivider={handleAddDivider}
+					onAddTask={handleAddTask}
 				/>
 			)}
 		</div>
