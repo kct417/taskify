@@ -25,5 +25,10 @@
 		"pre-commit": "^1.2.2",
 		"prettier": "^3.2.5"
 	},
-	"pre-commit": "format"
+	"pre-commit": "format",
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"env": "^0.0.2",
+		"mongoose": "^8.4.1"
+	}
 }

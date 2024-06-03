@@ -115,7 +115,21 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 							<div className="col-12" key={folder._id}>
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
 									<h2>
-										{folder.folderName} -{' '}
+										<button
+											onClick={() =>
+												navigate(
+													`/folders/${folder.folderName}`,
+													{
+														state: {
+															folderName:
+																folder.folderName,
+														},
+													},
+												)
+											}>
+											<strong>{folder.folderName}</strong>
+										</button>
+										{' - '}
 										{divider.dividerName}
 									</h2>
 									<TaskList
