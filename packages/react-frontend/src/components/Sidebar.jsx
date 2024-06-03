@@ -323,10 +323,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const fetchData = async () => {
 			const dividerData = {};
 			for (const divider of user.dividers) {
-				const folderNames = divider.folders.map(
-					(folder) => folder.folderName,
-				);
-				dividerData[divider.dividerName] = folderNames;
+				const folderIDName = divider.folders.map((folder) => ({
+					id: folder._id,
+					name: folder.folderName,
+				}));
+				dividerData[divider.dividerName] = folderIDName;
 			}
 			setItems(dividerData);
 		};
@@ -347,6 +348,17 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}),
 	);
 
+	const findContainer = (id) => {
+		for (const dividerName in items) {
+			if (items[dividerName].some((item) => item.id === id)) {
+				return dividerName;
+			} else if (dividerName === id) {
+				return dividerName;
+			}
+		}
+		return undefined;
+	};
+
 	const handleDragStart = async (event) => {
 		const { active } = event;
 		setActiveId(active.id);
@@ -358,7 +370,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 				(div) => div.dividerName === dividerName,
 			);
 			const folder = divider.folders.find(
-				(folder) => folder.folderName === active.id,
+				(folder) => folder._id === active.id,
 			);
 			setDraggedFolder(folder);
 		}
@@ -378,8 +390,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 		if (activeContainer === overContainer) {
 			const containerItems = items[activeContainer];
-			const oldIndex = containerItems.indexOf(active.id);
-			const newIndex = containerItems.indexOf(over.id);
+			const oldIndex = containerItems.findIndex(
+				(item) => item.id === active.id,
+			);
+			const newIndex = containerItems.findIndex(
+				(item) => item.id === over.id,
+			);
 
 			setItems((prevItems) => ({
 				...prevItems,
@@ -391,10 +407,6 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			}));
 		} else {
 			try {
-				// Delete the folder from the old divider
-				// console.log("Sidebar User:" + user);
-				// console.log("Sidebar User Divider:" + user.dividers);
-				// console.log("Sidebar Dragged Folder:" + draggedFolder);
 				await deleteFolder(
 					draggedFolder.folderName,
 					activeContainer,
@@ -406,9 +418,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 				setItems((prevItems) => {
 					const activeItems = prevItems[activeContainer].filter(
-						(item) => item !== active.id,
+						(item) => item.id !== active.id,
 					);
-					const overItems = [...prevItems[overContainer], active.id];
+					const overItems = [
+						...prevItems[overContainer],
+						{ id: active.id, name: draggedFolder.folderName },
+					];
 
 					return {
 						...prevItems,
@@ -422,17 +437,6 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 				setDraggedFolder(null);
 			}
 		}
-	};
-
-	const findContainer = (id) => {
-		for (const dividerName in items) {
-			if (items[dividerName].includes(id)) {
-				return dividerName;
-			} else if (dividerName === id) {
-				return dividerName;
-			}
-		}
-		return undefined;
 	};
 
 	return (
@@ -476,8 +480,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 								<SortableContext
 									items={items[dividerName]}
 									strategy={verticalListSortingStrategy}>
-									{items[dividerName].map((id) => (
-										<SortableItem key={id} id={id} />
+									{items[dividerName].map(({ id, name }) => (
+										<SortableItem
+											key={id}
+											id={id}
+											name={name}
+										/>
 									))}
 									{items[dividerName].length === 0 && (
 										<EmptySection id={dividerName} />
@@ -487,7 +495,15 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						))}
 						<DragOverlay>
 							{activeId ? (
-								<SortableItem id={activeId} isDragging />
+								<SortableItem
+									id={activeId}
+									name={
+										items[findContainer(activeId)].find(
+											(item) => item.id === activeId,
+										).name
+									}
+									isDragging={true}
+								/>
 							) : null}
 						</DragOverlay>
 					</DndContext>
@@ -537,7 +553,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	);
 };
 
-const SortableItem = ({ id, isDragging }) => {
+const SortableItem = ({ id, name, isDragging }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
 			id,
@@ -561,7 +577,7 @@ const SortableItem = ({ id, isDragging }) => {
 			className="btn btn-primary rounded-pill mb-2 text-left ml-4"
 			{...attributes}
 			{...listeners}>
-			{id}
+			{name}
 		</button>
 	);
 };
@@ -586,6 +602,7 @@ const EmptySection = ({ id }) => {
 
 SortableItem.propTypes = {
 	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	isDragging: PropTypes.bool,
 };
 
