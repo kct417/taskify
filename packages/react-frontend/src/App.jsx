@@ -66,7 +66,7 @@ function App() {
 					}
 				/>
 				<Route
-					path="/folders/:folderName"
+					path="/folders/:folderName/:dividerName"
 					element={
 						<div>
 							<Folder

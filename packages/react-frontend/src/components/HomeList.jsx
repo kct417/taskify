@@ -118,11 +118,13 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 										<button
 											onClick={() =>
 												navigate(
-													`/folders/${folder.folderName}`,
+													`/folders/${folder.folderName}/${divider.dividerName}`,
 													{
 														state: {
 															folderName:
 																folder.folderName,
+															dividerName:
+																folder.dividerName,
 														},
 													},
 												)

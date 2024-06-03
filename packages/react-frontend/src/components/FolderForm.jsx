@@ -5,11 +5,11 @@ import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 
 const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
-	const { folderName } = useParams(); // Get folder name from URL parameters
+	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 	const [description, setDescription] = useState('');
-	const [streakCount, setStrgieakCount] = useState(0);
+	const [streakCount, setStreakCount] = useState(0);
 	const sidebarButtonColor = '#F38D8D';
 
 	const fetchTasks = async () => {
@@ -50,7 +50,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		fetchTasks();
 	}, [API_PREFIX, user, updateUserData]);
 
-	const deleteTask = async (task, dividerName, folderName) => {
+	const deleteTask = async (task) => {
 		console.log(task, dividerName, folderName);
 		try {
 			const response = await fetch(
@@ -73,6 +73,10 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 					newStreakCount,
 				);
 
+				setTasks((prevTasks) =>
+					prevTasks.filter((t) => t._id !== task._id),
+				);
+
 				const updatedUserResponse = await fetch(
 					`${API_PREFIX}/${user.username}`,
 					{
@@ -83,13 +87,11 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 				);
 				const updatedUserData = await updatedUserResponse.json();
 				updateUserData(user.token, user.username, updatedUserData);
-
-				fetchTasks();
 			} else {
 				console.error('Failed to delete task');
 			}
 		} catch (error) {
-			console.error('Error deleting task:', error);
+			console.error('Error in deleting task:', error);
 		}
 	};
 
@@ -99,7 +101,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		localStorage.setItem(`description-${folderName}`, newDescription);
 	};
 
-	// Compare the dates for Today/Upcoming/Past Sections
 	const isToday = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
@@ -109,6 +110,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 
 		return today.getTime() === taskDate.getTime();
 	};
+
 	const isFuture = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
@@ -118,6 +120,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 
 		return today.getTime() < taskDate.getTime();
 	};
+
 	const isPast = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
@@ -136,7 +139,9 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
 				<div className="d-flex justify-content-between align-items-center">
-					<h3>{folderName}</h3>
+					<h1>
+						{folderName} - {dividerName}
+					</h1>
 					<div className="position-relative">
 						<img
 							src={fire_asset}
@@ -148,7 +153,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 							className="position-absolute"
 							style={{
 								top: '35%',
-								left: '40%',
+								left: '30%',
 								color: 'black',
 								fontSize: '1.25em',
 							}}>
