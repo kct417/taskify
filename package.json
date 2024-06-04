@@ -10,7 +10,7 @@
 		"backend": "npm -w express-backend run dev",
 		"format": "npx prettier . --write && git add .",
 		"lint": "npx eslint . && npx prettier --check .",
-		"test": "npx jest --passWithNoTests"
+		"test": "npm test -w jest-testing"
 	},
 	"author": "",
 	"license": "GPL-2.0-only",
