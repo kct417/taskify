@@ -143,16 +143,8 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const dueDate = formFields.dueDate?.trim();
 		const description = formFields.description?.trim();
 
-		if (
-			!folderName ||
-			!dividerName ||
-			!taskName ||
-			!dueDate ||
-			!description
-		) {
-			alert(
-				'Please select a folder and select a divider and populate all task fields',
-			);
+		if (!folderName || !dividerName || !taskName) {
+			alert('Task name, divider, and folder are required fields');
 			return;
 		}
 
