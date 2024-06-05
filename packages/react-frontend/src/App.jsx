@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Folder from './pages/Folder';
+
+const API_PREFIX = 'http://localhost:8000';
 
 function App() {
-  const [count, setCount] = useState(0)
+	const INVALID_TOKEN = 'INVALID_TOKEN';
+	const INVALID_USERNAME = 'INVALID_USERNAME';
+	const [user, setUser] = useState({
+		token: INVALID_TOKEN,
+		username: INVALID_USERNAME,
+		streak: 0,
+		dividers: [],
+	});
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const populateUser = (newToken, username, streak, dividers, callback) => {
+		setUser({
+			token: newToken,
+			username: username,
+			streak: streak,
+			dividers: dividers,
+		});
+		if (callback) {
+			callback();
+		}
+	};
+
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<div>
+							<Home
+								API_PREFIX={API_PREFIX}
+								user={user}
+								setUser={populateUser}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/login"
+					element={
+						<div>
+							<Login
+								API_PREFIX={API_PREFIX}
+								setUser={populateUser}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/signup"
+					element={
+						<div>
+							<Register
+								API_PREFIX={API_PREFIX}
+								setUser={populateUser}
+							/>
+						</div>
+					}
+				/>
+				<Route
+					path="/folders/:folderName/:dividerName"
+					element={
+						<div>
+							<Folder
+								API_PREFIX={API_PREFIX}
+								user={user}
+								setUser={populateUser}
+							/>
+						</div>
+					}
+				/>
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
-export default App
+export default App;

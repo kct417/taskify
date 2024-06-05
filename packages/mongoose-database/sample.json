@@ -1,0 +1,57 @@
+{
+	"firstName": "",
+	"lastName": "",
+	"username": "",
+	"hashedPassword": "",
+	"dividers": [
+		{
+			"dividerName": "",
+			"folders": [
+				{
+					"folderName": "",
+					"description": "",
+					"tasks": [
+						{
+							"taskName": "",
+							"description": "",
+							"dueDate": "",
+							"completed": false
+						},
+						{
+							"taskName": "",
+							"description": "",
+							"dueDate": "",
+							"completed": false
+						}
+					]
+				},
+				{
+					"folderName": "",
+					"description": "",
+					"tasks": [
+						{
+							"taskName": "",
+							"description": "",
+							"dueDate": "",
+							"completed": false
+						}
+					]
+				}
+			]
+		},
+		{
+			"dividerName": "",
+			"folders": [
+				{
+					"folderName": "",
+					"description": "",
+					"tasks": []
+				}
+			]
+		},
+		{
+			"dividerName": "",
+			"folders": []
+		}
+	]
+}
