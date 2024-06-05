@@ -14,13 +14,15 @@ function App() {
 	const [user, setUser] = useState({
 		token: INVALID_TOKEN,
 		username: INVALID_USERNAME,
+		streak: 0,
 		dividers: [],
 	});
 
-	const populateUser = (newToken, username, dividers, callback) => {
+	const populateUser = (newToken, username, streak, dividers, callback) => {
 		setUser({
 			token: newToken,
 			username: username,
+			streak: streak,
 			dividers: dividers,
 		});
 		if (callback) {
@@ -49,7 +51,7 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={populateUser}
+								setUser={populateUser}
 							/>
 						</div>
 					}
@@ -60,7 +62,7 @@ function App() {
 						<div>
 							<Register
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={populateUser}
+								setUser={populateUser}
 							/>
 						</div>
 					}

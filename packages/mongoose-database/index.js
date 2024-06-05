@@ -5,6 +5,8 @@ const ENV_PATH = '../../.env';
 
 config({ path: ENV_PATH });
 
+// connect to the mongo cloud database
+
 mongoose.set('debug', true);
 
 mongoose

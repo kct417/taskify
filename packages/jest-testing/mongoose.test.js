@@ -9,6 +9,8 @@ import {
 	updateTasks,
 } from '../mongoose-database/services/user-services.js';
 
+// tests for mongoose user model and user services
+
 describe('User Services Success', () => {
 	beforeAll(async () => {
 		await mongoose.connect('mongodb://localhost:27017/testDB', {});

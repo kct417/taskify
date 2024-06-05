@@ -14,7 +14,7 @@ const Folder = ({ API_PREFIX, user, setUser }) => {
 				<FolderForm
 					API_PREFIX={API_PREFIX}
 					user={user}
-					updateUserData={setUser}
+					setUser={setUser}
 				/>
 			</div>
 		</div>

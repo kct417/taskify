@@ -4,12 +4,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 
-const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
+const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 	const [description, setDescription] = useState('');
-	const [streakCount, setStreakCount] = useState(0);
 	const sidebarButtonColor = '#F38D8D';
 
 	const fetchTasks = async () => {
@@ -31,32 +30,8 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		}
 	};
 
-	const fetchUserStreakCount = async () => {
-		try {
-			const response = await fetch(
-				`${API_PREFIX}/${user.username}/streak`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				},
-			);
-			const data = await response.json();
-			setStreakCount(data.streakCount);
-		} catch (error) {
-			console.error('Error fetching streak count:', error);
-		}
-	};
-
 	useEffect(() => {
-		const savedDescription = localStorage.getItem(
-			`description-${folderName}`,
-		);
-		if (savedDescription) {
-			setDescription(savedDescription);
-		}
 		fetchTasks();
-		fetchUserStreakCount();
 	}, [API_PREFIX, user, folderName]);
 
 	const deleteTask = async (task) => {
@@ -74,17 +49,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 			);
 			//Update streak count for task deleted
 			if (response.ok) {
-				const newStreakCount = streakCount + 1;
-				setStreakCount(newStreakCount);
-				await fetch(`${API_PREFIX}/${user.username}/streak`, {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${user.token}`,
-					},
-					body: JSON.stringify({ streakCount: newStreakCount }),
-				});
-
 				setTasks((prevTasks) =>
 					prevTasks.filter((t) => t._id !== task._id),
 				);
@@ -98,7 +62,12 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				updateUserData(user.token, user.username, updatedUserData);
+				setUser(
+					user.token,
+					user.username,
+					user.streak + 1,
+					updatedUserData,
+				);
 			} else {
 				console.error('Failed to delete task');
 			}
@@ -107,28 +76,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		}
 	};
 
-	const handleDescriptionChange = (event) => {
-		const newDescription = event.target.value;
-		setDescription(newDescription);
-		localStorage.setItem(`description-${folderName}`, newDescription);
-	};
-
-	//Reset to 0
-	const resetStreakCount = async () => {
-		try {
-			setStreakCount(0);
-			await fetch(`${API_PREFIX}/${user.username}/streak`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${user.token}`,
-				},
-				body: JSON.stringify({ streakCount: 0 }),
-			});
-		} catch (error) {
-			console.error('Error resetting streak count:', error);
-		}
-	};
 	//Sort tasks in sections based on date
 	const isToday = (date) => {
 		const today = new Date();
@@ -169,14 +116,16 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1>
-						{folderName} - {dividerName}
+						{dividerName}
+						<span
+							style={{
+								color: sidebarButtonColor,
+							}}>
+							{' / '}
+							{folderName}
+						</span>
 					</h1>
 					<div className="d-flex align-items-center">
-						<button
-							onClick={resetStreakCount}
-							className="btn btn-danger mr-2">
-							Reset Streak
-						</button>
 						<div className="position-relative">
 							<img
 								src={fire_asset}
@@ -192,21 +141,11 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 									color: 'black',
 									fontSize: '1.25em',
 								}}>
-								{streakCount}
+								{user.streak}
 							</figcaption>
 						</div>
 					</div>
 				</div>
-				<h5 className="mt-3">
-					Description:
-					<input
-						type="text"
-						value={description}
-						onChange={handleDescriptionChange}
-						placeholder="Type folder description here..."
-						className="form-control mt-2"
-					/>
-				</h5>
 				<hr />
 			</header>
 			<main className="container-fluid">
@@ -255,7 +194,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 FolderForm.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	updateUserData: PropTypes.func.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
 
 export default FolderForm;

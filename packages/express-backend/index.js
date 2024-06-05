@@ -5,6 +5,8 @@ import '../mongoose-database/index.js';
 import User from './fetch-user.js';
 import { registerUser, loginUser, authenticateUser } from './auth-user.js';
 
+// available routes for the frontend
+
 const app = express();
 const port = 8000;
 const API_PREFIX = `http://localhost:${port}`;
@@ -16,8 +18,6 @@ app.post('/signup', registerUser);
 app.post('/login', loginUser);
 
 app.get('/:username', authenticateUser, User.getDividers);
-
-app.get('/:username/streak', authenticateUser, User.getStreakCount);
 
 app.post('/:username', authenticateUser, User.createDivider);
 app.post('/:username/:dividerName', authenticateUser, User.createFolder);
@@ -38,8 +38,6 @@ app.delete(
 app.put('/:username', authenticateUser, User.setDivider);
 app.put('/:username/:dividerName', authenticateUser, User.setFolder);
 app.put('/:username/:dividerName/:folderName', authenticateUser, User.setTask);
-
-app.patch('/:username/streak', authenticateUser, User.setStreakCount);
 
 app.listen(port, () => {
 	console.log(`Example app listening at ${API_PREFIX}`);

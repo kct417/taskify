@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fire_asset from '../assets/fire_asset.png';
 
 import TaskList from './TaskList';
 
 const HomeList = ({ API_PREFIX, user, setUser }) => {
 	const [topTasks, setTopTasks] = useState([]);
-	const [streakCount, setStreakCount] = useState(0);
 
 	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
@@ -38,32 +38,14 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			console.error('Error fetching tasks:', error);
 		}
 	};
-	const fetchUserStreakCount = async () => {
-		try {
-			const response = await fetch(
-				`${API_PREFIX}/${user.username}/streak`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				},
-			);
-			const data = await response.json();
-			setStreakCount(data.streakCount);
-		} catch (error) {
-			console.error('Error fetching streak count:', error);
-		}
-	};
 
 	useEffect(() => {
 		fetchTasks();
-		fetchUserStreakCount();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [API_PREFIX, user, setUser]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
-		console.log(task, dividerName, folderName);
 		try {
 			const response = await fetch(
 				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
@@ -77,17 +59,6 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 				},
 			);
 			if (response.ok) {
-				//Update Streak Count via HomePage
-				const newStreakCount = streakCount + 1;
-				setStreakCount(newStreakCount);
-				await fetch(`${API_PREFIX}/${user.username}/streak`, {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${user.token}`,
-					},
-					body: JSON.stringify({ streakCount: newStreakCount }),
-				});
 				// Refresh tasks after deletion
 				const updatedUserResponse = await fetch(
 					`${API_PREFIX}/${user.username}`,
@@ -98,7 +69,12 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				setUser(user.token, user.username, updatedUserData);
+				setUser(
+					user.token,
+					user.username,
+					user.streak + 1,
+					updatedUserData,
+				);
 			} else {
 				console.error('Failed to delete task');
 			}
@@ -120,7 +96,29 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-				<h1>Home</h1>
+				<div className="d-flex justify-content-between align-items-center">
+					<h1>Home</h1>
+					<div className="d-flex align-items-center">
+						<div className="position-relative">
+							<img
+								src={fire_asset}
+								className="img-fluid"
+								style={{ width: '50px', height: '50px' }}
+								alt="Fire"
+							/>
+							<figcaption
+								className="position-absolute"
+								style={{
+									top: '35%',
+									left: '30%',
+									color: 'black',
+									fontSize: '1.25em',
+								}}>
+								{user.streak}
+							</figcaption>
+						</div>
+					</div>
+				</div>
 				<hr />
 			</header>
 			<main className="container-fluid">
@@ -144,26 +142,14 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 							<div className="col-12" key={folder._id}>
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
 									<h2>
-										<button
-											onClick={() =>
-												navigate(
-													`/folders/${folder.folderName}/${divider.dividerName}`,
-													{
-														state: {
-															folderName:
-																folder.folderName,
-															dividerName:
-																folder.dividerName,
-														},
-													},
-												)
-											}>
-											<strong>
-												{folder.folderName}{' '}
-											</strong>
-										</button>
-										{' - '}
 										{divider.dividerName}
+										<span
+											style={{
+												color: sidebarButtonColor,
+											}}>
+											{' / '}
+											{folder.folderName}
+										</span>
 									</h2>
 									<TaskList
 										tasks={folder.tasks}

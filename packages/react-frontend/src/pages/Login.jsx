@@ -5,7 +5,7 @@ import useBanner from '../hooks/UseBanner';
 import Form from '../components/Form';
 import AuthPageWrapper from '../components/AuthPageWrapper';
 
-const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
+const LoginForm = ({ API_PREFIX, setUser }) => {
 	const navigate = useNavigate();
 	const { showBanner, bannerState } = useBanner();
 
@@ -27,9 +27,10 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 					},
 				);
 				const dividers = await divResp.json();
-				handleLoginAndRegister(
+				setUser(
 					payload.token,
 					payload.username,
+					payload.streak,
 					dividers,
 					() => {
 						console.log(
@@ -89,7 +90,7 @@ const LoginForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 
 LoginForm.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
-	handleLoginAndRegister: PropTypes.func.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

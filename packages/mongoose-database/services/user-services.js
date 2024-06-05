@@ -1,5 +1,8 @@
 import userModel from '../models/user.js';
 
+// user services are mongoose queries
+// services should only be used in backend auth.js and fetch-users.js
+
 export const addUser = (user) => {
 	return userModel.create(user);
 };
@@ -8,23 +11,8 @@ export const findUser = (username) => {
 	return userModel.findOne({ username });
 };
 
-export const updateStreakCount = async (username, streakCount) => {
-	try {
-		const user = await userModel.findOne({ username });
-		if (!user) {
-			throw new Error('User not found');
-		}
-
-		user.streakCount = streakCount;
-		await user.save();
-
-		return user;
-	} catch (err) {
-		console.error(err);
-		return null;
-	}
-};
-
+// push, pull, and update divider
+// should check for existing user and divider
 export const updateDividers = async (username, divider, updateType) => {
 	try {
 		const user = await findUser(username);
@@ -43,9 +31,11 @@ export const updateDividers = async (username, divider, updateType) => {
 				if (!existingDivider) {
 					throw new Error('Divider not found');
 				}
+
 				updateOperation = {
 					$set: { 'dividers.$[divider]': divider },
 				};
+
 				arrayFilters.push({ 'divider._id': divider._id });
 				break;
 			case 'push':
@@ -56,6 +46,7 @@ export const updateDividers = async (username, divider, updateType) => {
 				) {
 					throw new Error('Divider already exists');
 				}
+
 				updateOperation = { $push: { dividers: divider } };
 				break;
 			case 'pull':
@@ -65,6 +56,7 @@ export const updateDividers = async (username, divider, updateType) => {
 				if (!existingDivider) {
 					throw new Error('Divider not found');
 				}
+
 				updateOperation = {
 					$pull: { dividers: { _id: divider._id } },
 				};
@@ -81,6 +73,7 @@ export const updateDividers = async (username, divider, updateType) => {
 				new: true,
 			},
 		);
+
 		return updatedUser;
 	} catch (err) {
 		console.error(err);
@@ -88,6 +81,8 @@ export const updateDividers = async (username, divider, updateType) => {
 	}
 };
 
+// push, pull, and update folder
+// should check for existing user, divider, and folder
 export const updateFolders = async (
 	username,
 	dividerName,
@@ -118,9 +113,11 @@ export const updateFolders = async (
 				if (!existingFolder) {
 					throw new Error('Folder not found');
 				}
+
 				updateOperation = {
 					$set: { 'dividers.$[divider].folders.$[folder]': folder },
 				};
+
 				arrayFilters.push({ 'folder._id': folder._id });
 				break;
 			case 'push':
@@ -131,6 +128,7 @@ export const updateFolders = async (
 				) {
 					throw new Error('Folder already exists');
 				}
+
 				updateOperation = {
 					$push: { 'dividers.$[divider].folders': folder },
 				};
@@ -142,6 +140,7 @@ export const updateFolders = async (
 				if (!existingFolder) {
 					throw new Error('Folder not found');
 				}
+
 				updateOperation = {
 					$pull: {
 						'dividers.$[divider].folders': { _id: folder._id },
@@ -160,6 +159,7 @@ export const updateFolders = async (
 				new: true,
 			},
 		);
+
 		return updatedUser;
 	} catch (err) {
 		console.error(err);
@@ -167,6 +167,8 @@ export const updateFolders = async (
 	}
 };
 
+// push, pull, and update task
+// should check for existing user, divider, folder, and task
 export const updateTasks = async (
 	username,
 	dividerName,
@@ -204,18 +206,21 @@ export const updateTasks = async (
 				if (!existingTask) {
 					throw new Error('Task not found');
 				}
+
 				updateOperation = {
 					$set: {
 						'dividers.$[divider].folders.$[folder].tasks.$[task]':
 							task,
 					},
 				};
+
 				arrayFilters.push({ 'task._id': task._id });
 				break;
 			case 'push':
 				if (folder.tasks.some((t) => t.taskName === task.taskName)) {
 					throw new Error('Folder already exists');
 				}
+
 				updateOperation = {
 					$push: {
 						'dividers.$[divider].folders.$[folder].tasks': task,
@@ -227,11 +232,15 @@ export const updateTasks = async (
 				if (!existingTask) {
 					throw new Error('Task not found');
 				}
+
 				updateOperation = {
 					$pull: {
 						'dividers.$[divider].folders.$[folder].tasks': {
 							_id: task._id,
 						},
+					},
+					$set: {
+						streak: user.streak + 1,
 					},
 				};
 				break;
@@ -247,6 +256,7 @@ export const updateTasks = async (
 				new: true,
 			},
 		);
+
 		return updatedUser;
 	} catch (err) {
 		console.error(err);
