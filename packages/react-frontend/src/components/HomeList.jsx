@@ -6,6 +6,7 @@ import TaskList from './TaskList';
 
 const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 	const [topTasks, setTopTasks] = useState([]);
+	const [streakCount, setStreakCount] = useState(0);
 
 	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
@@ -37,9 +38,26 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 			console.error('Error fetching tasks:', error);
 		}
 	};
+	const fetchUserStreakCount = async () => {
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/streak`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				},
+			);
+			const data = await response.json();
+			setStreakCount(data.streakCount);
+		} catch (error) {
+			console.error('Error fetching streak count:', error);
+		}
+	};
 
 	useEffect(() => {
 		fetchTasks();
+		fetchUserStreakCount();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [API_PREFIX, user, updateUserData]);
@@ -59,6 +77,17 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 				},
 			);
 			if (response.ok) {
+				//Update Streak Count via HomePage
+				const newStreakCount = streakCount + 1;
+				setStreakCount(newStreakCount);
+				await fetch(`${API_PREFIX}/${user.username}/streak`, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${user.token}`,
+					},
+					body: JSON.stringify({ streakCount: newStreakCount }),
+				});
 				// Refresh tasks after deletion
 				const updatedUserResponse = await fetch(
 					`${API_PREFIX}/${user.username}`,
