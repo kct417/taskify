@@ -4,39 +4,20 @@ import { useNavigate } from 'react-router-dom';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
+const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 	const [topTasks, setTopTasks] = useState([]);
-	const [dividers, setDividers] = useState([]);
+
 	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
 
 	const fetchTasks = async () => {
 		try {
-			if (token === INVALID_TOKEN) {
+			if (user.token === 'INVALID_TOKEN') {
 				navigate('/login');
 				return;
 			}
 
-			// Fetch user data'
-			const userResponse = await fetch(`${API_PREFIX}/${username}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
-
-			const userData = await userResponse.json();
-
-			userData.dividers.forEach((divider) => {
-				divider.folders.sort((a, b) => {
-					if (a.folderName === 'General') return -1;
-					if (b.folderName === 'General') return 1;
-					return 0;
-				});
-			});
-
-			setDividers(userData.dividers);
-
-			const allTasks = userData.dividers.flatMap((divider) =>
+			const allTasks = await user.dividers.flatMap((divider) =>
 				divider.folders.flatMap((folder) =>
 					folder.tasks.map((task) => ({
 						...task,
@@ -59,26 +40,36 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 	useEffect(() => {
 		fetchTasks();
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [API_PREFIX, token, navigate, INVALID_TOKEN, username]);
+	}, [API_PREFIX, user, updateUserData]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
 		console.log(task, dividerName, folderName);
 		try {
 			const response = await fetch(
-				`${API_PREFIX}/${username}/${dividerName}/${folderName}`,
+				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
 				{
 					method: 'DELETE',
 					headers: {
 						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${user.token}`,
 					},
 					body: JSON.stringify({ task: task }),
 				},
 			);
 			if (response.ok) {
 				// Refresh tasks after deletion
-				fetchTasks();
+				const updatedUserResponse = await fetch(
+					`${API_PREFIX}/${user.username}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					},
+				);
+				const updatedUserData = await updatedUserResponse.json();
+				updateUserData(user.token, user.username, updatedUserData);
 			} else {
 				console.error('Failed to delete task');
 			}
@@ -119,7 +110,7 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 							))}
 						</section>
 					</div>
-					{dividers.map((divider) =>
+					{user.dividers.map((divider) =>
 						divider.folders.map((folder) => (
 							<div className="col-12" key={folder._id}>
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
@@ -145,9 +136,8 @@ const HomeList = ({ API_PREFIX, token, INVALID_TOKEN, username }) => {
 
 HomeList.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
-	token: PropTypes.string.isRequired,
-	INVALID_TOKEN: PropTypes.string.isRequired,
-	username: PropTypes.string.isRequired,
+	user: PropTypes.object.isRequired,
+	updateUserData: PropTypes.func.isRequired,
 };
 
 export default HomeList;

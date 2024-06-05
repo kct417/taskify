@@ -32,7 +32,8 @@ export async function registerUser(req, res) {
 			dividers: [
 				{
 					dividerName: 'General',
-					folders: [{ folderName: 'General' }],
+					folders: [{ folderName: 'General', ordering: 1 }],
+					ordering: 1,
 				},
 			],
 		};

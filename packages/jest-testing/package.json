@@ -1,0 +1,26 @@
+{
+	"name": "jest-testing",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+	},
+	"author": "",
+	"license": "GPL-2.0-only",
+	"devDependencies": {
+		"@shelf/jest-mongodb": "^4.3.2",
+		"cross-env": "^7.0.3",
+		"jest": "^29.7.0"
+	},
+	"jest": {
+		"transform": {},
+		"rootDir": "../"
+	},
+	"eslintConfig": {
+		"globals": {
+			"process": true
+		}
+	}
+}
