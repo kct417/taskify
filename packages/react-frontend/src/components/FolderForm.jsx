@@ -65,7 +65,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				setUser(
 					user.token,
 					user.username,
-					user.streak,
+					user.streak + 1,
 					updatedUserData,
 				);
 			} else {
@@ -140,7 +140,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 									left: '30%',
 									color: 'black',
 									fontSize: '1.25em',
-								}}></figcaption>
+								}}>
+								{user.streak}
+							</figcaption>
 						</div>
 					</div>
 				</div>

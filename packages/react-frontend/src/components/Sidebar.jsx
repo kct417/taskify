@@ -562,6 +562,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 											id={id}
 											name={name}
 											dividerName={dividerName}
+											streak={user.streak}
 											navigate={navigate}
 										/>
 									))}
@@ -633,7 +634,14 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 };
 
 // SortableItem: displays the folder name as a sortable item
-const SortableItem = ({ id, name, dividerName, navigate, isDragging }) => {
+const SortableItem = ({
+	id,
+	name,
+	dividerName,
+	streak,
+	navigate,
+	isDragging,
+}) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
 			id,
@@ -663,6 +671,7 @@ const SortableItem = ({ id, name, dividerName, navigate, isDragging }) => {
 					state: {
 						folderName: name,
 						dividerName: dividerName,
+						streak: streak,
 					},
 				})
 			}>
@@ -694,6 +703,7 @@ SortableItem.propTypes = {
 	id: PropTypes.string.isRequired,
 	name: PropTypes.string,
 	dividerName: PropTypes.string,
+	streak: PropTypes.number,
 	navigate: PropTypes.func,
 	isDragging: PropTypes.bool,
 };
