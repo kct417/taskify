@@ -7,7 +7,7 @@ on:
         branches: [main, develop]
 
 env:
-    AZURE_WEBAPP_NAME: taskify
+    AZURE_WEBAPP_NAME: taskify-api
     AZURE_WEBAPP_PACKAGE_PATH: packages/express-backend
 
 jobs:
