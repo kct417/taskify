@@ -40,9 +40,9 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 };
 
 Form.propTypes = {
-	buttonText: PropTypes.string,
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
 	submitFunc: PropTypes.func.isRequired,
+	buttonText: PropTypes.string.isRequired,
 };
 
 export default Form;

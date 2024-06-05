@@ -20,7 +20,7 @@ import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 import { useNavigate } from 'react-router-dom';
 
-const Sidebar = ({ API_PREFIX, user, setUser }) => {
+const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 	// handleMenuButtonClick: cases for the menu popup buttons and its
 	// corresponding fields and buttons
 	const handleMenuButtonClick = (buttonType) => {
@@ -144,18 +144,22 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const description = formFields.description?.trim();
 
 		if (!folderName || !dividerName || !taskName) {
-			alert('Task name, divider, and folder are required fields');
+			showBanner(
+				'Wait!',
+				'Task name, divider, and folder are required fields.',
+				'warning',
+			);
 			return;
 		}
 
 		addTask(taskName, dueDate, description, folderName, dividerName)
 			.then(() => {
-				alert('Task added successfully');
+				showBanner('Nice!', 'Task added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding task:', error);
-				alert('Failed to add task');
+				showBanner('Oops!', 'Failed to add task.', 'danger');
 			});
 	};
 
@@ -203,7 +207,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
 		if (!folderName || !dividerName) {
-			alert('Please enter a folder name and select a divider');
+			showBanner(
+				'Hold on!',
+				'Please enter a folder name and select a divider.',
+				'warning',
+			);
 			return;
 		}
 		const folderObject = {
@@ -211,12 +219,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		};
 		addFolder(folderObject, dividerName)
 			.then(() => {
-				alert('Folder added successfully');
+				showBanner('Awesome!', 'Folder added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding folder:', error);
-				alert('Failed to add folder');
+				showBanner('Oh no!', 'Failed to add folder.', 'danger');
 			});
 	};
 
@@ -283,17 +291,21 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	const handleAddDivider = (formFields) => {
 		const dividerName = formFields.divider?.trim();
 		if (!dividerName) {
-			alert('Please enter a divider name');
+			showBanner(
+				"We're missing something!",
+				'Please enter a divider name.',
+				'warning',
+			);
 			return;
 		}
 		addDivider(dividerName)
 			.then(() => {
-				alert('Divider added successfully');
+				showBanner('Cool!', 'Divider added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding divider:', error);
-				alert('Failed to add divider');
+				showBanner('Ahh!', 'Failed to add divider.', 'danger');
 			});
 	};
 
@@ -708,6 +720,7 @@ Sidebar.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
 	setUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

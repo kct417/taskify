@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BannerPageWrapper from './BannerPageWrapper';
+import PropTypes from 'prop-types';
 
 const AuthPageWrapper = ({
 	children,
@@ -42,6 +43,15 @@ const AuthPageWrapper = ({
 			</div>
 		</BannerPageWrapper>
 	);
+};
+
+AuthPageWrapper.propTypes = {
+	children: PropTypes.object,
+	header: PropTypes.object.isRequired,
+	alternateText: PropTypes.string.isRequired,
+	alternateButtonText: PropTypes.string.isRequired,
+	alternateButtonOnClick: PropTypes.func.isRequired,
+	bannerState: PropTypes.object.isRequired,
 };
 
 export default AuthPageWrapper;

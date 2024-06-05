@@ -5,7 +5,7 @@ import fire_asset from '../assets/fire_asset.png';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, user, setUser }) => {
+const HomeList = ({ API_PREFIX, user, setUser, showBanner }) => {
 	const [topTasks, setTopTasks] = useState([]);
 
 	const sidebarButtonColor = '#F38D8D';
@@ -36,6 +36,11 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			setTopTasks(sortedTasks);
 		} catch (error) {
 			console.error('Error fetching tasks:', error);
+			showBanner(
+				'Oh no!',
+				'There was an error loading the tasks.',
+				'danger',
+			);
 		}
 	};
 
@@ -77,9 +82,15 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 				);
 			} else {
 				console.error('Failed to delete task');
+				showBanner('Oop!', 'Task deletion failed.', 'danger');
 			}
 		} catch (error) {
 			console.error('Error deleting task:', error);
+			showBanner(
+				'Ahh!',
+				'There was an error deleting the task.',
+				'danger',
+			);
 		}
 	};
 
@@ -171,6 +182,7 @@ HomeList.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
 	setUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
 };
 
 export default HomeList;

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 
-const FolderForm = ({ API_PREFIX, user, setUser }) => {
+const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
@@ -27,6 +27,11 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 			setTasks(folderTasks);
 		} catch (error) {
 			console.error('Error fetching tasks:', error);
+			showBanner(
+				'Ahh!',
+				'There was an error getting your tasks.',
+				'danger',
+			);
 		}
 	};
 
@@ -70,9 +75,19 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				);
 			} else {
 				console.error('Failed to delete task');
+				showBanner(
+					'Oops!',
+					'There was an issue removing the task.',
+					'danger',
+				);
 			}
 		} catch (error) {
 			console.error('Error in deleting task:', error);
+			showBanner(
+				'Yikes!',
+				'There was an issue deleting the task.',
+				'danger',
+			);
 		}
 	};
 
@@ -83,6 +98,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 
 		today.setHours(0, 0, 0, 0);
 		taskDate.setHours(0, 0, 0, 0);
+
+		console.log(today);
+		console.log(taskDate);
 
 		return today.getTime() === taskDate.getTime();
 	};
@@ -195,6 +213,7 @@ FolderForm.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
 	setUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
 };
 
 export default FolderForm;

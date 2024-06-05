@@ -1,4 +1,5 @@
 import BannerAlert from './BannerAlert';
+import PropTypes from 'prop-types';
 
 const BannerPageWrapper = ({ children, bannerState }) => {
 	return (
