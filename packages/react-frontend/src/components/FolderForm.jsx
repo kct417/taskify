@@ -62,7 +62,12 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				setUser(user.token, user.username, updatedUserData);
+				setUser(
+					user.token,
+					user.username,
+					user.streak,
+					updatedUserData,
+				);
 			} else {
 				console.error('Failed to delete task');
 			}
