@@ -5,7 +5,24 @@ export const addUser = (user) => {
 };
 
 export const findUser = (username) => {
-	return userModel.findOne({ username: username });
+	return userModel.findOne({ username });
+};
+
+export const updateStreakCount = async (username, streakCount) => {
+	try {
+		const user = await userModel.findOne({ username });
+		if (!user) {
+			throw new Error('User not found');
+		}
+
+		user.streakCount = streakCount;
+		await user.save();
+
+		return user;
+	} catch (err) {
+		console.error(err);
+		return null;
+	}
 };
 
 export const updateDividers = async (username, divider, updateType) => {

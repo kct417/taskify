@@ -3,6 +3,7 @@ import {
 	updateDividers,
 	updateFolders,
 	updateTasks,
+	updateStreakCount,
 } from '../mongoose-database/services/user-services.js';
 
 export const getDividers = (req, res) => {
@@ -120,6 +121,38 @@ export const setTask = (req, res) => {
 		});
 };
 
+export const getStreakCount = (req, res) => {
+	const { username } = req.params;
+	findUser(username)
+		.then((result) => {
+			if (result) {
+				res.status(200).send({ streakCount: result.streakCount });
+			} else {
+				res.status(404).send('User not found.');
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+			res.status(500).send(error);
+		});
+};
+
+export const setStreakCount = async (req, res) => {
+	const { username } = req.params;
+	const { streakCount } = req.body;
+	try {
+		const result = await updateStreakCount(username, streakCount);
+		if (result) {
+			res.status(200).send(result);
+		} else {
+			res.status(404).send('User not found.');
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).send(error);
+	}
+};
+
 export default {
 	getDividers,
 	createDivider,
@@ -131,4 +164,6 @@ export default {
 	createTask,
 	deleteTask,
 	setTask,
+	getStreakCount,
+	setStreakCount,
 };

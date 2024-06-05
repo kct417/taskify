@@ -17,6 +17,8 @@ app.post('/login', loginUser);
 
 app.get('/:username', authenticateUser, User.getDividers);
 
+app.get('/:username/streak', authenticateUser, User.getStreakCount);
+
 app.post('/:username', authenticateUser, User.createDivider);
 app.post('/:username/:dividerName', authenticateUser, User.createFolder);
 app.post(
@@ -36,6 +38,8 @@ app.delete(
 app.put('/:username', authenticateUser, User.setDivider);
 app.put('/:username/:dividerName', authenticateUser, User.setFolder);
 app.put('/:username/:dividerName/:folderName', authenticateUser, User.setTask);
+
+app.patch('/:username/streak', authenticateUser, User.setStreakCount);
 
 app.listen(port, () => {
 	console.log(`Example app listening at ${API_PREFIX}`);

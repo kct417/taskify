@@ -66,10 +66,14 @@ function App() {
 					}
 				/>
 				<Route
-					path="/folders/:id"
+					path="/folders/:folderName/:dividerName"
 					element={
 						<div>
-							<Folder API_PREFIX={API_PREFIX} user={user} />
+							<Folder
+								API_PREFIX={API_PREFIX}
+								user={user}
+								setUser={populateUser}
+							/>
 						</div>
 					}
 				/>
