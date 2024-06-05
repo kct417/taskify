@@ -142,13 +142,13 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 							<div className="col-12" key={folder._id}>
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
 									<h2>
-										{folder.folderName}
+										{divider.dividerName}
 										<span
 											style={{
 												color: sidebarButtonColor,
 											}}>
 											{' / '}
-											{divider.dividerName}
+											{folder.folderName}
 										</span>
 									</h2>
 									<TaskList

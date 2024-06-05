@@ -116,13 +116,13 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1>
-						{folderName}
+						{dividerName}
 						<span
 							style={{
 								color: sidebarButtonColor,
 							}}>
 							{' / '}
-							{dividerName}
+							{folderName}
 						</span>
 					</h1>
 					<div className="d-flex align-items-center">
