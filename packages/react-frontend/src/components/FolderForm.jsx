@@ -9,7 +9,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 	const [description, setDescription] = useState('');
-	const [streakCount, setStreakCount] = useState(0);
 	const sidebarButtonColor = '#F38D8D';
 
 	const fetchTasks = async () => {
@@ -31,32 +30,8 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		}
 	};
 
-	const fetchUserStreakCount = async () => {
-		try {
-			const response = await fetch(
-				`${API_PREFIX}/${user.username}/streak`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				},
-			);
-			const data = await response.json();
-			setStreakCount(data.streakCount);
-		} catch (error) {
-			console.error('Error fetching streak count:', error);
-		}
-	};
-
 	useEffect(() => {
-		const savedDescription = localStorage.getItem(
-			`description-${folderName}`,
-		);
-		if (savedDescription) {
-			setDescription(savedDescription);
-		}
 		fetchTasks();
-		fetchUserStreakCount();
 	}, [API_PREFIX, user, folderName]);
 
 	const deleteTask = async (task) => {
@@ -74,17 +49,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 			);
 			//Update streak count for task deleted
 			if (response.ok) {
-				const newStreakCount = streakCount + 1;
-				setStreakCount(newStreakCount);
-				await fetch(`${API_PREFIX}/${user.username}/streak`, {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${user.token}`,
-					},
-					body: JSON.stringify({ streakCount: newStreakCount }),
-				});
-
 				setTasks((prevTasks) =>
 					prevTasks.filter((t) => t._id !== task._id),
 				);
@@ -107,28 +71,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 		}
 	};
 
-	const handleDescriptionChange = (event) => {
-		const newDescription = event.target.value;
-		setDescription(newDescription);
-		localStorage.setItem(`description-${folderName}`, newDescription);
-	};
-
-	//Reset to 0
-	const resetStreakCount = async () => {
-		try {
-			setStreakCount(0);
-			await fetch(`${API_PREFIX}/${user.username}/streak`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${user.token}`,
-				},
-				body: JSON.stringify({ streakCount: 0 }),
-			});
-		} catch (error) {
-			console.error('Error resetting streak count:', error);
-		}
-	};
 	//Sort tasks in sections based on date
 	const isToday = (date) => {
 		const today = new Date();
@@ -172,11 +114,6 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 						{folderName} - {dividerName}
 					</h1>
 					<div className="d-flex align-items-center">
-						<button
-							onClick={resetStreakCount}
-							className="btn btn-danger mr-2">
-							Reset Streak
-						</button>
 						<div className="position-relative">
 							<img
 								src={fire_asset}
@@ -191,22 +128,10 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 									left: '30%',
 									color: 'black',
 									fontSize: '1.25em',
-								}}>
-								{streakCount}
-							</figcaption>
+								}}></figcaption>
 						</div>
 					</div>
 				</div>
-				<h5 className="mt-3">
-					Description:
-					<input
-						type="text"
-						value={description}
-						onChange={handleDescriptionChange}
-						placeholder="Type folder description here..."
-						className="form-control mt-2"
-					/>
-				</h5>
 				<hr />
 			</header>
 			<main className="container-fluid">

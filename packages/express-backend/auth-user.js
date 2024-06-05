@@ -6,7 +6,7 @@ import {
 	findUser,
 } from '../mongoose-database/services/user-services.js';
 
-export async function registerUser(req, res) {
+export const registerUser = async (req, res) => {
 	const { firstName, lastName, username, password } = req.body;
 
 	try {
@@ -37,35 +37,40 @@ export async function registerUser(req, res) {
 				},
 			],
 		};
-		await addUser(userToAdd);
+		const user = await addUser(userToAdd);
 
-		return res.status(201).send({ token: token, username: username });
+		return res.status(201).send({
+			token: token,
+			username: user.username,
+			streak: user.streak,
+		});
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send('Internal Server Error');
 	}
-}
+};
 
-export async function loginUser(req, res) {
+export const loginUser = async (req, res) => {
 	const { username, password } = req.body;
 
 	try {
-		const retrievedUser = await findUser(username);
+		const user = await findUser(username);
 
-		if (!retrievedUser) {
+		if (!user) {
 			return res
 				.status(401)
 				.send('Unauthorized: Invalid username or password');
 		}
 
-		const matched = await bcrypt.compare(
-			password,
-			retrievedUser.hashedPassword,
-		);
+		const matched = await bcrypt.compare(password, user.hashedPassword);
 		if (matched) {
 			const token = await generateAccessToken(username);
 			console.log('Token:', token);
-			return res.status(200).send({ token: token, username: username });
+			return res.status(200).send({
+				token: token,
+				username: user.username,
+				streak: user.streak,
+			});
 		} else {
 			return res
 				.status(401)
@@ -75,9 +80,9 @@ export async function loginUser(req, res) {
 		console.error(error);
 		return res.status(500).send('Internal Server Error');
 	}
-}
+};
 
-export function authenticateUser(req, res, next) {
+export const authenticateUser = (req, res, next) => {
 	const authHeader = req.headers['authorization'];
 	const token = authHeader && authHeader.split(' ')[1];
 
@@ -95,9 +100,9 @@ export function authenticateUser(req, res, next) {
 			}
 		});
 	}
-}
+};
 
-function generateAccessToken(username) {
+const generateAccessToken = (username) => {
 	return new Promise((resolve, reject) => {
 		jwt.sign(
 			{ username: username },
@@ -112,4 +117,4 @@ function generateAccessToken(username) {
 			},
 		);
 	});
-}
+};

@@ -31,6 +31,7 @@ const RegistrationForm = ({ API_PREFIX, handleLoginAndRegister }) => {
 				handleLoginAndRegister(
 					payload.token,
 					payload.username,
+					payload.streak,
 					dividers,
 					() => {
 						console.log(
