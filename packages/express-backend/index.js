@@ -9,7 +9,6 @@ import { registerUser, loginUser, authenticateUser } from './auth-user.js';
 
 const app = express();
 const port = 8000;
-const API_PREFIX = `http://localhost:${port}`;
 
 app.use(cors());
 app.use(express.json());
@@ -39,6 +38,6 @@ app.put('/:username', authenticateUser, User.setDivider);
 app.put('/:username/:dividerName', authenticateUser, User.setFolder);
 app.put('/:username/:dividerName/:folderName', authenticateUser, User.setTask);
 
-app.listen(port, () => {
-	console.log(`Example app listening at ${API_PREFIX}`);
+app.listen(process.env.port || port, () => {
+	console.log(`REST API is listening.`);
 });

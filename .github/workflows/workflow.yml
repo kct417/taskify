@@ -7,7 +7,8 @@ on:
         branches: [main, develop]
 
 env:
-    AZURE_WEBAPP_NAME: taskify-api
+    AZURE_WEBAPP_NAME: taskify
+    AZURE_WEBAPP_PACKAGE_PATH: packages/express-backend
 
 jobs:
     build-and-deploy:
@@ -25,20 +26,26 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
+
             - name: Start MongoDB
               uses: MongoCamp/mongodb-github-action@1.0.0
               with:
                   mongodb-version: ${{ matrix.mongodb-version }}
-            - name: Run npm clean install
-              run: npm ci
-            - name: Run linting and prettier check
-              run: npm run lint
-            - name: Run build
-              run: npm run -w react-frontend build
-            - name: Run test
-              run: npm test
+
+            - name: npm install, build, and test
+              run: |
+                  npm install --workspaces=false
+                  npm run -w express-backend build --if-present
+                  npm run -w express-backend test --if-present
+              working-directory: packages/express-backend
+
+            - name: Zip artifact for deployment
+              run: zip release.zip ./* -r
+              working-directory: packages/express-backend
+
             - name: 'Deploy to Azure WebApp'
               uses: azure/webapps-deploy@v3
               with:
                   app-name: ${{ env.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+                  package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
