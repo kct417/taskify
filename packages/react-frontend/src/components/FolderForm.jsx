@@ -9,7 +9,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 	const sidebarButtonColor = '#F38D8D';
-
+	
 	const fetchTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
