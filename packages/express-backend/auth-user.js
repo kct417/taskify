@@ -6,6 +6,8 @@ import {
 	findUser,
 } from '../mongoose-database/services/user-services.js';
 
+// should check for existing user before registering
+// should send token, username, and streaks
 export const registerUser = async (req, res) => {
 	const { firstName, lastName, username, password } = req.body;
 
@@ -50,6 +52,8 @@ export const registerUser = async (req, res) => {
 	}
 };
 
+// should validate username and password
+// should send token, username, and streak
 export const loginUser = async (req, res) => {
 	const { username, password } = req.body;
 
@@ -82,6 +86,7 @@ export const loginUser = async (req, res) => {
 	}
 };
 
+// should authenticate user with token
 export const authenticateUser = (req, res, next) => {
 	const authHeader = req.headers['authorization'];
 	const token = authHeader && authHeader.split(' ')[1];
@@ -102,6 +107,7 @@ export const authenticateUser = (req, res, next) => {
 	}
 };
 
+// generates token given a username
 const generateAccessToken = (username) => {
 	return new Promise((resolve, reject) => {
 		jwt.sign(

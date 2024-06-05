@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+// user model is a tree structure
+// users will contain an array of dividers
+// dividers will contain an array of folders
+// folders will contain an array of tasks
+// frontend receives the array of dividers
+// frontend parses the dividers for sub arrays
+// user model should only be used in user-services.js
+
 const taskSchema = new mongoose.Schema({
 	taskName: { type: String, trim: true, required: true },
 	description: { type: String, trim: true },

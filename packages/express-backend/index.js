@@ -5,6 +5,8 @@ import '../mongoose-database/index.js';
 import User from './fetch-user.js';
 import { registerUser, loginUser, authenticateUser } from './auth-user.js';
 
+// available routes for the frontend
+
 const app = express();
 const port = 8000;
 const API_PREFIX = `http://localhost:${port}`;

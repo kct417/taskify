@@ -5,8 +5,12 @@ import {
 	updateTasks,
 } from '../mongoose-database/services/user-services.js';
 
+// functions to fetch user data based on api request
+// used in backend index.js when routes are called
+
 export const getDividers = (req, res) => {
 	const { username } = req.params;
+	// sends user dividers to frontend if successful
 	findUser(username)
 		.then((result) => {
 			if (result) {
@@ -24,6 +28,7 @@ export const getDividers = (req, res) => {
 export const createDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
+	// sends user dividers to frontend if successful
 	updateDividers(username, divider, 'push')
 		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
@@ -35,6 +40,7 @@ export const createDivider = (req, res) => {
 export const deleteDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
+	// sends user dividers to frontend if successful
 	updateDividers(username, divider, 'pull')
 		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
@@ -46,6 +52,7 @@ export const deleteDivider = (req, res) => {
 export const setDivider = (req, res) => {
 	const { username } = req.params;
 	const { divider } = req.body;
+	// sends user dividers to frontend if successful
 	updateDividers(username, divider, 'set')
 		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
@@ -57,6 +64,7 @@ export const setDivider = (req, res) => {
 export const createFolder = (req, res) => {
 	const { username, dividerName } = req.params;
 	const { folder } = req.body;
+	// sends user dividers to frontend if successful
 	updateFolders(username, dividerName, folder, 'push')
 		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
@@ -79,6 +87,7 @@ export const deleteFolder = (req, res) => {
 export const setFolder = (req, res) => {
 	const { username, dividerName } = req.params;
 	const { folder } = req.body;
+	// sends user dividers to frontend if successful
 	updateFolders(username, dividerName, folder, 'set')
 		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
@@ -90,6 +99,7 @@ export const setFolder = (req, res) => {
 export const createTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
+	// sends user dividers to frontend if successful
 	updateTasks(username, dividerName, folderName, task, 'push')
 		.then((result) => res.status(201).send(result.dividers))
 		.catch((error) => {
@@ -101,6 +111,7 @@ export const createTask = (req, res) => {
 export const deleteTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
+	// sends user dividers to frontend if successful
 	updateTasks(username, dividerName, folderName, task, 'pull')
 		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
@@ -112,6 +123,7 @@ export const deleteTask = (req, res) => {
 export const setTask = (req, res) => {
 	const { username, dividerName, folderName } = req.params;
 	const { task } = req.body;
+	// sends user dividers to frontend if successful
 	updateTasks(username, dividerName, folderName, task, 'set')
 		.then((result) => res.status(200).send(result.dividers))
 		.catch((error) => {
@@ -122,6 +134,7 @@ export const setTask = (req, res) => {
 
 export const getStreakCount = (req, res) => {
 	const { username } = req.params;
+	// sends user dividers to frontend if successful
 	findUser(username)
 		.then((result) => {
 			if (result) {
