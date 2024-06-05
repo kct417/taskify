@@ -18,8 +18,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ API_PREFIX, user, setUser }) => {
+	// handleMenuButtonClick: cases for the menu popup buttons and its
+	// corresponding fields and buttons
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
@@ -132,6 +135,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		handleShow(content, fields, buttons);
 	};
 
+	// handleAddTask: adds a task to the user's data by getting the form fields
 	const handleAddTask = (formFields) => {
 		const folderName = formFields.folder?.trim();
 		const dividerName = formFields.divider?.trim();
@@ -163,6 +167,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			});
 	};
 
+	// addTask: adds a task to the user's data by sending a POST request
 	async function addTask(
 		taskName,
 		dueDate,
@@ -197,10 +202,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			}
 		} catch (error) {
 			console.error('Error:', error);
-			throw error; // re-throw the error so the caller can handle it
+			throw error;
 		}
 	}
 
+	// handleAddFolder: adds a folder to the user's data by getting the form fields
 	const handleAddFolder = (formFields) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
@@ -222,6 +228,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			});
 	};
 
+	// addFolder: adds a folder to the user's data by sending a POST request
 	async function addFolder(folderEntered, dividerName) {
 		try {
 			const response = await fetch(
@@ -249,6 +256,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	}
 
+	// deleteFolder: deletes a folder from the user's data by sending a DELETE request
 	async function deleteFolder(folderName, dividerName, folderId) {
 		try {
 			const response = await fetch(
@@ -279,6 +287,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	}
 
+	// handleAddDivider: adds a divider to the user's data by getting the form fields
 	const handleAddDivider = (formFields) => {
 		const dividerName = formFields.divider?.trim();
 		if (!dividerName) {
@@ -296,6 +305,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			});
 	};
 
+	// addDivider: adds a divider to the user's data by sending a POST request
 	async function addDivider(dividerEntered) {
 		try {
 			const response = await fetch(`${API_PREFIX}/${user.username}`, {
@@ -320,6 +330,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	}
 
+	// addAuthHeader: adds the Authorization header to the request
 	function addAuthHeader(otherHeaders = {}) {
 		return {
 			...otherHeaders,
@@ -327,6 +338,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		};
 	}
 
+	// fetchDividerNames: fetches the divider names from the user's data
 	const [dividerNames, setDividerNames] = useState([]);
 	useEffect(() => {
 		const fetchDividerNames = async () => {
@@ -344,6 +356,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	}, [user, setUser]);
 
 	// Overlay Code
+	const navigate = useNavigate();
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
 		content: null,
@@ -351,6 +364,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		buttons: [],
 	});
 
+	// handleShow: shows the overlay with the given content, fields, and buttons
 	const handleShow = (content, fields = [], buttons = []) => {
 		setOverlayConfig({
 			show: true,
@@ -360,6 +374,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		});
 	};
 
+	// handleClose: closes the overlay
 	const handleClose = () => {
 		setOverlayConfig({
 			show: false,
@@ -374,6 +389,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	const [activeId, setActiveId] = useState(null); // track active item being dragged
 	const [draggedFolder, setDraggedFolder] = useState(null); // track folder being dragged
 
+	// fetchData: fetches the user's data by getting the divider and folder objects
 	useEffect(() => {
 		const fetchData = async () => {
 			const dividerData = {};
@@ -389,6 +405,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		fetchData();
 	}, [user, setUser]);
 
+	// useSensors: uses the MouseSensor and TouchSensor for drag and drop
 	const sensors = useSensors(
 		useSensor(MouseSensor, {
 			activationConstraint: {
@@ -403,6 +420,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}),
 	);
 
+	// findContainer: finds the container of the given id
 	const findContainer = (id) => {
 		for (const dividerName in items) {
 			if (items[dividerName].some((item) => item.id === id)) {
@@ -414,11 +432,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		return undefined;
 	};
 
+	// handleDragStart: handles the start of dragging a folder
 	const handleDragStart = async (event) => {
 		const { active } = event;
 		setActiveId(active.id);
 
-		// Find the divider and folder object for the active id
+		// find the divider and folder object for the active id
 		const dividerName = findContainer(active.id);
 		if (dividerName) {
 			const divider = user.dividers.find(
@@ -431,6 +450,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		}
 	};
 
+	// handleDragEnd: handles the end of dragging a folder
 	const handleDragEnd = async (event) => {
 		const { active, over } = event;
 		setActiveId(null);
@@ -462,13 +482,14 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			}));
 		} else {
 			try {
+				// delete the folder from the old divider
 				await deleteFolder(
 					draggedFolder.folderName,
 					activeContainer,
 					draggedFolder._id,
 				);
 
-				// Add the folder to the new divider
+				// add the folder to the new divider
 				await addFolder(draggedFolder, overContainer);
 
 				setItems((prevItems) => {
@@ -511,14 +532,14 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						backgroundColor: '#F38D8D',
 						borderColor: '#F38D8D',
 						fontSize: '18px',
-					}}>
+					}}
+					onClick={() => navigate('/')}>
 					Home
 				</button>
 			</div>
 			<div
 				className="flex-grow-1 p-3"
 				style={{ maxHeight: 'calc(100vh - 140px)', overflowY: 'auto' }}>
-				{/* Wrapper div for scrollable content with background color */}
 				<div style={{ backgroundColor: '#D2C0C0' }}>
 					<DndContext
 						sensors={sensors}
@@ -540,6 +561,8 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 											key={id}
 											id={id}
 											name={name}
+											dividerName={dividerName}
+											navigate={navigate}
 										/>
 									))}
 									{items[dividerName].length === 0 && (
@@ -609,7 +632,8 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	);
 };
 
-const SortableItem = ({ id, name, isDragging }) => {
+// SortableItem: displays the folder name as a sortable item
+const SortableItem = ({ id, name, dividerName, navigate, isDragging }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
 			id,
@@ -632,12 +656,22 @@ const SortableItem = ({ id, name, isDragging }) => {
 			}}
 			className="btn btn-primary rounded-pill mb-2 text-left ml-4"
 			{...attributes}
-			{...listeners}>
+			{...listeners}
+			// navigate to the folder page when the folder name is clicked
+			onClick={() =>
+				navigate(`/folders/${name}/${dividerName}`, {
+					state: {
+						folderName: name,
+						dividerName: dividerName,
+					},
+				})
+			}>
 			{name}
 		</button>
 	);
 };
 
+// EmptySection: displays a message to drag items to add to the divider
 const EmptySection = ({ id }) => {
 	const { setNodeRef } = useSortable({
 		id,
@@ -659,6 +693,8 @@ const EmptySection = ({ id }) => {
 SortableItem.propTypes = {
 	id: PropTypes.string.isRequired,
 	name: PropTypes.string,
+	dividerName: PropTypes.string,
+	navigate: PropTypes.func,
 	isDragging: PropTypes.bool,
 };
 
