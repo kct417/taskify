@@ -73,17 +73,14 @@ function MenuPopup({ onButtonClick }) {
 	return (
 		<div style={styles.menuPopup}>
 			<h2 style={styles.title}>Add Item</h2>
+			<MenuButton onClick={() => onButtonClick('Add Divider')}>
+				Add Divider
+			</MenuButton>
 			<MenuButton onClick={() => onButtonClick('Add Folder')}>
 				Add Folder
 			</MenuButton>
 			<MenuButton onClick={() => onButtonClick('Add Task')}>
 				Add Task
-			</MenuButton>
-			<MenuButton onClick={() => onButtonClick('Add Divider')}>
-				Add Divider
-			</MenuButton>
-			<MenuButton onClick={() => onButtonClick('Prompt AI')}>
-				Prompt AI
 			</MenuButton>
 			<MenuButton onClick={() => onButtonClick('Exit')}>Exit</MenuButton>
 		</div>
