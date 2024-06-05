@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import fire_asset from '../assets/fire_asset.png';
 
 import TaskList from './TaskList';
 
@@ -95,7 +96,29 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
 				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
-				<h1>Home</h1>
+				<div className="d-flex justify-content-between align-items-center">
+					<h1>Home</h1>
+					<div className="d-flex align-items-center">
+						<div className="position-relative">
+							<img
+								src={fire_asset}
+								className="img-fluid"
+								style={{ width: '50px', height: '50px' }}
+								alt="Fire"
+							/>
+							<figcaption
+								className="position-absolute"
+								style={{
+									top: '35%',
+									left: '30%',
+									color: 'black',
+									fontSize: '1.25em',
+								}}>
+								{user.streak}
+							</figcaption>
+						</div>
+					</div>
+				</div>
 				<hr />
 			</header>
 			<main className="container-fluid">
