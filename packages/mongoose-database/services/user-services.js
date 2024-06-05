@@ -74,10 +74,10 @@ export const updateDividers = async (username, divider, updateType) => {
 		}
 
 		const updatedUser = await userModel.findOneAndUpdate(
-			{ username },
+			{ username: username },
 			updateOperation,
 			{
-				arrayFilters,
+				arrayFilters: arrayFilters,
 				new: true,
 			},
 		);
@@ -153,10 +153,10 @@ export const updateFolders = async (
 		}
 
 		const updatedUser = await userModel.findOneAndUpdate(
-			{ username },
+			{ username: username },
 			updateOperation,
 			{
-				arrayFilters,
+				arrayFilters: arrayFilters,
 				new: true,
 			},
 		);
@@ -214,7 +214,7 @@ export const updateTasks = async (
 				break;
 			case 'push':
 				if (folder.tasks.some((t) => t.taskName === task.taskName)) {
-					throw new Error('Task already exists');
+					throw new Error('Folder already exists');
 				}
 				updateOperation = {
 					$push: {
@@ -240,10 +240,10 @@ export const updateTasks = async (
 		}
 
 		const updatedUser = await userModel.findOneAndUpdate(
-			{ username },
+			{ username: username },
 			updateOperation,
 			{
-				arrayFilters,
+				arrayFilters: arrayFilters,
 				new: true,
 			},
 		);
