@@ -19,6 +19,9 @@ jobs:
               with:
                   submodules: true
                   lfs: false
+            - name: Install dependencies
+              run: npm install
+              working-directory: ./packages/react-frontend
             - name: Build the project
               run: npm run build
               working-directory: ./packages/react-frontend
