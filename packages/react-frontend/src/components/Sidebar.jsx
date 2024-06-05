@@ -196,7 +196,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, data);
+				setUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add task');
 			}
@@ -246,7 +246,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, data);
+				setUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add folder');
 			}
@@ -277,7 +277,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			);
 			if (response.status === 200) {
 				const data = await response.json();
-				setUser(user.token, user.username, data);
+				setUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to delete folder');
 			}
@@ -320,7 +320,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, data);
+				setUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add divider');
 			}
