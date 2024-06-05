@@ -45,7 +45,6 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 	}, [API_PREFIX, user, setUser]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
-		console.log(task, dividerName, folderName);
 		try {
 			const response = await fetch(
 				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
