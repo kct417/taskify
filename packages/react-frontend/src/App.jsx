@@ -51,7 +51,7 @@ function App() {
 						<div>
 							<Login
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={populateUser}
+								setUser={populateUser}
 							/>
 						</div>
 					}
@@ -62,7 +62,7 @@ function App() {
 						<div>
 							<Register
 								API_PREFIX={API_PREFIX}
-								handleLoginAndRegister={populateUser}
+								setUser={populateUser}
 							/>
 						</div>
 					}

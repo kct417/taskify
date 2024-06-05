@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
 
-const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
+const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
@@ -62,7 +62,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				updateUserData(user.token, user.username, updatedUserData);
+				setUser(user.token, user.username, updatedUserData);
 			} else {
 				console.error('Failed to delete task');
 			}
@@ -180,7 +180,7 @@ const FolderForm = ({ API_PREFIX, user, updateUserData }) => {
 FolderForm.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	updateUserData: PropTypes.func.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
 
 export default FolderForm;
