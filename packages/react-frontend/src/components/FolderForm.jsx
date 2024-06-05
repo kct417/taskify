@@ -80,31 +80,37 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const isToday = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
-
-		today.setHours(0, 0, 0, 0);
-		taskDate.setHours(0, 0, 0, 0);
-
+	
+		today.setDate(today.getDate() - 1); 
+		today.setHours(0, 0, 0, 0); 
+	
+		taskDate.setHours(0, 0, 0, 0); 
+	
 		return today.getTime() === taskDate.getTime();
 	};
 
 	const isFuture = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
+		
+		today.setDate(today.getDate() - 1); 
+		today.setHours(0, 0, 0, 0); 
 
-		today.setHours(0, 0, 0, 0);
-		taskDate.setHours(0, 0, 0, 0);
+		taskDate.setHours(0, 0, 0, 0); 
 
-		return today.getTime() < taskDate.getTime();
+    		return today.getTime() < taskDate.getTime();
 	};
 
 	const isPast = (date) => {
 		const today = new Date();
 		const taskDate = new Date(date);
+		
+		today.setDate(today.getDate() - 1); 
+		today.setHours(0, 0, 0, 0); 
 
-		today.setHours(0, 0, 0, 0);
-		taskDate.setHours(0, 0, 0, 0);
+		taskDate.setHours(0, 0, 0, 0); 
 
-		return today.getTime() > taskDate.getTime();
+    		return today.getTime() > taskDate.getTime();
 	};
 
 	return (
