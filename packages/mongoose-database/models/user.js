@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
 		username: { type: String, trim: true, required: true, unique: true },
 		hashedPassword: { type: String, trim: true, required: true },
 		dividers: [dividerSchema],
-		streakCount: { type: Number, trim: true, default: 0 },
+		streak: { type: Number, trim: true, default: 0 },
 		created: { type: Date, trim: true, default: Date.now },
 	},
 	{ collection: 'users' },
