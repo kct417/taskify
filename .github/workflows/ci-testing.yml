@@ -12,6 +12,7 @@ jobs:
             matrix:
                 os: [ubuntu-latest]
                 node-version: [20.x]
+                mongodb-version: ['7.x']
 
         runs-on: ${{ matrix.os }}
 
@@ -21,6 +22,10 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node-version }}
+            - name: Start MongoDB
+              uses: supercharge/mongodb-github-action@1.11.0
+              with:
+                  mongodb-version: ${{ matrix.mongodb-version }}
             - name: Run npm clean install
               run: npm ci
             - name: Run linting and prettier check
