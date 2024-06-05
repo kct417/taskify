@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Folder from './pages/Folder';
 
-const API_PREFIX = 'https://thankful-smoke-0f194be1e.5.azurestaticapps.net/';
+const API_PREFIX = 'https://taskify-api.azurewebsites.net/';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
