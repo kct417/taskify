@@ -120,26 +120,14 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 							<div className="col-12" key={folder._id}>
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
 									<h2>
-										<button
-											onClick={() =>
-												navigate(
-													`/folders/${folder.folderName}/${divider.dividerName}`,
-													{
-														state: {
-															folderName:
-																folder.folderName,
-															dividerName:
-																folder.dividerName,
-														},
-													},
-												)
-											}>
-											<strong>
-												{folder.folderName}{' '}
-											</strong>
-										</button>
-										{' - '}
-										{divider.dividerName}
+										{folder.folderName}
+										<span
+											style={{
+												color: sidebarButtonColor,
+											}}>
+											{' / '}
+											{divider.dividerName}
+										</span>
 									</h2>
 									<TaskList
 										tasks={folder.tasks}

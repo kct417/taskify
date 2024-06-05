@@ -17,7 +17,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				navigate('/login');
 				return;
 			}
-
+			//Fetch the tasks based on the current folderName
 			const folderTasks = user.dividers.flatMap((divider) =>
 				divider.folders
 					.filter((folder) => folder.folderName === folderName)
@@ -73,6 +73,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 
 	//Sort tasks in sections based on date
 	const isToday = (date) => {
+		//Compare current day to see if today is the task's date
 		const today = new Date();
 		const taskDate = new Date(date);
 
