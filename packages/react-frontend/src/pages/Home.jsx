@@ -1,25 +1,35 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import useBanner from '../hooks/UseBanner';
 
 import HomeList from '../components/HomeList';
 import Sidebar from '../components/Sidebar';
+import BannerPageWrapper from '../components/BannerPageWrapper';
 
 const Home = ({ API_PREFIX, user, setUser }) => {
+	const { showBanner, bannerState } = useBanner();
 	return (
-		<div
-			className="d-flex"
-			style={{ height: '100vh', overflowY: 'hidden' }}>
-			<Sidebar API_PREFIX={API_PREFIX} user={user} setUser={setUser} />
+		<BannerPageWrapper bannerState={bannerState}>
 			<div
-				className="container-fluid p-0 d-flex"
-				style={{ overflowY: 'auto' }}>
-				<HomeList
+				className="d-flex"
+				style={{ height: '100vh', overflowY: 'hidden' }}>
+				<Sidebar
 					API_PREFIX={API_PREFIX}
 					user={user}
-					updateUserData={setUser}
+					setUser={setUser}
+					showBanner={showBanner}
 				/>
+				<div
+					className="container-fluid p-0 d-flex"
+					style={{ overflowY: 'auto' }}>
+					<HomeList
+						API_PREFIX={API_PREFIX}
+						user={user}
+						setUser={setUser}
+						showBanner={showBanner}
+					/>
+				</div>
 			</div>
-		</div>
+		</BannerPageWrapper>
 	);
 };
 

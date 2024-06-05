@@ -24,8 +24,12 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 			})}
 			<button
 				type="button"
-				style={{ backgroundColor: '#F38D8D', borderColor: '#F38D8D' }}
-				className="btn btn-primary btn-block"
+				style={{
+					color: '#FFFFFF',
+					backgroundColor: '#F38D8D',
+					borderColor: '#F38D8D',
+				}}
+				className="btn btn-block"
 				onClick={() => {
 					submitFunc(formFields);
 				}}>

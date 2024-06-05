@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, user, updateUserData }) => {
+const HomeList = ({ API_PREFIX, user, setUser }) => {
 	const [topTasks, setTopTasks] = useState([]);
 	const [streakCount, setStreakCount] = useState(0);
 
@@ -60,7 +60,7 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 		fetchUserStreakCount();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [API_PREFIX, user, updateUserData]);
+	}, [API_PREFIX, user, setUser]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
 		console.log(task, dividerName, folderName);
@@ -98,7 +98,7 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				updateUserData(user.token, user.username, updatedUserData);
+				setUser(user.token, user.username, updatedUserData);
 			} else {
 				console.error('Failed to delete task');
 			}
@@ -184,7 +184,7 @@ const HomeList = ({ API_PREFIX, user, updateUserData }) => {
 HomeList.propTypes = {
 	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	updateUserData: PropTypes.func.isRequired,
+	setUser: PropTypes.func.isRequired,
 };
 
 export default HomeList;
