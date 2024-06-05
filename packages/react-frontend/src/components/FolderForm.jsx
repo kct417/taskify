@@ -8,7 +8,6 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
-	const [description, setDescription] = useState('');
 	const sidebarButtonColor = '#F38D8D';
 
 	const fetchTasks = async () => {
