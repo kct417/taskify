@@ -19,10 +19,12 @@ import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 import { useNavigate } from 'react-router-dom';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
+const Sidebar = ({ user, updateUser, showBanner }) => {
 	// handleMenuButtonClick: cases for the menu popup buttons and its
 	// corresponding fields and buttons
+
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
@@ -192,7 +194,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add task');
 			}
@@ -246,7 +248,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add folder');
 			}
@@ -277,7 +279,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 			);
 			if (response.status === 200) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to delete folder');
 			}
@@ -324,7 +326,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add divider');
 			}
@@ -357,7 +359,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 		};
 
 		fetchDividerNames();
-	}, [user, setUser]);
+	}, [user, updateUser]);
 
 	// Overlay Code
 	const navigate = useNavigate();
@@ -407,7 +409,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 			setItems(dividerData);
 		};
 		fetchData();
-	}, [user, setUser]);
+	}, [user, updateUser]);
 
 	// useSensors: uses the MouseSensor and TouchSensor for drag and drop
 	const sensors = useSensors(
@@ -533,11 +535,11 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 				<button
 					className="btn btn-primary rounded-pill text-left"
 					style={{
-						backgroundColor: '#F38D8D',
-						borderColor: '#F38D8D',
+						backgroundColor: TASKIFY_THEME_COLOR,
+						borderColor: TASKIFY_THEME_COLOR,
 						fontSize: '18px',
 					}}
-					onClick={() => navigate('/')}>
+					onClick={() => navigate('/home')}>
 					Home
 				</button>
 			</div>
@@ -611,7 +613,7 @@ const Sidebar = ({ API_PREFIX, user, setUser, showBanner }) => {
 						style={{
 							lineHeight: '0px',
 							fontSize: '30px',
-							color: '#F38D8D',
+							color: TASKIFY_THEME_COLOR,
 						}}>
 						+
 					</span>
@@ -662,8 +664,8 @@ const SortableItem = ({
 			ref={setNodeRef}
 			style={{
 				...style,
-				backgroundColor: '#F38D8D',
-				borderColor: '#F38D8D',
+				backgroundColor: TASKIFY_THEME_COLOR,
+				borderColor: TASKIFY_THEME_COLOR,
 				fontSize: '18px',
 			}}
 			className="btn btn-primary rounded-pill mb-2 text-left ml-4"
@@ -671,7 +673,7 @@ const SortableItem = ({
 			{...listeners}
 			// navigate to the folder page when the folder name is clicked
 			onClick={() =>
-				navigate(`/folders/${name}/${dividerName}`, {
+				navigate(`/home/${dividerName}/${name}`, {
 					state: {
 						folderName: name,
 						dividerName: dividerName,
@@ -717,9 +719,8 @@ EmptySection.propTypes = {
 };
 
 Sidebar.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	setUser: PropTypes.func.isRequired,
+	updateUser: PropTypes.func.isRequired,
 	showBanner: PropTypes.func.isRequired,
 };
 

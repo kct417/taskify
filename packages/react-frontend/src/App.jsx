@@ -4,14 +4,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Folder from './pages/Folder';
-
-const API_PREFIX = 'http://localhost:8000';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const INVALID_USERNAME = 'INVALID_USERNAME';
-	const [user, setUser] = useState({
+	const [user, updateUser] = useState({
 		token: INVALID_TOKEN,
 		username: INVALID_USERNAME,
 		streak: 0,
@@ -19,7 +16,7 @@ function App() {
 	});
 
 	const populateUser = (newToken, username, streak, dividers, callback) => {
-		setUser({
+		updateUser({
 			token: newToken,
 			username: username,
 			streak: streak,
@@ -33,51 +30,14 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route
-					path="/"
-					element={
-						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								user={user}
-								setUser={populateUser}
-							/>
-						</div>
-					}
-				/>
-				<Route
-					path="/login"
-					element={
-						<div>
-							<Login
-								API_PREFIX={API_PREFIX}
-								setUser={populateUser}
-							/>
-						</div>
-					}
-				/>
+				<Route path="/" element={<Login updateUser={populateUser} />} />
 				<Route
 					path="/signup"
-					element={
-						<div>
-							<Register
-								API_PREFIX={API_PREFIX}
-								setUser={populateUser}
-							/>
-						</div>
-					}
+					element={<Register updateUser={populateUser} />}
 				/>
 				<Route
-					path="/folders/:folderName/:dividerName"
-					element={
-						<div>
-							<Folder
-								API_PREFIX={API_PREFIX}
-								user={user}
-								setUser={populateUser}
-							/>
-						</div>
-					}
+					path={`/home/:dividerName?/:folderName?`}
+					element={<Home user={user} updateUser={populateUser} />}
 				/>
 			</Routes>
 		</BrowserRouter>

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import AuthPageWrapper from '../components/AuthPageWrapper';
-
 import Form from '../components/Form';
 import useBanner from '../hooks/UseBanner';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const RegistrationForm = ({ API_PREFIX, setUser }) => {
+const Register = ({ updateUser }) => {
 	const navigate = useNavigate();
 	const { showBanner, bannerState } = useBanner();
 
@@ -28,7 +28,7 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 					},
 				);
 				const dividers = await divResp.json();
-				setUser(
+				updateUser(
 					payload.token,
 					payload.username,
 					payload.streak,
@@ -38,7 +38,7 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 							`Registration successful for user: '${payload.username}'`,
 						);
 						console.log(`Auth token saved`);
-						navigate('/');
+						navigate('/home');
 					},
 				);
 			} else {
@@ -48,7 +48,12 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 				);
 			}
 		} catch (error) {
-			showBanner('Registration Error:', error.message, 'danger');
+			console.error(error);
+			showBanner(
+				'Oops!',
+				'Something went wrong trying to sign up. Please try again later.',
+				'danger',
+			);
 		}
 	}
 
@@ -60,7 +65,8 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 
 	const header = (
 		<>
-			Create your <strong style={{ color: '#F38D8D' }}>Taskify</strong>{' '}
+			Create your{' '}
+			<strong style={{ color: TASKIFY_THEME_COLOR }}>Taskify</strong>{' '}
 			account
 		</>
 	);
@@ -69,7 +75,7 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 			header={header}
 			alternateText={'Already have an account?'}
 			alternateButtonText={'Log In'}
-			alternateButtonOnClick={() => navigate('/login')}
+			alternateButtonOnClick={() => navigate('/')}
 			bannerState={bannerState}>
 			<Form
 				fields={[
@@ -102,9 +108,8 @@ const RegistrationForm = ({ API_PREFIX, setUser }) => {
 	);
 };
 
-RegistrationForm.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
-	setUser: PropTypes.func.isRequired,
+Register.propTypes = {
+	updateUser: PropTypes.func.isRequired,
 };
 
-export default RegistrationForm;
+export default Register;

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { TASKIFY_THEME_COLOR } from '../constants';
 
 const formatDate = (dateString) => {
 	const date = new Date(dateString);
@@ -20,10 +21,13 @@ const Task = ({ task, onDelete, dividerName, folderName }) => {
 	return (
 		<div
 			className="mb-3 text-muted"
-			style={{ border: '2px solid #F38D8D', borderRadius: '5px' }}>
+			style={{
+				border: '2px solid ' + TASKIFY_THEME_COLOR,
+				borderRadius: '5px',
+			}}>
 			<div
 				className="d-flex justify-content-start align-items-center"
-				style={{ borderBottom: '1.5px solid #F38D8D' }}>
+				style={{ borderBottom: '1.5px solid ' + TASKIFY_THEME_COLOR }}>
 				<input
 					type="checkbox"
 					className="m-2"

@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
-	const { folderName, dividerName } = useParams();
+const FolderList = ({
+	user,
+	updateUser,
+	showBanner,
+	dividerName,
+	folderName,
+}) => {
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 	const [description, setDescription] = useState('');
-	const sidebarButtonColor = '#F38D8D';
 
 	const fetchTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
-				navigate('/login');
+				navigate('/');
 				return;
 			}
 
@@ -37,7 +42,7 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 
 	useEffect(() => {
 		fetchTasks();
-	}, [API_PREFIX, user, folderName]);
+	}, [user, folderName]);
 
 	const deleteTask = async (task) => {
 		try {
@@ -67,7 +72,7 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				setUser(
+				updateUser(
 					user.token,
 					user.username,
 					user.streak + 1,
@@ -131,15 +136,15 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 			style={{ backgroundColor: '#FFF5F5', height: '100vh' }}>
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
-				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
+				style={{
+					borderBottom: `4px solid ${TASKIFY_THEME_COLOR}`,
+					zIndex: 1,
+				}}>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1>
 						{dividerName}
-						<span
-							style={{
-								color: sidebarButtonColor,
-							}}>
-							{' / '}
+						{' / '}
+						<span style={{ color: TASKIFY_THEME_COLOR }}>
 							{folderName}
 						</span>
 					</h1>
@@ -170,7 +175,7 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 				<div className="row">
 					<div className="col-12 mb-4">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>Today</h2>
+							<h2>Today</h2>
 							<TaskList
 								tasks={tasks.filter((task) =>
 									isToday(task.dueDate),
@@ -181,9 +186,7 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 					</div>
 					<div className="col-12 mb-4">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>
-								Upcoming
-							</h2>
+							<h2>Upcoming</h2>
 							<TaskList
 								tasks={tasks.filter((task) =>
 									isFuture(task.dueDate),
@@ -194,7 +197,7 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 					</div>
 					<div className="col-12">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>Past</h2>
+							<h2>Past</h2>
 							<TaskList
 								tasks={tasks.filter((task) =>
 									isPast(task.dueDate),
@@ -209,11 +212,12 @@ const FolderForm = ({ API_PREFIX, user, setUser, showBanner }) => {
 	);
 };
 
-FolderForm.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
+FolderList.propTypes = {
 	user: PropTypes.object.isRequired,
-	setUser: PropTypes.func.isRequired,
+	updateUser: PropTypes.func.isRequired,
 	showBanner: PropTypes.func.isRequired,
+	dividerName: PropTypes.string,
+	folderName: PropTypes.string,
 };
 
-export default FolderForm;
+export default FolderList;

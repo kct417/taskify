@@ -16,4 +16,9 @@ const BannerPageWrapper = ({ children, bannerState }) => {
 	);
 };
 
+BannerPageWrapper.propTypes = {
+	children: PropTypes.object,
+	bannerState: PropTypes.object,
+};
+
 export default BannerPageWrapper;
