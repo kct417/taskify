@@ -11,6 +11,8 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
 
+	// Fetches tasks to display on the home page
+	// Sorts tasks as well to display in the Top 5 section
 	const fetchTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
@@ -41,10 +43,9 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 
 	useEffect(() => {
 		fetchTasks();
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [API_PREFIX, user, setUser]);
 
+	// Deletes a task, updates the user afterwards
 	const deleteTask = async (task, dividerName, folderName) => {
 		try {
 			const response = await fetch(

@@ -9,6 +9,8 @@ const formatDate = (dateString) => {
 const Task = ({ task, onDelete, dividerName, folderName }) => {
 	const [checked, setChecked] = useState(false);
 
+	// If a task is checked, the "checked" field is set to "true"
+	// and the task is deleted
 	const handleCheckboxClick = () => {
 		setChecked(!checked);
 		if (!checked) {
