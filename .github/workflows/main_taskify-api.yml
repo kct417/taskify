@@ -11,7 +11,12 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+                node-version: [20.x]
+                dir: [packages/express-backend, packages/mongoose-database]
+        runs-on: ${{ matrix.os }}
 
         steps:
             - uses: actions/checkout@v4
@@ -19,17 +24,17 @@ jobs:
             - name: Set up Node.js version
               uses: actions/setup-node@v3
               with:
-                  node-version: '20.x'
+                  node-version: ${{ matrix.node-version }}
 
             - name: npm install, build, and test
               run: |
                   npm install
                   npm run build --if-present
-              working-directory: packages/express-backend
+              working-directory: ${{ matrix.dir }}
 
             - name: Zip artifact for deployment
               run: zip release.zip ./* -r
-              working-directory: packages/express-backend
+              working-directory: ${{ matrix.dir }}
 
             - name: Upload artifact for deployment job
               uses: actions/upload-artifact@v3
