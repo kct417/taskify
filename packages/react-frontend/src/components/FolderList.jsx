@@ -24,11 +24,12 @@ const FolderList = ({
 					return;
 				}
 
-				const divider = user.dividers.map(
+				console.log(user.dividers);
+				const divider = user.dividers.find(
 					(divider) => divider.dividerName === dividerName,
 				);
 
-				const folder = divider.folders.map(
+				const folder = divider.folders.find(
 					(folder) => folder.folderName === folderName,
 				);
 
