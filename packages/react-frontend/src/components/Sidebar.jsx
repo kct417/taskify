@@ -464,6 +464,20 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 		return undefined;
 	};
 
+	// checkDuplicateFolder: checks if the folder already exists in the divider
+	const checkDuplicateFolder = (folderName, dividerName) => {
+		for (const divider of user.dividers) {
+			if (divider.dividerName === dividerName) {
+				for (const folder of divider.folders) {
+					if (folder.folderName === folderName) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	};
+
 	// handleDragStart: handles the start of dragging a folder
 	const handleDragStart = async (event) => {
 		const { active } = event;
@@ -491,6 +505,16 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 
 		const activeContainer = findContainer(active.id);
 		const overContainer = findContainer(over.id);
+
+		if (checkDuplicateFolder(draggedFolder.folderName, overContainer)) {
+			showBanner(
+				'Hold on!',
+				'Folder already exists in the divider.',
+				'warning',
+			);
+			setDraggedFolder(null);
+			return;
+		}
 
 		if (activeContainer === undefined || overContainer === undefined)
 			return;
