@@ -1,4 +1,4 @@
-name: Continuous Integration and Deployment
+name: Continuous Integration
 
 on:
     push:
@@ -8,7 +8,6 @@ on:
 
 env:
     AZURE_WEBAPP_NAME: taskify-api
-    # AZURE_WEBAPP_PACKAGE_PATH: packages/express-backend
 
 jobs:
     build-and-deploy:
@@ -48,4 +47,3 @@ jobs:
               with:
                   app-name: ${{ env.AZURE_WEBAPP_NAME }}
                   publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-                  # package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
