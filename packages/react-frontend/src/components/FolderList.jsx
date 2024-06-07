@@ -23,8 +23,6 @@ const FolderList = ({
 					navigate('/');
 					return;
 				}
-
-				console.log(user.dividers);
 				const divider = user.dividers.find(
 					(divider) => divider.dividerName === dividerName,
 				);
@@ -32,8 +30,9 @@ const FolderList = ({
 				const folder = divider.folders.find(
 					(folder) => folder.folderName === folderName,
 				);
-
-				setTasks(folder.tasks);
+				if (folder) {
+					setTasks(folder.tasks);
+				}
 			} catch (error) {
 				console.error('Error fetching tasks:', error);
 				showBanner(
