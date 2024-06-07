@@ -48,8 +48,8 @@ const Login = ({ updateUser }) => {
 		} catch (error) {
 			console.error(error);
 			showBanner(
-				'Error!',
-				'TODO: change this to be user friendly',
+				'Oh no!',
+				'Something went wrong. Check your username and password.',
 				'danger',
 			);
 		}
