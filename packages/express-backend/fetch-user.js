@@ -3,7 +3,7 @@ import {
 	updateDividers,
 	updateFolders,
 	updateTasks,
-} from '../mongoose-database/services/user-services.js';
+} from './user-services.js';
 
 // functions to fetch user data based on api request
 // used in backend index.js when routes are called

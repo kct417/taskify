@@ -1,10 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import {
-	addUser,
-	findUser,
-} from '../mongoose-database/services/user-services.js';
+import { addUser, findUser } from './user-services.js';
 
 // should check for existing user before registering
 // should send token, username, and streaks

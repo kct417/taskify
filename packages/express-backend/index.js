@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import '../mongoose-database/index.js';
+import './connect-database.js';
 import User from './fetch-user.js';
 import { registerUser, loginUser, authenticateUser } from './auth-user.js';
 

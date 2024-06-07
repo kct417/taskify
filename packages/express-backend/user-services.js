@@ -1,4 +1,4 @@
-import userModel from '../models/user.js';
+import userModel from './user.js';
 
 // user services are mongoose queries
 // services should only be used in backend auth.js and fetch-users.js
