@@ -24,11 +24,9 @@ const FolderList = ({
 					return;
 				}
 
-				const folderTasks = user.dividers.flatMap((divider) =>
-					divider.folders
-						.filter((folder) => folder.folderName === folderName)
-						.flatMap((folder) => folder.tasks),
-				);
+				const folderTasks =
+					user.dividers[`${dividerName}`].folders[`${folderName}`]
+						.tasks;
 
 				setTasks(folderTasks);
 			} catch (error) {
@@ -42,7 +40,7 @@ const FolderList = ({
 		};
 
 		fetchTasks();
-	}, [user, folderName, navigate, showBanner]);
+	}, [user, folderName, dividerName, navigate, showBanner]);
 
 	const deleteTask = async (task) => {
 		try {
