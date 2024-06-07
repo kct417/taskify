@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-import userModel from '../mongoose-database/models/user.js';
+import userModel from '../express-backend/user.js';
 import {
 	addUser,
 	findUser,
 	updateDividers,
 	updateFolders,
 	updateTasks,
-} from '../mongoose-database/services/user-services.js';
+} from '../express-backend/user-services.js';
 
 // tests for mongoose user model and user services
 
