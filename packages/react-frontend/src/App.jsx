@@ -6,8 +6,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Folder from './pages/Folder';
 
-const API_PREFIX = 'https://taskify-api.azurewebsites.net';
-// const API_PREFIX = 'http://localhost:8000';
+// const API_PREFIX = 'https://taskify-api.azurewebsites.net';
+const API_PREFIX = 'https://13.56.12.195:8000';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
