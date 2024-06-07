@@ -18,6 +18,10 @@ const port = 8000;
 app.use(cors(corsOptions));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
 app.post('/signup', registerUser);
 app.post('/login', loginUser);
 
