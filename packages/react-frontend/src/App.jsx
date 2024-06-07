@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Folder from './pages/Folder';
 
 // const API_PREFIX = 'https://taskify-api.azurewebsites.net';
-const API_PREFIX = 'https://13.56.12.195:8000';
+const API_PREFIX = 'https://3.101.118.77:8000';
 
 
 function App() {
