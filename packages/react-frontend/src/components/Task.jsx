@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { TASKIFY_THEME_COLOR } from '../constants';
 
 const formatDate = (dateString) => {
 	const date = new Date(dateString);
@@ -16,24 +17,37 @@ const Task = ({ task, onDelete, dividerName, folderName }) => {
 		}
 	};
 
+	const hasTaskDescription = task.description !== undefined;
 	return (
 		<div
-			className="d-flex p-2 justify-content-between border rounded mb-2"
-			style={{ backgroundColor: '#f7bcbc' }}>
-			<div className="form-check me-2">
+			className="mb-3 text-muted"
+			style={{
+				border: '2px solid ' + TASKIFY_THEME_COLOR,
+				borderRadius: '5px',
+			}}>
+			<div
+				className="d-flex justify-content-start align-items-center"
+				style={{ borderBottom: '1.5px solid ' + TASKIFY_THEME_COLOR }}>
 				<input
 					type="checkbox"
-					className="form-check-input"
+					className="m-2"
+					style={{ width: '25px', height: '25px' }}
 					checked={checked}
 					onChange={handleCheckboxClick}
 				/>
+				<div className="d-flex mr-2 w-100 text-truncate justify-content-between">
+					<h3 className="text-left m-0">{task.taskName}</h3>
+					<h3 className="text-end m-0">
+						due:{' '}
+						{task.dueDate
+							? formatDate(task.dueDate)
+							: 'No due date'}
+					</h3>
+				</div>
 			</div>
-			<div className="text-center flex-grow-1 text-white">
-				{task.taskName}
-			</div>
-			<div className="text-end font-weight-bold">
-				Due: {task.dueDate ? formatDate(task.dueDate) : 'No due date'}
-			</div>
+			{hasTaskDescription && (
+				<p className="p-2 m-0">{task.description}</p>
+			)}
 		</div>
 	);
 };

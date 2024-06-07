@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import fire_asset from '../assets/fire_asset.png';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
 import TaskList from './TaskList';
 
-const HomeList = ({ API_PREFIX, user, setUser }) => {
+const HomeList = ({ user, updateUser, showBanner }) => {
 	const [topTasks, setTopTasks] = useState([]);
 
-	const sidebarButtonColor = '#F38D8D';
 	const navigate = useNavigate();
 
 	const fetchTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
-				navigate('/login');
+				navigate('/');
 				return;
 			}
 
@@ -36,6 +37,11 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			setTopTasks(sortedTasks);
 		} catch (error) {
 			console.error('Error fetching tasks:', error);
+			showBanner(
+				'Oh no!',
+				'There was an error loading the tasks.',
+				'error',
+			);
 		}
 	};
 
@@ -43,7 +49,7 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 		fetchTasks();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [API_PREFIX, user, setUser]);
+	}, [user, updateUser]);
 
 	const deleteTask = async (task, dividerName, folderName) => {
 		try {
@@ -69,7 +75,7 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				setUser(
+				updateUser(
 					user.token,
 					user.username,
 					user.streak + 1,
@@ -77,9 +83,15 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 				);
 			} else {
 				console.error('Failed to delete task');
+				showBanner('Oop!', 'Task deletion failed.', 'error');
 			}
 		} catch (error) {
 			console.error('Error deleting task:', error);
+			showBanner(
+				'Ahh!',
+				'There was an error deleting the task.',
+				'danger',
+			);
 		}
 	};
 
@@ -87,7 +99,7 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 		<div
 			className="d-flex flex-column bg-light"
 			style={{
-				backgroundColor: '#FFF5F5',
+				backgroundColor: TASKIFY_THEME_COLOR,
 				paddingLeft: '20px',
 				flex: 1,
 				paddingTop: '20px',
@@ -95,7 +107,10 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 			}}>
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
-				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
+				style={{
+					borderBottom: `4px solid ${TASKIFY_THEME_COLOR}`,
+					zIndex: 1,
+				}}>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1>Home</h1>
 					<div className="d-flex align-items-center">
@@ -145,7 +160,7 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 										{divider.dividerName}
 										<span
 											style={{
-												color: sidebarButtonColor,
+												color: TASKIFY_THEME_COLOR,
 											}}>
 											{' / '}
 											{folder.folderName}
@@ -168,9 +183,9 @@ const HomeList = ({ API_PREFIX, user, setUser }) => {
 };
 
 HomeList.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	setUser: PropTypes.func.isRequired,
+	updateUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
 };
 
 export default HomeList;

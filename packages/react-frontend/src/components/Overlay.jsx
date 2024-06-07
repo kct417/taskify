@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { TASKIFY_THEME_COLOR } from '../constants';
 
-function Overlay({
+const Overlay = ({
 	user,
 	show,
 	context,
@@ -11,7 +12,7 @@ function Overlay({
 	onAddFolder,
 	onAddDivider,
 	onAddTask,
-}) {
+}) => {
 	const [formFields, setFormFields] = useState({});
 	const [selectedDivider, setSelectedDivider] = useState();
 
@@ -47,7 +48,7 @@ function Overlay({
 			className="modal fade show d-block"
 			tabIndex="-1"
 			role="dialog"
-			style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+			style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 2 }}>
 			<div className="modal-dialog" role="document">
 				<div className="modal-content">
 					<div className="modal-header">
@@ -160,8 +161,9 @@ function Overlay({
 										className="btn btn-block"
 										onClick={clickFunction}
 										style={{
-											backgroundColor: '#F38D8D',
-											borderColor: '#F38D8D',
+											backgroundColor:
+												TASKIFY_THEME_COLOR,
+											borderColor: TASKIFY_THEME_COLOR,
 											fontSize: '18px',
 											borderRadius: '8px',
 											marginBottom: '10px',
@@ -178,8 +180,8 @@ function Overlay({
 							className="btn btn-block"
 							onClick={handleClose}
 							style={{
-								backgroundColor: '#F38D8D',
-								borderColor: '#F38D8D',
+								backgroundColor: TASKIFY_THEME_COLOR,
+								borderColor: TASKIFY_THEME_COLOR,
 								fontSize: '18px',
 								borderRadius: '8px',
 							}}>
@@ -190,7 +192,7 @@ function Overlay({
 			</div>
 		</div>
 	);
-}
+};
 
 Overlay.propTypes = {
 	user: PropTypes.object.isRequired,

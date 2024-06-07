@@ -17,7 +17,7 @@ export const updateDividers = async (username, divider, updateType) => {
 	try {
 		const user = await findUser(username);
 		if (!user) {
-			throw new Error('User not found');
+			throw new Error(`User '${username}' not found`);
 		}
 
 		let updateOperation;
@@ -29,7 +29,9 @@ export const updateDividers = async (username, divider, updateType) => {
 					d._id.equals(divider._id),
 				);
 				if (!existingDivider) {
-					throw new Error('Divider not found');
+					throw new Error(
+						`Divider '${divider.dividerName}' not found`,
+					);
 				}
 
 				updateOperation = {
@@ -44,7 +46,9 @@ export const updateDividers = async (username, divider, updateType) => {
 						(d) => d.dividerName === divider.dividerName,
 					)
 				) {
-					throw new Error('Divider already exists');
+					throw new Error(
+						`Divider '${divider.dividerName}' already exists`,
+					);
 				}
 
 				updateOperation = { $push: { dividers: divider } };
@@ -54,7 +58,7 @@ export const updateDividers = async (username, divider, updateType) => {
 					d._id.equals(divider._id),
 				);
 				if (!existingDivider) {
-					throw new Error('Divider not found');
+					throw new Error(`Divider ${divider.dividerName} not found`);
 				}
 
 				updateOperation = {
@@ -92,14 +96,14 @@ export const updateFolders = async (
 	try {
 		const user = await findUser(username);
 		if (!user) {
-			throw new Error('User not found');
+			throw new Error(`User '${username}' not found`);
 		}
 
 		const divider = user.dividers.find(
 			(d) => d.dividerName === dividerName,
 		);
 		if (!divider) {
-			throw new Error('Divider not found');
+			throw new Error(`Divider '${dividerName}' not found`);
 		}
 
 		let updateOperation;
@@ -111,7 +115,7 @@ export const updateFolders = async (
 					f._id.equals(folder._id),
 				);
 				if (!existingFolder) {
-					throw new Error('Folder not found');
+					throw new Error(`Folder ${folder.folderName} not found`);
 				}
 
 				updateOperation = {
@@ -126,7 +130,9 @@ export const updateFolders = async (
 						(f) => f.folderName === folder.folderName,
 					)
 				) {
-					throw new Error('Folder already exists');
+					throw new Error(
+						`Folder ${folder.folderName} already exists`,
+					);
 				}
 
 				updateOperation = {
@@ -138,7 +144,7 @@ export const updateFolders = async (
 					f._id.equals(folder._id),
 				);
 				if (!existingFolder) {
-					throw new Error('Folder not found');
+					throw new Error(`Folder ${folder.folderName} not found`);
 				}
 
 				updateOperation = {
@@ -179,19 +185,19 @@ export const updateTasks = async (
 	try {
 		const user = await findUser(username);
 		if (!user) {
-			throw new Error('User not found');
+			throw new Error(`User '${username}' not found`);
 		}
 
 		const divider = user.dividers.find(
 			(d) => d.dividerName === dividerName,
 		);
 		if (!divider) {
-			throw new Error('Divider not found');
+			throw new Error(`Divider '${dividerName}' not found`);
 		}
 
 		const folder = divider.folders.find((f) => f.folderName === folderName);
 		if (!folder) {
-			throw new Error('Folder not found');
+			throw new Error(`Folder '${folderName}' not found`);
 		}
 
 		let updateOperation;
@@ -204,7 +210,7 @@ export const updateTasks = async (
 			case 'set':
 				existingTask = folder.tasks.find((t) => t._id.equals(task._id));
 				if (!existingTask) {
-					throw new Error('Task not found');
+					throw new Error(`Task ${task.taskName} not found`);
 				}
 
 				updateOperation = {
@@ -218,7 +224,7 @@ export const updateTasks = async (
 				break;
 			case 'push':
 				if (folder.tasks.some((t) => t.taskName === task.taskName)) {
-					throw new Error('Folder already exists');
+					throw new Error(`Task ${task.taskName} already exists`);
 				}
 
 				updateOperation = {
@@ -230,7 +236,7 @@ export const updateTasks = async (
 			case 'pull':
 				existingTask = folder.tasks.find((t) => t._id.equals(task._id));
 				if (!existingTask) {
-					throw new Error('Task not found');
+					throw new Error(`Task ${task.taskName} not found`);
 				}
 
 				updateOperation = {

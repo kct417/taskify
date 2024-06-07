@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { TASKIFY_THEME_COLOR } from '../constants';
 
 const Form = ({ fields, submitFunc, buttonText }) => {
 	const [formFields] = useState({});
@@ -26,8 +27,8 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 				type="button"
 				style={{
 					color: '#FFFFFF',
-					backgroundColor: '#F38D8D',
-					borderColor: '#F38D8D',
+					backgroundColor: TASKIFY_THEME_COLOR,
+					borderColor: TASKIFY_THEME_COLOR,
 				}}
 				className="btn btn-block"
 				onClick={() => {
@@ -40,9 +41,9 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 };
 
 Form.propTypes = {
-	buttonText: PropTypes.string,
 	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
 	submitFunc: PropTypes.func.isRequired,
+	buttonText: PropTypes.string.isRequired,
 };
 
 export default Form;

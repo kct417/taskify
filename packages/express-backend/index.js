@@ -7,15 +7,10 @@ import { registerUser, loginUser, authenticateUser } from './auth-user.js';
 
 // available routes for the frontend
 
-const corsOptions = {
-	origin: 'https://thankful-smoke-0f194be1e.5.azurestaticapps.net',
-	optionsSuccessStatus: 200,
-};
-
 const app = express();
 const port = 8000;
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {

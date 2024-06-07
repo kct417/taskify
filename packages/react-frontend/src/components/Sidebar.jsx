@@ -18,11 +18,13 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const Sidebar = ({ API_PREFIX, user, setUser }) => {
+const Sidebar = ({ user, updateUser, showBanner }) => {
 	// handleMenuButtonClick: cases for the menu popup buttons and its
 	// corresponding fields and buttons
+
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
@@ -144,18 +146,22 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const description = formFields.description?.trim();
 
 		if (!folderName || !dividerName || !taskName) {
-			alert('Task name, divider, and folder are required fields');
+			showBanner(
+				'Wait!',
+				'Task name, divider, and folder are required fields.',
+				'warning',
+			);
 			return;
 		}
 
 		addTask(taskName, dueDate, description, folderName, dividerName)
 			.then(() => {
-				alert('Task added successfully');
+				showBanner('Nice!', 'Task added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding task:', error);
-				alert('Failed to add task');
+				showBanner('Oops!', 'Failed to add task.', 'danger');
 			});
 	};
 
@@ -188,7 +194,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add task');
 			}
@@ -203,7 +209,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		const folderName = formFields.folderName?.trim();
 		const dividerName = formFields.divider?.trim();
 		if (!folderName || !dividerName) {
-			alert('Please enter a folder name and select a divider');
+			showBanner(
+				'Hold on!',
+				'Please enter a folder name and select a divider.',
+				'warning',
+			);
 			return;
 		}
 		const folderObject = {
@@ -211,12 +221,12 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		};
 		addFolder(folderObject, dividerName)
 			.then(() => {
-				alert('Folder added successfully');
+				showBanner('Awesome!', 'Folder added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding folder:', error);
-				alert('Failed to add folder');
+				showBanner('Oh no!', 'Failed to add folder.', 'danger');
 			});
 	};
 
@@ -238,7 +248,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add folder');
 			}
@@ -269,7 +279,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			);
 			if (response.status === 200) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to delete folder');
 			}
@@ -283,17 +293,21 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 	const handleAddDivider = (formFields) => {
 		const dividerName = formFields.divider?.trim();
 		if (!dividerName) {
-			alert('Please enter a divider name');
+			showBanner(
+				"We're missing something!",
+				'Please enter a divider name.',
+				'warning',
+			);
 			return;
 		}
 		addDivider(dividerName)
 			.then(() => {
-				alert('Divider added successfully');
+				showBanner('Cool!', 'Divider added successfully.', 'success');
 				handleClose();
 			})
 			.catch((error) => {
 				console.error('Error adding divider:', error);
-				alert('Failed to add divider');
+				showBanner('Ahh!', 'Failed to add divider.', 'danger');
 			});
 	};
 
@@ -312,7 +326,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 			if (response.status === 201) {
 				const data = await response.json();
-				setUser(user.token, user.username, user.streak, data);
+				updateUser(user.token, user.username, user.streak, data);
 			} else {
 				throw new Error('Failed to add divider');
 			}
@@ -345,10 +359,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 		};
 
 		fetchDividerNames();
-	}, [user, setUser]);
+	}, [user, updateUser]);
 
 	// Overlay Code
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [overlayConfig, setOverlayConfig] = useState({
 		show: false,
 		content: null,
@@ -395,7 +410,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 			setItems(dividerData);
 		};
 		fetchData();
-	}, [user, setUser]);
+	}, [user, updateUser]);
 
 	// useSensors: uses the MouseSensor and TouchSensor for drag and drop
 	const sensors = useSensors(
@@ -493,6 +508,22 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						{ id: active.id, name: draggedFolder.folderName },
 					];
 
+					if (
+						location.pathname ===
+						`/${user.username}/${activeContainer}/${draggedFolder.folderName}`
+					) {
+						navigate(
+							`/${user.username}/${overContainer}/${draggedFolder.folderName}`,
+							{
+								state: {
+									folderName: draggedFolder.folderName,
+									dividerName: overContainer,
+									streak: user.streak,
+								},
+							},
+						);
+					}
+
 					return {
 						...prevItems,
 						[activeContainer]: activeItems,
@@ -521,11 +552,11 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 				<button
 					className="btn btn-primary rounded-pill text-left"
 					style={{
-						backgroundColor: '#F38D8D',
-						borderColor: '#F38D8D',
+						backgroundColor: TASKIFY_THEME_COLOR,
+						borderColor: TASKIFY_THEME_COLOR,
 						fontSize: '18px',
 					}}
-					onClick={() => navigate('/')}>
+					onClick={() => navigate(`/${user.username}`)}>
 					Home
 				</button>
 			</div>
@@ -550,6 +581,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 									strategy={verticalListSortingStrategy}>
 									{items[dividerName].map(({ id, name }) => (
 										<SortableItem
+											username={user.username}
 											key={id}
 											id={id}
 											name={name}
@@ -567,6 +599,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						<DragOverlay>
 							{activeId ? (
 								<SortableItem
+									username={user.username}
 									id={activeId}
 									name={
 										items[findContainer(activeId)].find(
@@ -599,7 +632,7 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 						style={{
 							lineHeight: '0px',
 							fontSize: '30px',
-							color: '#F38D8D',
+							color: TASKIFY_THEME_COLOR,
 						}}>
 						+
 					</span>
@@ -627,8 +660,9 @@ const Sidebar = ({ API_PREFIX, user, setUser }) => {
 
 // SortableItem: displays the folder name as a sortable item
 const SortableItem = ({
+	username,
 	id,
-	name,
+	name: folderName,
 	dividerName,
 	streak,
 	navigate,
@@ -650,8 +684,8 @@ const SortableItem = ({
 			ref={setNodeRef}
 			style={{
 				...style,
-				backgroundColor: '#F38D8D',
-				borderColor: '#F38D8D',
+				backgroundColor: TASKIFY_THEME_COLOR,
+				borderColor: TASKIFY_THEME_COLOR,
 				fontSize: '18px',
 			}}
 			className="btn btn-primary rounded-pill mb-2 text-left ml-4"
@@ -659,15 +693,15 @@ const SortableItem = ({
 			{...listeners}
 			// navigate to the folder page when the folder name is clicked
 			onClick={() =>
-				navigate(`/folders/${name}/${dividerName}`, {
+				navigate(`/${username}/${dividerName}/${folderName}`, {
 					state: {
-						folderName: name,
+						folderName: folderName,
 						dividerName: dividerName,
 						streak: streak,
 					},
 				})
 			}>
-			{name}
+			{folderName}
 		</button>
 	);
 };
@@ -692,6 +726,7 @@ const EmptySection = ({ id }) => {
 };
 
 SortableItem.propTypes = {
+	username: PropTypes.string.isRequired,
 	id: PropTypes.string.isRequired,
 	name: PropTypes.string,
 	dividerName: PropTypes.string,
@@ -705,9 +740,9 @@ EmptySection.propTypes = {
 };
 
 Sidebar.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
 	user: PropTypes.object.isRequired,
-	setUser: PropTypes.func.isRequired,
+	updateUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

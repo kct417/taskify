@@ -1,4 +1,5 @@
 import BannerAlert from './BannerAlert';
+import PropTypes from 'prop-types';
 
 const BannerPageWrapper = ({ children, bannerState }) => {
 	return (
@@ -13,6 +14,11 @@ const BannerPageWrapper = ({ children, bannerState }) => {
 			{children}
 		</>
 	);
+};
+
+BannerPageWrapper.propTypes = {
+	children: PropTypes.object,
+	bannerState: PropTypes.object,
 };
 
 export default BannerPageWrapper;

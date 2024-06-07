@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import BannerPageWrapper from './BannerPageWrapper';
+import PropTypes from 'prop-types';
+import { TASKIFY_THEME_COLOR } from '../constants';
 
 const AuthPageWrapper = ({
 	children,
@@ -12,12 +14,12 @@ const AuthPageWrapper = ({
 	const [isHovering, setHovering] = useState(false);
 	const nonHoverStyle = {
 		background: '#FFFFFF',
-		borderColor: '#F38D8D',
-		color: '#F38D8D',
+		borderColor: TASKIFY_THEME_COLOR,
+		color: TASKIFY_THEME_COLOR,
 	};
 	const hoverStyle = {
-		borderColor: '#F38D8D',
-		background: '#F38D8D',
+		borderColor: TASKIFY_THEME_COLOR,
+		background: TASKIFY_THEME_COLOR,
 		color: '#FFFFFF',
 	};
 	return (
@@ -42,6 +44,15 @@ const AuthPageWrapper = ({
 			</div>
 		</BannerPageWrapper>
 	);
+};
+
+AuthPageWrapper.propTypes = {
+	children: PropTypes.object,
+	header: PropTypes.object.isRequired,
+	alternateText: PropTypes.string.isRequired,
+	alternateButtonText: PropTypes.string.isRequired,
+	alternateButtonOnClick: PropTypes.func.isRequired,
+	bannerState: PropTypes.object.isRequired,
 };
 
 export default AuthPageWrapper;

@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import useBanner from '../hooks/UseBanner';
 import Form from '../components/Form';
 import AuthPageWrapper from '../components/AuthPageWrapper';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const LoginForm = ({ API_PREFIX, setUser }) => {
+const Login = ({ updateUser }) => {
 	const navigate = useNavigate();
 	const { showBanner, bannerState } = useBanner();
 
@@ -27,7 +28,7 @@ const LoginForm = ({ API_PREFIX, setUser }) => {
 					},
 				);
 				const dividers = await divResp.json();
-				setUser(
+				updateUser(
 					payload.token,
 					payload.username,
 					payload.streak,
@@ -37,7 +38,7 @@ const LoginForm = ({ API_PREFIX, setUser }) => {
 							`Login successful for user: '${payload.username}'`,
 						);
 						console.log(`Auth token saved`);
-						navigate('/');
+						navigate(`/${payload.username}`);
 					},
 				);
 			} else {
@@ -45,7 +46,12 @@ const LoginForm = ({ API_PREFIX, setUser }) => {
 				throw new Error(`Login Error ${response.status}: ${text}`);
 			}
 		} catch (error) {
-			showBanner('Error!', error.message, 'danger');
+			console.error(error);
+			showBanner(
+				'Error!',
+				'TODO: change this to be user friendly',
+				'danger',
+			);
 		}
 	}
 
@@ -57,7 +63,8 @@ const LoginForm = ({ API_PREFIX, setUser }) => {
 
 	const header = (
 		<>
-			Welcome to <strong style={{ color: '#F38D8D' }}>Taskify</strong>
+			Welcome to{' '}
+			<strong style={{ color: TASKIFY_THEME_COLOR }}>Taskify</strong>
 		</>
 	);
 	return (
@@ -88,9 +95,8 @@ const LoginForm = ({ API_PREFIX, setUser }) => {
 	);
 };
 
-LoginForm.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
-	setUser: PropTypes.func.isRequired,
+Login.propTypes = {
+	updateUser: PropTypes.func.isRequired,
 };
 
-export default LoginForm;
+export default Login;

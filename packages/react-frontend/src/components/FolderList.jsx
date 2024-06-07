@@ -1,38 +1,48 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import fire_asset from '../assets/fire_asset.png';
+import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
-const FolderForm = ({ API_PREFIX, user, setUser }) => {
-	const { folderName, dividerName } = useParams();
+const FolderList = ({
+	user,
+	updateUser,
+	showBanner,
+	dividerName,
+	folderName,
+}) => {
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
-	const [description, setDescription] = useState('');
-	const sidebarButtonColor = '#F38D8D';
-
-	const fetchTasks = async () => {
-		try {
-			if (user.token === 'INVALID_TOKEN') {
-				navigate('/login');
-				return;
-			}
-
-			const folderTasks = user.dividers.flatMap((divider) =>
-				divider.folders
-					.filter((folder) => folder.folderName === folderName)
-					.flatMap((folder) => folder.tasks),
-			);
-
-			setTasks(folderTasks);
-		} catch (error) {
-			console.error('Error fetching tasks:', error);
-		}
-	};
+	// const [description, setDescription] = useState('');
 
 	useEffect(() => {
+		const fetchTasks = async () => {
+			try {
+				if (user.token === 'INVALID_TOKEN') {
+					navigate('/');
+					return;
+				}
+
+				const folderTasks = user.dividers.flatMap((divider) =>
+					divider.folders
+						.filter((folder) => folder.folderName === folderName)
+						.flatMap((folder) => folder.tasks),
+				);
+
+				setTasks(folderTasks);
+			} catch (error) {
+				console.error('Error fetching tasks:', error);
+				showBanner(
+					'Ahh!',
+					'There was an error getting your tasks.',
+					'danger',
+				);
+			}
+		};
+
 		fetchTasks();
-	}, [API_PREFIX, user, folderName]);
+	}, [user, folderName, navigate, showBanner]);
 
 	const deleteTask = async (task) => {
 		try {
@@ -62,7 +72,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 					},
 				);
 				const updatedUserData = await updatedUserResponse.json();
-				setUser(
+				updateUser(
 					user.token,
 					user.username,
 					user.streak + 1,
@@ -70,9 +80,19 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				);
 			} else {
 				console.error('Failed to delete task');
+				showBanner(
+					'Oops!',
+					'There was an issue removing the task.',
+					'danger',
+				);
 			}
 		} catch (error) {
 			console.error('Error in deleting task:', error);
+			showBanner(
+				'Yikes!',
+				'There was an issue deleting the task.',
+				'danger',
+			);
 		}
 	};
 
@@ -81,7 +101,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 		const today = new Date();
 		const taskDate = new Date(date);
 
+		today.setDate(today.getDate() - 1);
 		today.setHours(0, 0, 0, 0);
+
 		taskDate.setHours(0, 0, 0, 0);
 
 		return today.getTime() === taskDate.getTime();
@@ -91,7 +113,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 		const today = new Date();
 		const taskDate = new Date(date);
 
+		today.setDate(today.getDate() - 1);
 		today.setHours(0, 0, 0, 0);
+
 		taskDate.setHours(0, 0, 0, 0);
 
 		return today.getTime() < taskDate.getTime();
@@ -101,7 +125,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 		const today = new Date();
 		const taskDate = new Date(date);
 
+		today.setDate(today.getDate() - 1);
 		today.setHours(0, 0, 0, 0);
+
 		taskDate.setHours(0, 0, 0, 0);
 
 		return today.getTime() > taskDate.getTime();
@@ -110,18 +136,18 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	return (
 		<div
 			className="container-fluid bg-light p-3"
-			style={{ backgroundColor: '#FFF5F5', height: '100vh' }}>
+			style={{ backgroundColor: TASKIFY_THEME_COLOR, height: '100vh' }}>
 			<header
 				className="sticky-top bg-white mb-4 p-3 rounded"
-				style={{ borderBottom: `4px solid ${sidebarButtonColor}` }}>
+				style={{
+					borderBottom: `4px solid ${TASKIFY_THEME_COLOR}`,
+					zIndex: 1,
+				}}>
 				<div className="d-flex justify-content-between align-items-center">
 					<h1>
 						{dividerName}
-						<span
-							style={{
-								color: sidebarButtonColor,
-							}}>
-							{' / '}
+						{' / '}
+						<span style={{ color: TASKIFY_THEME_COLOR }}>
 							{folderName}
 						</span>
 					</h1>
@@ -152,7 +178,9 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 				<div className="row">
 					<div className="col-12 mb-4">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>Today</h2>
+							<h2 style={{ color: TASKIFY_THEME_COLOR }}>
+								Today
+							</h2>
 							<TaskList
 								tasks={tasks.filter((task) =>
 									isToday(task.dueDate),
@@ -163,7 +191,7 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 					</div>
 					<div className="col-12 mb-4">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>
+							<h2 style={{ color: TASKIFY_THEME_COLOR }}>
 								Upcoming
 							</h2>
 							<TaskList
@@ -174,12 +202,28 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 							/>
 						</section>
 					</div>
-					<div className="col-12">
+					<div className="col-12 mb-4">
 						<section className="p-3 bg-white rounded">
-							<h2 style={{ color: sidebarButtonColor }}>Past</h2>
+							<h2 style={{ color: TASKIFY_THEME_COLOR }}>Past</h2>
 							<TaskList
 								tasks={tasks.filter((task) =>
 									isPast(task.dueDate),
+								)}
+								onDelete={deleteTask}
+							/>
+						</section>
+					</div>
+					<div className="col-12">
+						<section className="p-3 bg-white rounded">
+							<h2 style={{ color: TASKIFY_THEME_COLOR }}>
+								No Due Date
+							</h2>
+							<TaskList
+								tasks={tasks.filter(
+									(task) =>
+										!isPast(task.dueDate) &&
+										!isFuture(task.dueDate) &&
+										!isToday(task.dueDate),
 								)}
 								onDelete={deleteTask}
 							/>
@@ -191,10 +235,12 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	);
 };
 
-FolderForm.propTypes = {
-	API_PREFIX: PropTypes.string.isRequired,
+FolderList.propTypes = {
 	user: PropTypes.object.isRequired,
-	setUser: PropTypes.func.isRequired,
+	updateUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
+	dividerName: PropTypes.string,
+	folderName: PropTypes.string,
 };
 
-export default FolderForm;
+export default FolderList;

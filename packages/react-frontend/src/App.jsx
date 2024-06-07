@@ -4,22 +4,19 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Folder from './pages/Folder';
-
-const API_PREFIX = 'https://taskify-api2.fly.dev';
 
 function App() {
 	const INVALID_TOKEN = 'INVALID_TOKEN';
 	const INVALID_USERNAME = 'INVALID_USERNAME';
-	const [user, setUser] = useState({
+	const [user, updateUser] = useState({
 		token: INVALID_TOKEN,
 		username: INVALID_USERNAME,
 		streak: 0,
 		dividers: [],
 	});
 
-	const populateUser = (newToken, username, streak, dividers, callback) => {
-		setUser({
+	const setUser = (newToken, username, streak, dividers, callback) => {
+		updateUser({
 			token: newToken,
 			username: username,
 			streak: streak,
@@ -33,51 +30,14 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route
-					path="/"
-					element={
-						<div>
-							<Home
-								API_PREFIX={API_PREFIX}
-								user={user}
-								setUser={populateUser}
-							/>
-						</div>
-					}
-				/>
-				<Route
-					path="/login"
-					element={
-						<div>
-							<Login
-								API_PREFIX={API_PREFIX}
-								setUser={populateUser}
-							/>
-						</div>
-					}
-				/>
+				<Route path="/" element={<Login updateUser={setUser} />} />
 				<Route
 					path="/signup"
-					element={
-						<div>
-							<Register
-								API_PREFIX={API_PREFIX}
-								setUser={populateUser}
-							/>
-						</div>
-					}
+					element={<Register updateUser={setUser} />}
 				/>
 				<Route
-					path="/folders/:folderName/:dividerName"
-					element={
-						<div>
-							<Folder
-								API_PREFIX={API_PREFIX}
-								user={user}
-								setUser={populateUser}
-							/>
-						</div>
-					}
+					path={`/:username?/:dividerName?/:folderName?`}
+					element={<Home user={user} updateUser={setUser} />}
 				/>
 			</Routes>
 		</BrowserRouter>
