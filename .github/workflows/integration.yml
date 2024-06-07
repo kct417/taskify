@@ -30,4 +30,3 @@ jobs:
               run: |
                   npm ci
                   npm test
-              working-directory: packages/express-backend
