@@ -24,11 +24,15 @@ const FolderList = ({
 					return;
 				}
 
-				const folderTasks =
-					user.dividers[`${dividerName}`].folders[`${folderName}`]
-						.tasks;
+				const divider = user.dividers.map(
+					(divider) => divider.dividerName === dividerName,
+				);
 
-				setTasks(folderTasks);
+				const folder = divider.folders.map(
+					(folder) => folder.folderName === folderName,
+				);
+
+				setTasks(folder.tasks);
 			} catch (error) {
 				console.error('Error fetching tasks:', error);
 				showBanner(
