@@ -49,11 +49,19 @@ const Register = ({ updateUser }) => {
 			}
 		} catch (error) {
 			console.error(error);
-			showBanner(
-				'Oops!',
-				'Something went wrong trying to sign up. Please try again later.',
-				'danger',
-			);
+			if (error.message.includes('Username already taken')) {
+				showBanner(
+					'Oops!',
+					'That username is already taken please try something else.',
+					'danger',
+				);
+			} else {
+				showBanner(
+					'Oops!',
+					'Something went wrong trying to sign up. Please try again later.',
+					'danger',
+				);
+			}
 		}
 	}
 
