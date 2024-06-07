@@ -43,6 +43,6 @@ app.put('/:username', authenticateUser, User.setDivider);
 app.put('/:username/:dividerName', authenticateUser, User.setFolder);
 app.put('/:username/:dividerName/:folderName', authenticateUser, User.setTask);
 
-app.listen(process.env.port || port, () => {
+app.listen(process.env.PORT || port, () => {
 	console.log(`REST API is listening.`);
 });
