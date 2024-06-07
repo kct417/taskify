@@ -158,11 +158,11 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 								<section className="mb-5 p-3 bg-white shadow-sm rounded">
 									<h2>
 										{divider.dividerName}
+										{' / '}
 										<span
 											style={{
-												color: '#FFFFFF',
+												color: TASKIFY_THEME_COLOR,
 											}}>
-											{' / '}
 											{folder.folderName}
 										</span>
 									</h2>
