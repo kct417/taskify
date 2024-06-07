@@ -3,6 +3,8 @@ import {
 	updateDividers,
 	updateFolders,
 	updateTasks,
+	// updateFolderOrder,
+	// updateTaskOrder,
 } from './user-services.js';
 
 // functions to fetch user data based on api request
@@ -148,6 +150,28 @@ export const getStreakCount = (req, res) => {
 			res.status(500).send(error);
 		});
 };
+
+// export const setFolderOrder = (req, res) => {
+// 	const { username, dividerName } = req.params;
+// 	const { folder, newIndex } = req.body;
+// 	updateFolderOrder(username, dividerName, folder, newIndex)
+// 		.then((result) => res.status(200).send(result.dividers))
+// 		.catch((error) => {
+// 			console.log(error);
+// 			res.status(500).send(error);
+// 		});
+// };
+
+// export const setTaskOrder = (req, res) => {
+// 	const { username, dividerName, folderName } = req.params;
+// 	const { task, newIndex } = req.body;
+// 	updateTaskOrder(username, dividerName, folderName, task, newIndex)
+// 		.then((result) => res.status(200).send(result.dividers))
+// 		.catch((error) => {
+// 			console.log(error);
+// 			res.status(500).send(error);
+// 		});
+// };
 
 export default {
 	getDividers,

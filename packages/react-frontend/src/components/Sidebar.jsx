@@ -336,6 +336,31 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 		}
 	}
 
+	// async function updateFolderOrdering(dividerName, folder, newIndex) {
+	// 	try {
+	// 		const response = await fetch(
+	// 			`${API_PREFIX}/${user.username}/${dividerName}/${folder.folderName}`,
+	// 			{
+	// 				method: 'PUT',
+	// 				headers: addAuthHeader({
+	// 					'Content-Type': 'application/json',
+	// 				}),
+	// 				body: JSON.stringify({ folder, newIndex }),
+	// 			},
+	// 		);
+
+	// 		if (response.status === 200) {
+	// 			const data = await response.json();
+	// 			updateUser(user.token, user.username, user.streak, data);
+	// 		} else {
+	// 			throw new Error('Failed to update folder ordering');
+	// 		}
+	// 	} catch (error) {
+	// 		console.error('Error:', error);
+	// 		throw error;
+	// 	}
+	// }
+
 	// addAuthHeader: adds the Authorization header to the request
 	function addAuthHeader(otherHeaders = {}) {
 		return {

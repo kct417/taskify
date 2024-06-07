@@ -160,7 +160,7 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 										{divider.dividerName}
 										<span
 											style={{
-												color: TASKIFY_THEME_COLOR,
+												color: '#FFFFFF',
 											}}>
 											{' / '}
 											{folder.folderName}

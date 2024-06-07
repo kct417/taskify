@@ -269,3 +269,96 @@ export const updateTasks = async (
 		return null;
 	}
 };
+
+// export const updateFolderOrder = async (
+// 	username,
+// 	dividerName,
+// 	folder,
+// 	newIndex,
+// ) => {
+// 	try {
+// 		const user = await findUser(username);
+// 		if (!user) {
+// 			throw new Error(`User '${username}' not found`);
+// 		}
+
+// 		const divider = user.dividers.find(
+// 			(d) => d.dividerName === dividerName,
+// 		);
+// 		if (!divider) {
+// 			throw new Error(`Divider '${dividerName}' not found`);
+// 		}
+
+// 		const folderIndex = divider.folders.findIndex((f) =>
+// 			f._id.equals(folder._id),
+// 		);
+// 		if (folderIndex === -1) {
+// 			throw new Error(`Folder ${folder.folderName} not found`);
+// 		}
+
+// 		const updatedDivider = divider.folders
+// 			.splice(folderIndex, 1)
+// 			.splice(newIndex, 0, folder);
+// 		updatedDivider['_id'] = divider._id;
+
+// 		const updatedUser = await updateDividers(
+// 			username,
+// 			updatedDivider,
+// 			'set',
+// 		);
+
+// 		return updatedUser;
+// 	} catch (err) {
+// 		console.error(err);
+// 		return null;
+// 	}
+// };
+
+// export const updateTaskOrder = async (
+// 	username,
+// 	dividerName,
+// 	folderName,
+// 	task,
+// 	newIndex,
+// ) => {
+// 	try {
+// 		const user = await findUser(username);
+// 		if (!user) {
+// 			throw new Error(`User '${username}' not found`);
+// 		}
+
+// 		const divider = user.dividers.find(
+// 			(d) => d.dividerName === dividerName,
+// 		);
+// 		if (!divider) {
+// 			throw new Error(`Divider '${dividerName}' not found`);
+// 		}
+
+// 		const folder = divider.folders.find((f) => f.folderName === folderName);
+// 		if (!folder) {
+// 			throw new Error(`Folder '${folderName}' not found`);
+// 		}
+
+// 		const taskIndex = folder.tasks.findIndex((t) => t._id.equals(task._id));
+// 		if (taskIndex === -1) {
+// 			throw new Error(`Task ${task.taskName} not found`);
+// 		}
+
+// 		const updatedFolder = folder.tasks
+// 			.splice(taskIndex, 1)
+// 			.splice(newIndex, 0, task);
+// 		updatedFolder['_id'] = folder._id;
+
+// 		const updatedUser = await updateFolders(
+// 			username,
+// 			dividerName,
+// 			updatedFolder,
+// 			'set',
+// 		);
+
+// 		return updatedUser;
+// 	} catch (err) {
+// 		console.error(err);
+// 		return null;
+// 	}
+// };
