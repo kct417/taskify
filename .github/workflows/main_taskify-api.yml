@@ -43,6 +43,9 @@ jobs:
                   path: ${{ matrix.dir }}/release.zip
 
     deploy:
+        strategy:
+            matrix:
+                dir: [packages/express-backend, packages/mongoose-database]
         runs-on: ubuntu-latest
         needs: build
         environment:
@@ -56,7 +59,7 @@ jobs:
                   name: node-app
 
             - name: Unzip artifact for deployment
-              run: unzip release.zip
+              run: unzip ${{ matrix.dir }}/release.zip
 
             - name: 'Deploy to Azure Web App'
               id: deploy-to-webapp
