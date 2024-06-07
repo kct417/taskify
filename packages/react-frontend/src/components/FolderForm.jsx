@@ -8,8 +8,10 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	const { folderName, dividerName } = useParams();
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
+	const [description, setDescription] = useState('');
 	const sidebarButtonColor = '#F38D8D';
 
+	// Get tasks that are specific to the current folder
 	const fetchTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
@@ -32,6 +34,53 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 	useEffect(() => {
 		fetchTasks();
 	}, [API_PREFIX, user, folderName]);
+
+	const handleDescriptionChange = (event) => {
+		setDescription(event.target.value);
+	};
+
+	const handleSubmit = async (event) => {
+		const fo = formFields.folderName?.trim();
+		try {
+			const response = await fetch(
+				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
+				{
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${user.token}`,
+					},
+					body: JSON.stringify({
+						folder: {
+							description: description,
+						},
+					}),
+				},
+			);
+
+			if (response.ok) {
+				const updatedUserResponse = await fetch(
+					`${API_PREFIX}/${user.username}`,
+					{
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					},
+				);
+				const updatedUserData = await updatedUserResponse.json();
+				setUser(
+					user.token,
+					user.username,
+					user.streak,
+					updatedUserData,
+				);
+			} else {
+				console.error('Failed to update description');
+			}
+		} catch (error) {
+			console.error('Error updating description:', error);
+		}
+	};
 
 	const deleteTask = async (task) => {
 		try {
@@ -151,6 +200,21 @@ const FolderForm = ({ API_PREFIX, user, setUser }) => {
 						</div>
 					</div>
 				</div>
+				<form onSubmit={handleSubmit}>
+					<div className="form-group">
+						<h5>Description</h5>
+						<textarea
+							id="description"
+							className="form-control"
+							value={description}
+							onChange={handleDescriptionChange}
+							placeholder="Enter folder description"
+						/>
+					</div>
+					<button type="submit" className="btn btn-primary mt-3">
+						Save Description
+					</button>
+				</form>
 				<hr />
 			</header>
 			<main className="container-fluid">
