@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { TASKIFY_THEME_COLOR } from '../constants';
-import { deleteTask } from '../delete';
+import deleteTask from '../delete';
 
 import ListHeader from './ListHeader';
 import TaskList from './TaskList';

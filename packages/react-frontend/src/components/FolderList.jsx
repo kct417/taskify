@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import TaskList from './TaskList';
 import { TASKIFY_THEME_COLOR } from '../constants';
-import { deleteTask } from '../delete';
+import deleteTask from '../delete';
 import ListHeader from './ListHeader';
 
 const FolderList = ({
