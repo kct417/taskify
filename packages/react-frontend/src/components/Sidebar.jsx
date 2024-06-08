@@ -159,8 +159,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 				showBanner('Nice!', 'Task added successfully.', 'success');
 				handleClose();
 			})
-			.catch((error) => {
-				console.error('Error adding task:', error);
+			.catch(() => {
 				showBanner('Oops!', 'Failed to add task.', 'danger');
 			});
 	};
@@ -224,8 +223,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 				showBanner('Awesome!', 'Folder added successfully.', 'success');
 				handleClose();
 			})
-			.catch((error) => {
-				console.error('Error adding folder:', error);
+			.catch(() => {
 				showBanner('Oh no!', 'Failed to add folder.', 'danger');
 			});
 	};
@@ -305,8 +303,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 				showBanner('Cool!', 'Divider added successfully.', 'success');
 				handleClose();
 			})
-			.catch((error) => {
-				console.error('Error adding divider:', error);
+			.catch(() => {
 				showBanner('Ahh!', 'Failed to add divider.', 'danger');
 			});
 	};

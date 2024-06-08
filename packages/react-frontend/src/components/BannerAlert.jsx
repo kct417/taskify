@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
 const BannerAlert = ({ boldMessage, message, type, isShowing, setShowing }) => {
-	const showDurationSecs = 10;
+	const showDurationSecs = 5; // how long to show the banner
 	const hide = () => setShowing(false);
 
 	// hide the banner alert after showDurationSecs seconds

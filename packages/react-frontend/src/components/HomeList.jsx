@@ -2,17 +2,19 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import fire_asset from '../assets/fire_asset.png';
-import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
+import { TASKIFY_THEME_COLOR } from '../constants';
+import { deleteTask } from '../delete';
 
+import ListHeader from './ListHeader';
 import TaskList from './TaskList';
+import Task from './Task';
 
 const HomeList = ({ user, updateUser, showBanner }) => {
 	const [topTasks, setTopTasks] = useState([]);
 
 	const navigate = useNavigate();
 
-	const fetchTasks = async () => {
+	const fetchAllTasks = async () => {
 		try {
 			if (user.token === 'INVALID_TOKEN') {
 				navigate('/');
@@ -22,7 +24,7 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 			const allTasks = await user.dividers.flatMap((divider) =>
 				divider.folders.flatMap((folder) =>
 					folder.tasks.map((task) => ({
-						...task,
+						task,
 						folderName: folder.folderName,
 						dividerName: divider.dividerName,
 					})),
@@ -30,8 +32,11 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 			);
 
 			const sortedTasks = allTasks
-				.filter((task) => task.dueDate)
-				.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+				.filter((wrappedTask) => wrappedTask.task.dueDate)
+				.sort(
+					(wt1, wt2) =>
+						new Date(wt1.task.dueDate) - new Date(wt2.task.dueDate),
+				)
 				.slice(0, 5);
 
 			setTopTasks(sortedTasks);
@@ -46,54 +51,10 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 	};
 
 	useEffect(() => {
-		fetchTasks();
+		fetchAllTasks();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, updateUser]);
-
-	const deleteTask = async (task, dividerName, folderName) => {
-		try {
-			const response = await fetch(
-				`${API_PREFIX}/${user.username}/${dividerName}/${folderName}`,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${user.token}`,
-					},
-					body: JSON.stringify({ task: task }),
-				},
-			);
-			if (response.ok) {
-				// Refresh tasks after deletion
-				const updatedUserResponse = await fetch(
-					`${API_PREFIX}/${user.username}`,
-					{
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					},
-				);
-				const updatedUserData = await updatedUserResponse.json();
-				updateUser(
-					user.token,
-					user.username,
-					user.streak + 1,
-					updatedUserData,
-				);
-			} else {
-				console.error('Failed to delete task');
-				showBanner('Oop!', 'Task deletion failed.', 'error');
-			}
-		} catch (error) {
-			console.error('Error deleting task:', error);
-			showBanner(
-				'Ahh!',
-				'There was an error deleting the task.',
-				'danger',
-			);
-		}
-	};
 
 	return (
 		<div
@@ -105,51 +66,32 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 				paddingTop: '20px',
 				paddingRight: '20px',
 			}}>
-			<header
-				className="sticky-top bg-white mb-4 p-3 rounded"
-				style={{
-					borderBottom: `4px solid ${TASKIFY_THEME_COLOR}`,
-					zIndex: 1,
-				}}>
-				<div className="d-flex justify-content-between align-items-center">
-					<h1>Home</h1>
-					<div className="d-flex align-items-center">
-						<div className="position-relative">
-							<img
-								src={fire_asset}
-								className="img-fluid"
-								style={{ width: '50px', height: '50px' }}
-								alt="Fire"
-							/>
-							<figcaption
-								className="position-absolute"
-								style={{
-									top: '35%',
-									left: '30%',
-									color: 'black',
-									fontSize: '1.25em',
-								}}>
-								{user.streak}
-							</figcaption>
-						</div>
-					</div>
-				</div>
-				<hr />
-			</header>
+			<ListHeader title={<h1>Home</h1>} streak={user.streak} />
 			<main className="container-fluid">
 				<div className="row">
 					<div className="col-12">
 						<section className="mb-5 p-3 bg-white shadow-sm rounded">
 							<h2>Top 5</h2>
-							{topTasks.map((task) => (
-								<TaskList
-									key={task._id}
-									tasks={[task]}
-									onDelete={deleteTask}
-									dividerName={task.dividerName}
-									folderName={task.folderName}
-								/>
-							))}
+							{topTasks.map((wrappedTask) => {
+								const { task, dividerName, folderName } =
+									wrappedTask;
+								return (
+									<Task
+										key={task._id}
+										task={task}
+										deleteSelf={() => {
+											deleteTask(
+												task,
+												user,
+												dividerName,
+												folderName,
+												updateUser,
+												showBanner,
+											);
+										}}
+									/>
+								);
+							})}
 						</section>
 					</div>
 					{user.dividers.map((divider) =>
@@ -168,9 +110,16 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 									</h2>
 									<TaskList
 										tasks={folder.tasks}
-										onDelete={deleteTask}
-										dividerName={divider.dividerName}
-										folderName={folder.folderName}
+										deleteFromList={(task) => {
+											deleteTask(
+												task,
+												user,
+												divider.dividerName,
+												folder.folderName,
+												updateUser,
+												showBanner,
+											);
+										}}
 									/>
 								</section>
 							</div>

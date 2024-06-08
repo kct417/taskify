@@ -2,16 +2,14 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-const TaskList = ({ tasks, onDelete, dividerName, folderName }) => {
+const TaskList = ({ tasks, deleteFromList }) => {
 	return (
 		<div>
 			{tasks.map((task) => (
 				<Task
 					key={task._id}
 					task={task}
-					onDelete={onDelete}
-					dividerName={dividerName}
-					folderName={folderName}
+					deleteSelf={() => deleteFromList(task)}
 				/>
 			))}
 		</div>
@@ -20,9 +18,7 @@ const TaskList = ({ tasks, onDelete, dividerName, folderName }) => {
 
 TaskList.propTypes = {
 	tasks: PropTypes.array,
-	onDelete: PropTypes.func.isRequired,
-	dividerName: PropTypes.string,
-	folderName: PropTypes.string,
+	deleteFromList: PropTypes.func.isRequired,
 };
 
 export default TaskList;

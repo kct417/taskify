@@ -7,13 +7,13 @@ const formatDate = (dateString) => {
 	return date.toISOString().split('T')[0];
 };
 
-const Task = ({ task, onDelete, dividerName, folderName }) => {
+const Task = ({ task, deleteSelf }) => {
 	const [checked, setChecked] = useState(false);
 
 	const handleCheckboxClick = () => {
 		setChecked(!checked);
 		if (!checked) {
-			onDelete(task, dividerName, folderName);
+			deleteSelf();
 		}
 	};
 
@@ -60,9 +60,7 @@ Task.propTypes = {
 		dueDate: PropTypes.string,
 		completed: PropTypes.bool,
 	}).isRequired,
-	onDelete: PropTypes.func.isRequired,
-	dividerName: PropTypes.string,
-	folderName: PropTypes.string,
+	deleteSelf: PropTypes.func.isRequired,
 };
 
 export default Task;
