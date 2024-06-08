@@ -19,7 +19,11 @@ import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
+import {
+	TASKIFY_THEME_COLOR,
+	TASKIFY_WHITE_COLOR,
+	API_PREFIX,
+} from '../constants';
 
 const Sidebar = ({ user, updateUser, showBanner }) => {
 	// handleMenuButtonClick: cases for the menu popup buttons and its
@@ -668,8 +672,8 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 					type="button"
 					onClick={() => handleShow({ title: 'Menu' })}
 					style={{
-						backgroundColor: '#FFFFFF',
-						borderColor: '#FFFFFF',
+						backgroundColor: TASKIFY_WHITE_COLOR,
+						borderColor: TASKIFY_WHITE_COLOR,
 						width: '50px',
 						height: '50px',
 					}}>

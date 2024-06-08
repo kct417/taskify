@@ -1,5 +1,6 @@
 import { API_PREFIX } from './constants';
 
+// deletes a task from a given user's divider's folder and updates client's state
 async function deleteTask(
 	task,
 	user,

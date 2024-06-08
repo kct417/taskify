@@ -22,6 +22,7 @@ function App() {
 			streak: streak,
 			dividers: dividers,
 		});
+		// run an arbitrary callback after updating the user
 		if (callback) {
 			callback();
 		}

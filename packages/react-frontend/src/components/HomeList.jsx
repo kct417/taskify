@@ -31,6 +31,7 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 				),
 			);
 
+			// gets top 5 earliest tasks
 			const sortedTasks = allTasks
 				.filter((wrappedTask) => wrappedTask.task.dueDate)
 				.sort(

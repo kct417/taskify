@@ -19,25 +19,26 @@ const Login = ({ updateUser }) => {
 				},
 				body: JSON.stringify(credentials),
 			});
-			if (response.status === 200) {
+			if (response.ok) {
 				const payload = await response.json();
-				const divResp = await fetch(
+
+				const divRes = await fetch(
 					`${API_PREFIX}/${payload.username}`,
 					{
-						headers: addAuthHeader(payload.token),
+						headers: {
+							Authorization: `Bearer ${payload.token}`,
+						},
 					},
 				);
-				const dividers = await divResp.json();
+
+				const dividers = await divRes.json();
+
 				updateUser(
 					payload.token,
 					payload.username,
 					payload.streak,
 					dividers,
 					() => {
-						console.log(
-							`Login successful for user: '${payload.username}'`,
-						);
-						console.log(`Auth token saved`);
 						navigate(`/${payload.username}`);
 					},
 				);
@@ -47,18 +48,20 @@ const Login = ({ updateUser }) => {
 			}
 		} catch (error) {
 			console.error(error);
-			showBanner(
-				'Oh no!',
-				'Something went wrong. Check your username and password.',
-				'danger',
-			);
+			if (error.message.includes('Invalid username or password')) {
+				showBanner(
+					'Oops!',
+					'Looks like you entered an invalid username or password.',
+					'danger',
+				);
+			} else {
+				showBanner(
+					'Oh no!',
+					'Something went wrong. Please try again later.',
+					'danger',
+				);
+			}
 		}
-	}
-
-	function addAuthHeader(token) {
-		return {
-			Authorization: `Bearer ${token}`,
-		};
 	}
 
 	const header = (

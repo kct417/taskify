@@ -19,25 +19,26 @@ const Register = ({ updateUser }) => {
 				body: JSON.stringify(credentials),
 			});
 
-			if (response.status === 201) {
+			if (response.ok) {
 				const payload = await response.json();
-				const divResp = await fetch(
+
+				const divRes = await fetch(
 					`${API_PREFIX}/${payload.username}`,
 					{
-						headers: addAuthHeader(payload.token),
+						headers: {
+							Authorization: `Bearer ${payload.token}`,
+						},
 					},
 				);
-				const dividers = await divResp.json();
+
+				const dividers = await divRes.json();
+
 				updateUser(
 					payload.token,
 					payload.username,
 					payload.streak,
 					dividers,
 					() => {
-						console.log(
-							`Registration successful for user: '${payload.username}'`,
-						);
-						console.log(`Auth token saved`);
 						navigate(`/${payload.username}`);
 					},
 				);
@@ -63,12 +64,6 @@ const Register = ({ updateUser }) => {
 				);
 			}
 		}
-	}
-
-	function addAuthHeader(token) {
-		return {
-			Authorization: `Bearer ${token}`,
-		};
 	}
 
 	const header = (

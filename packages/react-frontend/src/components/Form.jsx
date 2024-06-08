@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { TASKIFY_THEME_COLOR } from '../constants';
+import { TASKIFY_THEME_COLOR, TASKIFY_WHITE_COLOR } from '../constants';
 
 const Form = ({ fields, submitFunc, buttonText }) => {
 	const [formFields] = useState({});
@@ -17,6 +17,7 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 							className="form-control"
 							placeholder={placeholder}
 							onChange={(event) => {
+								// key used to identify field name in the returned object
 								formFields[key] = event.target.value;
 							}}
 						/>
@@ -26,7 +27,7 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 			<button
 				type="button"
 				style={{
-					color: '#FFFFFF',
+					color: TASKIFY_WHITE_COLOR,
 					backgroundColor: TASKIFY_THEME_COLOR,
 					borderColor: TASKIFY_THEME_COLOR,
 				}}

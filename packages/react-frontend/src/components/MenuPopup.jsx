@@ -1,6 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
+// MenuPopup component-specific CSS styling
 const styles = {
 	menuPopup: {
 		position: 'fixed',
@@ -39,37 +40,23 @@ const styles = {
 	},
 };
 
-class MenuButton extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isHovered: false,
-		};
-	}
-
-	toggleHover = () => {
-		this.setState({ isHovered: !this.state.isHovered });
-	};
-
-	render() {
-		const { onClick, children } = this.props;
-		const { isHovered } = this.state;
+const MenuPopup = ({ onButtonClick }) => {
+	const MenuButton = ({ children, onClick }) => {
+		const [isHovering, setIsHovering] = useState(false);
 		return (
 			<button
 				style={{
 					...styles.menuButton,
-					...(isHovered ? styles.menuButtonHover : {}),
+					...(isHovering ? styles.menuButtonHover : {}),
 				}}
 				onClick={onClick}
-				onMouseEnter={this.toggleHover}
-				onMouseLeave={this.toggleHover}>
+				onMouseEnter={() => setIsHovering(true)}
+				onMouseLeave={() => setIsHovering(false)}>
 				{children}
 			</button>
 		);
-	}
-}
+	};
 
-function MenuPopup({ onButtonClick }) {
 	return (
 		<div style={styles.menuPopup}>
 			<h2 style={styles.title}>Add Item</h2>
@@ -85,11 +72,6 @@ function MenuPopup({ onButtonClick }) {
 			<MenuButton onClick={() => onButtonClick('Exit')}>Exit</MenuButton>
 		</div>
 	);
-}
-
-MenuButton.propTypes = {
-	onClick: PropTypes.func.isRequired,
-	children: PropTypes.node.isRequired,
 };
 
 MenuPopup.propTypes = {

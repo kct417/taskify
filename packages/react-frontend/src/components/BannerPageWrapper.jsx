@@ -2,6 +2,7 @@ import BannerAlert from './BannerAlert';
 import PropTypes from 'prop-types';
 
 const BannerPageWrapper = ({ children, bannerState }) => {
+	// puts banner alert component at top of document in html with all the correct state
 	return (
 		<>
 			<BannerAlert

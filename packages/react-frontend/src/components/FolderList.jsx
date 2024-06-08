@@ -15,7 +15,6 @@ const FolderList = ({
 }) => {
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
-	// const [description, setDescription] = useState('');
 
 	const removeTaskFromFolder = (task) =>
 		deleteTask(task, user, dividerName, folderName, updateUser, showBanner);

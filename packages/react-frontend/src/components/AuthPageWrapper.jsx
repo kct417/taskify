@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import BannerPageWrapper from './BannerPageWrapper';
 import PropTypes from 'prop-types';
-import { TASKIFY_THEME_COLOR } from '../constants';
+import { TASKIFY_THEME_COLOR, TASKIFY_WHITE_COLOR } from '../constants';
 
 const AuthPageWrapper = ({
 	children,
@@ -13,14 +13,14 @@ const AuthPageWrapper = ({
 }) => {
 	const [isHovering, setHovering] = useState(false);
 	const nonHoverStyle = {
-		background: '#FFFFFF',
+		background: TASKIFY_WHITE_COLOR,
 		borderColor: TASKIFY_THEME_COLOR,
 		color: TASKIFY_THEME_COLOR,
 	};
 	const hoverStyle = {
 		borderColor: TASKIFY_THEME_COLOR,
 		background: TASKIFY_THEME_COLOR,
-		color: '#FFFFFF',
+		color: TASKIFY_WHITE_COLOR,
 	};
 	return (
 		<BannerPageWrapper bannerState={bannerState}>
@@ -33,6 +33,7 @@ const AuthPageWrapper = ({
 						<button
 							type="button"
 							style={isHovering ? hoverStyle : nonHoverStyle}
+							// force color change on hover
 							onMouseEnter={() => setHovering(true)}
 							onMouseLeave={() => setHovering(false)}
 							className="ml-2 btn"
