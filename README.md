@@ -17,10 +17,12 @@ Contributions are welcome! Follow these steps to contribute to the project:
 
 1. **Fork the repository** and clone it to your local machine.
 2. **Create a new branch** for your changes: `git checkout -b my-feature`.
-3. **Make your changes** and test them thoroughly.
-4. **Commit your changes**: `git commit -am 'Add some feature'`.
-5. **Push to the branch**: `git push origin my-feature`.
-6. **Submit a pull request**.
+3. **Install node packages** for prerequisite packages: `npm install`.
+4. **Check `package.json` for scripts** to run code.
+5. **Make your changes** and test them thoroughly.
+6. **Commit your changes**: `git commit -am 'Add some feature'`.
+7. **Push to the branch**: `git push origin my-feature`.
+8. **Submit a pull request**.
 
 ## Coding Standards
 
