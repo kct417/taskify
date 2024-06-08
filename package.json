@@ -25,5 +25,8 @@
 		"pre-commit": "^1.2.2",
 		"prettier": "^3.2.5"
 	},
-	"pre-commit": "format"
+	"pre-commit": "format",
+	"dependencies": {
+		"react-icons": "^5.2.1"
+	}
 }

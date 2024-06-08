@@ -15,6 +15,8 @@ import {
 	useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { MdDeleteForever } from 'react-icons/md';
+
 import { useState, useEffect } from 'react';
 import Overlay from './Overlay';
 import MenuPopup from './MenuPopup';
@@ -34,7 +36,6 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 
 	// handleMenuButtonClick: cases for the menu popup buttons and its
 	// corresponding fields and buttons
-
 	const handleMenuButtonClick = (buttonType) => {
 		let content = {};
 		let fields = [];
@@ -427,6 +428,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 	const [items, setItems] = useState({}); // track items in each divider
 	const [activeId, setActiveId] = useState(null); // track active item being dragged
 	const [draggedFolder, setDraggedFolder] = useState(null); // track folder being dragged
+	const [isHoveringFolder, setIsHoveringFolder] = useState(false); // if folder is hovering to show delete
 
 	// fetchData: fetches the user's data by getting the divider and folder objects
 	useEffect(() => {
@@ -489,6 +491,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 	const handleDragStart = async (event) => {
 		const { active } = event;
 		setActiveId(active.id);
+		setIsHoveringFolder(true);
 
 		// find the divider and folder object for the active id
 		const dividerName = findContainer(active.id);
@@ -507,24 +510,51 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 	const handleDragEnd = async (event) => {
 		const { active, over } = event;
 		setActiveId(null);
+		setIsHoveringFolder(false);
 
 		if (!over) return;
 
 		const activeContainer = findContainer(active.id);
-		const overContainer = findContainer(over.id);
-
-		if (checkDuplicateFolder(draggedFolder.folderName, overContainer)) {
-			showBanner(
-				'Hold on!',
-				'Folder already exists in the divider.',
-				'warning',
-			);
-			setDraggedFolder(null);
-			return;
-		}
+		// const overContainer = findContainer(over.id);
+		const overContainer =
+			over.id === 'trash-area'
+				? 'trash-area'
+				: over.id.startsWith('droppable-area-')
+					? over.id.replace('droppable-area-', '')
+					: findContainer(over.id);
 
 		if (activeContainer === undefined || overContainer === undefined)
 			return;
+
+		if (overContainer === 'trash-area') {
+			try {
+				await deleteFolder(
+					draggedFolder.folderName,
+					activeContainer,
+					draggedFolder._id,
+				);
+				setItems((prevItems) => {
+					const activeItems = prevItems[activeContainer].filter(
+						(item) => item.id !== active.id,
+					);
+					return {
+						...prevItems,
+						[activeContainer]: activeItems,
+					};
+				});
+				showBanner(
+					'Success!',
+					'Folder deleted successfully.',
+					'success',
+				);
+				navigate(`/${user.username}`);
+			} catch (error) {
+				console.error('Error deleting folder:', error);
+			} finally {
+				setDraggedFolder(null);
+			}
+			return;
+		}
 
 		if (activeContainer === overContainer) {
 			const containerItems = items[activeContainer];
@@ -543,6 +573,16 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 					newIndex,
 				),
 			}));
+		} else if (
+			checkDuplicateFolder(draggedFolder.folderName, overContainer)
+		) {
+			showBanner(
+				'Hold on!',
+				'Folder already exists in the divider.',
+				'warning',
+			);
+			setDraggedFolder(null);
+			return;
 		} else {
 			try {
 				// delete the folder from the old divider
@@ -617,6 +657,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 				fontSize: '16px',
 				paddingTop: '20px',
 			}}>
+			<GradientBackground isVisible={isHoveringFolder} />
 			<div className="p-3">
 				<button
 					className="btn btn-primary rounded-pill text-left"
@@ -679,33 +720,41 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 								/>
 							) : null}
 						</DragOverlay>
+						<hr style={{ marginBottom: '20px' }} />
+						<div
+							className="p-3 position-absolute d-flex justify-content-center"
+							style={{ bottom: '10px', left: '10px' }}>
+							{isHoveringFolder ? (
+								<div>
+									<TrashArea id="trash-area" />
+								</div>
+							) : (
+								<button
+									className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
+									type="button"
+									onClick={() =>
+										handleShow({ title: 'Menu' })
+									}
+									style={{
+										backgroundColor: '#FFFFFF',
+										borderColor: '#FFFFFF',
+										width: '50px',
+										height: '50px',
+									}}>
+									<span
+										className="fs-3"
+										style={{
+											lineHeight: '0px',
+											fontSize: '30px',
+											color: TASKIFY_THEME_COLOR,
+										}}>
+										+
+									</span>
+								</button>
+							)}
+						</div>
 					</DndContext>
 				</div>
-			</div>
-			<hr style={{ marginBottom: '20px' }} />
-			<div
-				className="p-3 position-absolute d-flex justify-content-center"
-				style={{ bottom: '10px', left: '10px' }}>
-				<button
-					className="btn btn-primary rounded-circle d-flex justify-content-center align-items-center"
-					type="button"
-					onClick={() => handleShow({ title: 'Menu' })}
-					style={{
-						backgroundColor: TASKIFY_WHITE_COLOR,
-						borderColor: TASKIFY_WHITE_COLOR,
-						width: '50px',
-						height: '50px',
-					}}>
-					<span
-						className="fs-3"
-						style={{
-							lineHeight: '0px',
-							fontSize: '30px',
-							color: TASKIFY_THEME_COLOR,
-						}}>
-						+
-					</span>
-				</button>
 			</div>
 			{overlayConfig.show && overlayConfig.content.title === 'Menu' && (
 				<MenuPopup onButtonClick={handleMenuButtonClick} />
@@ -726,6 +775,26 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 		</div>
 	);
 };
+
+// GradientBackground: displays a gradient background when trashing a folder
+const GradientBackground = ({ isVisible }) => (
+	<div
+		style={{
+			background: isVisible
+				? 'radial-gradient(circle at bottom left, rgba(255, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%)'
+				: 'none',
+			position: 'absolute',
+			bottom: 0,
+			left: 0,
+			right: 0,
+			width: '100%',
+			height: isVisible ? '150px' : 0,
+			zIndex: isVisible ? 1 : -1,
+			opacity: isVisible ? 0.6 : 0,
+			pointerEvents: 'none',
+		}}
+	/>
+);
 
 // SortableItem: displays the folder name as a sortable item
 const SortableItem = ({
@@ -806,6 +875,55 @@ const EmptySection = ({ id }) => {
 			Drag items here to add to {id}
 		</div>
 	);
+};
+
+const TrashArea = ({ id }) => {
+	const { setNodeRef } = useSortable({
+		id,
+	});
+
+	return (
+		<div
+			ref={setNodeRef}
+			style={{
+				width: '50px',
+				height: '50px',
+				borderRadius: '50%',
+				fontSize: '30px',
+				color: 'black',
+			}}
+			className="d-flex justify-content-center align-items-center">
+			<MdDeleteForever />
+		</div>
+	);
+};
+
+TrashArea.propTypes = {
+	id: PropTypes.string.isRequired,
+};
+
+SortableItem.propTypes = {
+	username: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
+	dividerName: PropTypes.string,
+	streak: PropTypes.number,
+	navigate: PropTypes.func,
+	isDragging: PropTypes.bool,
+};
+
+EmptySection.propTypes = {
+	id: PropTypes.string.isRequired,
+};
+
+Sidebar.propTypes = {
+	user: PropTypes.object.isRequired,
+	updateUser: PropTypes.func.isRequired,
+	showBanner: PropTypes.func.isRequired,
+};
+
+GradientBackground.propTypes = {
+	isVisible: PropTypes.bool,
 };
 
 export default Sidebar;
