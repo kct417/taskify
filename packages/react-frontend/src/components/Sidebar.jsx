@@ -24,6 +24,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
 	TASKIFY_THEME_COLOR,
 	TASKIFY_WHITE_COLOR,
+	TASKIFY_DARK_PINK_COLOR,
 	API_PREFIX,
 } from '../constants';
 
@@ -605,15 +606,10 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 					];
 
 					// replace spaces with %20 for the URL
-					const dividerName = activeContainer.replace(
+					const dividerName = activeContainer.replaceAll(' ', '%20');
+					const folderName = draggedFolder.folderName.replaceAll(
 						' ',
 						'%20',
-						'g',
-					);
-					const folderName = draggedFolder.folderName.replace(
-						' ',
-						'%20',
-						'g',
 					);
 
 					// navigate to the new folder page if the folder is moved and in old folder page
@@ -651,7 +647,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 		<div
 			className="d-flex flex-column position-relative"
 			style={{
-				backgroundColor: '#D2C0C0',
+				backgroundColor: TASKIFY_DARK_PINK_COLOR,
 				width: '15vw',
 				height: '100vh',
 				fontSize: '16px',
@@ -673,7 +669,7 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 			<div
 				className="flex-grow-1 p-3"
 				style={{ maxHeight: 'calc(100vh - 140px)', overflowY: 'auto' }}>
-				<div style={{ backgroundColor: '#D2C0C0' }}>
+				<div style={{ backgroundColor: TASKIFY_DARK_PINK_COLOR }}>
 					<DndContext
 						sensors={sensors}
 						collisionDetection={closestCenter}
@@ -736,8 +732,8 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 										handleShow({ title: 'Menu' })
 									}
 									style={{
-										backgroundColor: '#FFFFFF',
-										borderColor: '#FFFFFF',
+										backgroundColor: TASKIFY_WHITE_COLOR,
+										borderColor: TASKIFY_WHITE_COLOR,
 										width: '50px',
 										height: '50px',
 									}}>
@@ -788,7 +784,7 @@ const GradientBackground = ({ isVisible }) => (
 			left: 0,
 			right: 0,
 			width: '100%',
-			height: isVisible ? '150px' : 0,
+			height: isVisible ? '250px' : 0,
 			zIndex: isVisible ? 1 : -1,
 			opacity: isVisible ? 0.6 : 0,
 			pointerEvents: 'none',
