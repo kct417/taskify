@@ -1,11 +1,12 @@
 # Taskify
 
-Taskify is a project management tool designed to help teams organize tasks efficiently.
+Taskify is a minimalistic todo-list application for those who need help organizing their day-to-day lives. Users can create dividers for top-level organizaton. Within each divider they can create folders. Within each folder they can create tasks. Tasks can optionally be given descriptions and due dates. Life can get messy! You can rearrange folders as your life is rearranged. Taskify also includes streaks that makes it fun to complete tasks.
 
 ## Table of Contents
 
 -   [How to Contribute](#how-to-contribute)
 -   [Coding Standards](#coding-standards)
+-   [Project Documentation](#project-documentation)
 -   [Auth Sequence Diagram](#auth-sequence-diagram)
 -   [Figma Prototype](#figma-prototype)
 -   [UML Class Diagram](#uml-class-diagram)
@@ -110,6 +111,10 @@ In this project, we adhere to the following coding standards to ensure consisten
 
 By following these coding standards, we aim to maintain a high level of code quality and readability throughout the project.
 
+## Project Documentation
+
+https://github.com/users/kct417/projects/2
+
 ## Auth Sequence Diagram
 
 ![Auth Sequence Diagram](images/auth-sequence-diagram.jpg)
@@ -120,6 +125,8 @@ Taskify's UI design is prototyped in Figma. Click the image below to view the pr
 
 [![Figma Prototype](images/figma-prototype.png)](https://www.figma.com/design/7g5YAjZ3vnykjcdwRZiJTC/ToDo-List-UI?node-id=0%3A1&t=oC4kI5KMClifi8dm-1)
 
+Last Updated: 05/10/2024
+
 ## UML Class Diagram
 
-![UML Class Diagram](images/uml-class-diagram.jpg)
+https://github.com/kct417/taskify/wiki/UML-Class-Diagram

@@ -1,4 +1,4 @@
-name: Build and Deploy Frontend
+name: Continuous Deployment
 
 on:
     push:
@@ -51,3 +51,14 @@ jobs:
                   azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_THANKFUL_SMOKE_0F194BE1E }}
                   app_location: './packages/react-frontend'
                   action: 'close'
+
+    deploy:
+        name: Deploy app
+        runs-on: ubuntu-latest
+        concurrency: deploy-group # optional: ensure only one action runs at a time
+        steps:
+            - uses: actions/checkout@v4
+            - uses: superfly/flyctl-actions/setup-flyctl@master
+            - run: flyctl deploy --remote-only
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
