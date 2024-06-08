@@ -2,47 +2,57 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { TASKIFY_THEME_COLOR } from '../constants';
 
+// Overlay component definition
 const Overlay = ({
-	user,
-	show,
-	context,
-	fields,
-	buttons,
-	handleClose,
-	onAddFolder,
-	onAddDivider,
-	onAddTask,
+	user, // User object containing user data
+	show, // Boolean to control the visibility of the overlay
+	context, // Object containing context information (like title)
+	fields, // Array of field objects for the form
+	buttons, // Array of button objects for the form
+	handleClose, // Function to handle closing the overlay
+	onAddFolder, // Function to handle adding a folder
+	onAddDivider, // Function to handle adding a divider
+	onAddTask, // Function to handle adding a task
 }) => {
+	// State to manage form field values
 	const [formFields, setFormFields] = useState({});
+	// State to manage the selected divider
 	const [selectedDivider, setSelectedDivider] = useState();
 
+	// Function to handle changes in form fields
 	const handleFormFieldChange = (key, value) => {
 		if (key === 'divider') {
-			setSelectedDivider(value);
+			setSelectedDivider(value); // Update selected divider if the key is 'divider'
 		}
 
+		// Update the form fields state
 		setFormFields((prevFormFields) => ({
 			...prevFormFields,
 			[key]: value,
 		}));
 	};
 
+	// Function to handle clicking the 'Add Folder' button
 	const handleAddFolderClick = () => {
 		onAddFolder(formFields);
 	};
 
+	// Function to handle clicking the 'Add Divider' button
 	const handleAddDividerClick = () => {
 		onAddDivider(formFields);
 	};
 
+	// Function to handle clicking the 'Add Task' button
 	const handleAddTaskClick = () => {
 		onAddTask(formFields);
 	};
 
+	// Return null if the overlay is not supposed to be shown
 	if (!show) {
 		return null;
 	}
 
+	// Render the overlay component
 	return (
 		<div
 			className="modal fade show d-block"
@@ -194,16 +204,17 @@ const Overlay = ({
 	);
 };
 
+// Define prop types for the Overlay component
 Overlay.propTypes = {
-	user: PropTypes.object.isRequired,
-	show: PropTypes.bool.isRequired,
-	context: PropTypes.object.isRequired,
-	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-	buttons: PropTypes.arrayOf(PropTypes.object).isRequired,
-	handleClose: PropTypes.func.isRequired,
-	onAddFolder: PropTypes.func.isRequired,
-	onAddDivider: PropTypes.func.isRequired,
-	onAddTask: PropTypes.func.isRequired,
+	user: PropTypes.object.isRequired, // User object is required
+	show: PropTypes.bool.isRequired, // Show boolean is required
+	context: PropTypes.object.isRequired, // Context object is required
+	fields: PropTypes.arrayOf(PropTypes.object).isRequired, // Fields array is required
+	buttons: PropTypes.arrayOf(PropTypes.object).isRequired, // Buttons array is required
+	handleClose: PropTypes.func.isRequired, // Handle close function is required
+	onAddFolder: PropTypes.func.isRequired, // On add folder function is required
+	onAddDivider: PropTypes.func.isRequired, // On add divider function is required
+	onAddTask: PropTypes.func.isRequired, // On add task function is required
 };
 
 export default Overlay;
