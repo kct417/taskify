@@ -27,39 +27,37 @@ const FolderList = ({
 	const removeTaskFromFolder = (task) =>
 		deleteTask(task, user, dividerName, folderName, updateUser, showBanner);
 
-	const fetchFolderTasks = async () => {
-		try {
-			if (user.token === 'INVALID_TOKEN') {
-				navigate('/');
-				return;
-			}
-			const divider = user.dividers.find(
-				(divider) => divider.dividerName === dividerName,
-			);
-
-			const folder = divider.folders.find(
-				(folder) => folder.folderName === folderName,
-			);
-
-			// fixes bug where the folder does not exist on drag and drop
-			if (folder) {
-				setTasks(folder.tasks);
-			}
-		} catch (error) {
-			console.error('Error fetching tasks:', error);
-			showBanner(
-				'Ahh!',
-				'There was an error getting your tasks.',
-				'danger',
-			);
-		}
-	};
-
 	useEffect(() => {
-		fetchFolderTasks();
+		const fetchFolderTasks = async () => {
+			try {
+				if (user.token === 'INVALID_TOKEN') {
+					navigate('/');
+					return;
+				}
+				const divider = user.dividers.find(
+					(divider) => divider.dividerName === dividerName,
+				);
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user, folderName, dividerName]);
+				const folder = divider.folders.find(
+					(folder) => folder.folderName === folderName,
+				);
+
+				// fixes bug where the folder does not exist on drag and drop
+				if (folder) {
+					setTasks(folder.tasks);
+				}
+			} catch (error) {
+				console.error('Error fetching tasks:', error);
+				showBanner(
+					'Ahh!',
+					'There was an error getting your tasks.',
+					'danger',
+				);
+			}
+		};
+
+		fetchFolderTasks();
+	}, [user, folderName, dividerName, navigate, showBanner]);
 
 	const isToday = (date) => {
 		const today = new Date();

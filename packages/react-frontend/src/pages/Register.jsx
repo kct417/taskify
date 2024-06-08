@@ -26,7 +26,7 @@ const Register = ({ updateUser }) => {
 			if (response.ok) {
 				const payload = await response.json();
 
-				const divRes = await fetch(
+				const dividerResponse = await fetch(
 					`${API_PREFIX}/${payload.username}`,
 					{
 						headers: {
@@ -35,7 +35,7 @@ const Register = ({ updateUser }) => {
 					},
 				);
 
-				const dividers = await divRes.json();
+				const dividers = await dividerResponse.json();
 
 				updateUser(
 					payload.token,

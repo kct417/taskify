@@ -48,4 +48,4 @@ async function deleteTask(
 	}
 }
 
-export { deleteTask };
+export default deleteTask;
