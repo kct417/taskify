@@ -7,6 +7,11 @@ import { useParams } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
 const Home = ({ user, updateUser }) => {
+	Home.propTypes = {
+		user: PropTypes.object.isRequired,
+		updateUser: PropTypes.func.isRequired,
+	};
+
 	const { showBanner, bannerState } = useBanner();
 	const { dividerName, folderName } = useParams();
 
@@ -41,11 +46,6 @@ const Home = ({ user, updateUser }) => {
 			</div>
 		</BannerPageWrapper>
 	);
-};
-
-Home.propTypes = {
-	user: PropTypes.object.isRequired,
-	updateUser: PropTypes.func.isRequired,
 };
 
 export default Home;

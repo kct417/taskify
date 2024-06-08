@@ -3,6 +3,12 @@ import { useState } from 'react';
 import { TASKIFY_THEME_COLOR, TASKIFY_WHITE_COLOR } from '../constants';
 
 const Form = ({ fields, submitFunc, buttonText }) => {
+	Form.propTypes = {
+		fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+		submitFunc: PropTypes.func.isRequired,
+		buttonText: PropTypes.string.isRequired,
+	};
+
 	const [formFields] = useState({});
 
 	return (
@@ -39,12 +45,6 @@ const Form = ({ fields, submitFunc, buttonText }) => {
 			</button>
 		</form>
 	);
-};
-
-Form.propTypes = {
-	fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-	submitFunc: PropTypes.func.isRequired,
-	buttonText: PropTypes.string.isRequired,
 };
 
 export default Form;

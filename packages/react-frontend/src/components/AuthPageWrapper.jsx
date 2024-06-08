@@ -11,6 +11,15 @@ const AuthPageWrapper = ({
 	alternateButtonOnClick,
 	bannerState,
 }) => {
+	AuthPageWrapper.propTypes = {
+		children: PropTypes.object.isRequired,
+		header: PropTypes.object.isRequired,
+		alternateText: PropTypes.string.isRequired,
+		alternateButtonText: PropTypes.string.isRequired,
+		alternateButtonOnClick: PropTypes.func.isRequired,
+		bannerState: PropTypes.object.isRequired,
+	};
+
 	const [isHovering, setHovering] = useState(false);
 	const nonHoverStyle = {
 		background: TASKIFY_WHITE_COLOR,
@@ -45,15 +54,6 @@ const AuthPageWrapper = ({
 			</div>
 		</BannerPageWrapper>
 	);
-};
-
-AuthPageWrapper.propTypes = {
-	children: PropTypes.object,
-	header: PropTypes.object.isRequired,
-	alternateText: PropTypes.string.isRequired,
-	alternateButtonText: PropTypes.string.isRequired,
-	alternateButtonOnClick: PropTypes.func.isRequired,
-	bannerState: PropTypes.object.isRequired,
 };
 
 export default AuthPageWrapper;

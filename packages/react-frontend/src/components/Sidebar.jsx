@@ -26,6 +26,12 @@ import {
 } from '../constants';
 
 const Sidebar = ({ user, updateUser, showBanner }) => {
+	Sidebar.propTypes = {
+		user: PropTypes.object.isRequired,
+		updateUser: PropTypes.func.isRequired,
+		showBanner: PropTypes.func.isRequired,
+	};
+
 	// handleMenuButtonClick: cases for the menu popup buttons and its
 	// corresponding fields and buttons
 
@@ -558,9 +564,22 @@ const Sidebar = ({ user, updateUser, showBanner }) => {
 						{ id: active.id, name: draggedFolder.folderName },
 					];
 
+					// replace spaces with %20 for the URL
+					const dividerName = activeContainer.replace(
+						' ',
+						'%20',
+						'g',
+					);
+					const folderName = draggedFolder.folderName.replace(
+						' ',
+						'%20',
+						'g',
+					);
+
+					// navigate to the new folder page if the folder is moved and in old folder page
 					if (
 						location.pathname ===
-						`/${user.username}/${activeContainer}/${draggedFolder.folderName}`
+						`/${user.username}/${dividerName}/${folderName}`
 					) {
 						navigate(
 							`/${user.username}/${overContainer}/${draggedFolder.folderName}`,
@@ -718,6 +737,16 @@ const SortableItem = ({
 	navigate,
 	isDragging,
 }) => {
+	SortableItem.propTypes = {
+		username: PropTypes.string.isRequired,
+		id: PropTypes.string.isRequired,
+		name: PropTypes.string,
+		dividerName: PropTypes.string,
+		streak: PropTypes.number,
+		navigate: PropTypes.func,
+		isDragging: PropTypes.bool,
+	};
+
 	const { attributes, listeners, setNodeRef, transform, transition } =
 		useSortable({
 			id,
@@ -758,6 +787,10 @@ const SortableItem = ({
 
 // EmptySection: displays a message to drag items to add to the divider
 const EmptySection = ({ id }) => {
+	EmptySection.propTypes = {
+		id: PropTypes.string.isRequired,
+	};
+
 	const { setNodeRef } = useSortable({
 		id,
 	});
@@ -773,26 +806,6 @@ const EmptySection = ({ id }) => {
 			Drag items here to add to {id}
 		</div>
 	);
-};
-
-SortableItem.propTypes = {
-	username: PropTypes.string.isRequired,
-	id: PropTypes.string.isRequired,
-	name: PropTypes.string,
-	dividerName: PropTypes.string,
-	streak: PropTypes.number,
-	navigate: PropTypes.func,
-	isDragging: PropTypes.bool,
-};
-
-EmptySection.propTypes = {
-	id: PropTypes.string.isRequired,
-};
-
-Sidebar.propTypes = {
-	user: PropTypes.object.isRequired,
-	updateUser: PropTypes.func.isRequired,
-	showBanner: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

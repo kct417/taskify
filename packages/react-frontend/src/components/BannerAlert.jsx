@@ -2,6 +2,14 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
 const BannerAlert = ({ boldMessage, message, type, isShowing, setShowing }) => {
+	BannerAlert.propTypes = {
+		boldMessage: PropTypes.string.isRequired,
+		message: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		isShowing: PropTypes.bool.isRequired,
+		setShowing: PropTypes.func.isRequired,
+	};
+
 	const showDurationSecs = 5; // how long to show the banner
 	const hide = () => setShowing(false);
 
@@ -33,14 +41,6 @@ const BannerAlert = ({ boldMessage, message, type, isShowing, setShowing }) => {
 			</button>
 		</div>
 	);
-};
-
-BannerAlert.propTypes = {
-	boldMessage: PropTypes.string,
-	message: PropTypes.string,
-	type: PropTypes.string,
-	isShowing: PropTypes.bool.isRequired,
-	setShowing: PropTypes.func.isRequired,
 };
 
 export default BannerAlert;

@@ -10,6 +10,12 @@ import TaskList from './TaskList';
 import Task from './Task';
 
 const HomeList = ({ user, updateUser, showBanner }) => {
+	HomeList.propTypes = {
+		user: PropTypes.object.isRequired,
+		updateUser: PropTypes.func.isRequired,
+		showBanner: PropTypes.func.isRequired,
+	};
+
 	const [topTasks, setTopTasks] = useState([]);
 
 	const navigate = useNavigate();
@@ -130,12 +136,6 @@ const HomeList = ({ user, updateUser, showBanner }) => {
 			</main>
 		</div>
 	);
-};
-
-HomeList.propTypes = {
-	user: PropTypes.object.isRequired,
-	updateUser: PropTypes.func.isRequired,
-	showBanner: PropTypes.func.isRequired,
 };
 
 export default HomeList;

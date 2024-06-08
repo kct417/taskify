@@ -8,6 +8,17 @@ const formatDate = (dateString) => {
 };
 
 const Task = ({ task, deleteSelf }) => {
+	Task.propTypes = {
+		task: PropTypes.shape({
+			_id: PropTypes.string.isRequired,
+			taskName: PropTypes.string.isRequired,
+			description: PropTypes.string,
+			dueDate: PropTypes.string,
+			completed: PropTypes.bool,
+		}).isRequired,
+		deleteSelf: PropTypes.func.isRequired,
+	};
+
 	const [checked, setChecked] = useState(false);
 
 	const handleCheckboxClick = () => {
@@ -50,17 +61,6 @@ const Task = ({ task, deleteSelf }) => {
 			)}
 		</div>
 	);
-};
-
-Task.propTypes = {
-	task: PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-		taskName: PropTypes.string.isRequired,
-		description: PropTypes.string,
-		dueDate: PropTypes.string,
-		completed: PropTypes.bool,
-	}).isRequired,
-	deleteSelf: PropTypes.func.isRequired,
 };
 
 export default Task;

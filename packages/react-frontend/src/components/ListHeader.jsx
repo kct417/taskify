@@ -1,7 +1,14 @@
+import PropTypes from 'prop-types';
+
 import { TASKIFY_THEME_COLOR } from '../constants';
 import fire_asset from '../assets/fire_asset.png';
 
 const ListHeader = ({ title, streak }) => {
+	ListHeader.propTypes = {
+		title: PropTypes.object.isRequired,
+		streak: PropTypes.number.isRequired,
+	};
+
 	return (
 		<header
 			className="sticky-top bg-white mb-4 p-3 rounded"

@@ -19,7 +19,6 @@ const taskSchema = new mongoose.Schema({
 
 const folderSchema = new mongoose.Schema({
 	folderName: { type: String, trim: true, required: true },
-	description: { type: String, trim: true },
 	tasks: [taskSchema],
 	ordering: { type: Number, trim: true },
 	created: { type: Date, trim: true, default: Date.now },

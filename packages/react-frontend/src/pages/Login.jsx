@@ -7,6 +7,10 @@ import AuthPageWrapper from '../components/AuthPageWrapper';
 import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
 const Login = ({ updateUser }) => {
+	Login.propTypes = {
+		updateUser: PropTypes.func.isRequired,
+	};
+
 	const navigate = useNavigate();
 	const { showBanner, bannerState } = useBanner();
 
@@ -96,10 +100,6 @@ const Login = ({ updateUser }) => {
 			/>
 		</AuthPageWrapper>
 	);
-};
-
-Login.propTypes = {
-	updateUser: PropTypes.func.isRequired,
 };
 
 export default Login;

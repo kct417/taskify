@@ -6,6 +6,10 @@ import useBanner from '../hooks/UseBanner';
 import { TASKIFY_THEME_COLOR, API_PREFIX } from '../constants';
 
 const Register = ({ updateUser }) => {
+	Register.propTypes = {
+		updateUser: PropTypes.func.isRequired,
+	};
+
 	const navigate = useNavigate();
 	const { showBanner, bannerState } = useBanner();
 
@@ -109,10 +113,6 @@ const Register = ({ updateUser }) => {
 			/>
 		</AuthPageWrapper>
 	);
-};
-
-Register.propTypes = {
-	updateUser: PropTypes.func.isRequired,
 };
 
 export default Register;

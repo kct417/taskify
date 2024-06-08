@@ -41,7 +41,16 @@ const styles = {
 };
 
 const MenuPopup = ({ onButtonClick }) => {
+	MenuPopup.propTypes = {
+		onButtonClick: PropTypes.func.isRequired,
+	};
+
 	const MenuButton = ({ children, onClick }) => {
+		MenuButton.propTypes = {
+			children: PropTypes.node.isRequired,
+			onClick: PropTypes.func.isRequired,
+		};
+
 		const [isHovering, setIsHovering] = useState(false);
 		return (
 			<button
@@ -72,10 +81,6 @@ const MenuPopup = ({ onButtonClick }) => {
 			<MenuButton onClick={() => onButtonClick('Exit')}>Exit</MenuButton>
 		</div>
 	);
-};
-
-MenuPopup.propTypes = {
-	onButtonClick: PropTypes.func.isRequired,
 };
 
 export default MenuPopup;

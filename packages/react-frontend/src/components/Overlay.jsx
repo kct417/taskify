@@ -14,6 +14,19 @@ const Overlay = ({
 	onAddDivider, // Function to handle adding a divider
 	onAddTask, // Function to handle adding a task
 }) => {
+	// Define prop types for the Overlay component
+	Overlay.propTypes = {
+		user: PropTypes.object.isRequired, // User object is required
+		show: PropTypes.bool.isRequired, // Show boolean is required
+		context: PropTypes.object.isRequired, // Context object is required
+		fields: PropTypes.arrayOf(PropTypes.object).isRequired, // Fields array is required
+		buttons: PropTypes.arrayOf(PropTypes.object).isRequired, // Buttons array is required
+		handleClose: PropTypes.func.isRequired, // Handle close function is required
+		onAddFolder: PropTypes.func.isRequired, // On add folder function is required
+		onAddDivider: PropTypes.func.isRequired, // On add divider function is required
+		onAddTask: PropTypes.func.isRequired, // On add task function is required
+	};
+
 	// State to manage form field values
 	const [formFields, setFormFields] = useState({});
 	// State to manage the selected divider
@@ -202,19 +215,6 @@ const Overlay = ({
 			</div>
 		</div>
 	);
-};
-
-// Define prop types for the Overlay component
-Overlay.propTypes = {
-	user: PropTypes.object.isRequired, // User object is required
-	show: PropTypes.bool.isRequired, // Show boolean is required
-	context: PropTypes.object.isRequired, // Context object is required
-	fields: PropTypes.arrayOf(PropTypes.object).isRequired, // Fields array is required
-	buttons: PropTypes.arrayOf(PropTypes.object).isRequired, // Buttons array is required
-	handleClose: PropTypes.func.isRequired, // Handle close function is required
-	onAddFolder: PropTypes.func.isRequired, // On add folder function is required
-	onAddDivider: PropTypes.func.isRequired, // On add divider function is required
-	onAddTask: PropTypes.func.isRequired, // On add task function is required
 };
 
 export default Overlay;

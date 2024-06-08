@@ -13,6 +13,14 @@ const FolderList = ({
 	dividerName,
 	folderName,
 }) => {
+	FolderList.propTypes = {
+		user: PropTypes.object.isRequired,
+		updateUser: PropTypes.func.isRequired,
+		showBanner: PropTypes.func.isRequired,
+		dividerName: PropTypes.string,
+		folderName: PropTypes.string,
+	};
+
 	const navigate = useNavigate();
 	const [tasks, setTasks] = useState([]);
 
@@ -32,6 +40,8 @@ const FolderList = ({
 			const folder = divider.folders.find(
 				(folder) => folder.folderName === folderName,
 			);
+
+			// fixes bug where the folder does not exist on drag and drop
 			if (folder) {
 				setTasks(folder.tasks);
 			}
@@ -96,11 +106,13 @@ const FolderList = ({
 	);
 
 	const ListWrapper = ({ children }) => {
+		ListWrapper.propTypes = {
+			children: PropTypes.node,
+		};
+
 		return (
 			<div className="col-12 mb-4">
-				<section className="p-3 bg-white rounded">
-					{...children}
-				</section>
+				<section className="p-3 bg-white rounded">{children}</section>
 			</div>
 		);
 	};
@@ -155,14 +167,6 @@ const FolderList = ({
 			</main>
 		</div>
 	);
-};
-
-FolderList.propTypes = {
-	user: PropTypes.object.isRequired,
-	updateUser: PropTypes.func.isRequired,
-	showBanner: PropTypes.func.isRequired,
-	dividerName: PropTypes.string,
-	folderName: PropTypes.string,
 };
 
 export default FolderList;

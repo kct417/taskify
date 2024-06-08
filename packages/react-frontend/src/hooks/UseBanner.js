@@ -2,7 +2,11 @@ import { useState } from 'react';
 
 function useBanner() {
 	const [isShowing, setShowing] = useState(false);
-	const [content, setContent] = useState({});
+	const [content, setContent] = useState({
+		boldMessage: '',
+		message: '',
+		type: '',
+	});
 
 	function showBanner(boldMessage, message, type) {
 		setContent({
