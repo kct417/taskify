@@ -18,6 +18,7 @@ export const registerUser = async (req, res) => {
 			return res.status(409).send('Username already taken');
 		}
 
+		// hash password and generate token
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(password, salt);
 		const token = await generateAccessToken(username);
@@ -63,6 +64,7 @@ export const loginUser = async (req, res) => {
 				.send('Unauthorized: Invalid username or password');
 		}
 
+		// compare hashed password with input password
 		const matched = await bcrypt.compare(password, user.hashedPassword);
 		if (matched) {
 			const token = await generateAccessToken(username);
@@ -92,6 +94,7 @@ export const authenticateUser = (req, res, next) => {
 		console.log('No token received');
 		res.status(401).end();
 	} else {
+		// verify token and add username to request body
 		jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
 			if (decoded) {
 				req.body['username'] = decoded.username;

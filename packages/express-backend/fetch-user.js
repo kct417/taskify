@@ -134,45 +134,6 @@ export const setTask = (req, res) => {
 		});
 };
 
-export const getStreakCount = (req, res) => {
-	const { username } = req.params;
-	// sends user dividers to frontend if successful
-	findUser(username)
-		.then((result) => {
-			if (result) {
-				res.status(200).send({ streakCount: result.streakCount });
-			} else {
-				res.status(404).send('User not found.');
-			}
-		})
-		.catch((error) => {
-			console.log(error);
-			res.status(500).send(error);
-		});
-};
-
-// export const setFolderOrder = (req, res) => {
-// 	const { username, dividerName } = req.params;
-// 	const { folder, newIndex } = req.body;
-// 	updateFolderOrder(username, dividerName, folder, newIndex)
-// 		.then((result) => res.status(200).send(result.dividers))
-// 		.catch((error) => {
-// 			console.log(error);
-// 			res.status(500).send(error);
-// 		});
-// };
-
-// export const setTaskOrder = (req, res) => {
-// 	const { username, dividerName, folderName } = req.params;
-// 	const { task, newIndex } = req.body;
-// 	updateTaskOrder(username, dividerName, folderName, task, newIndex)
-// 		.then((result) => res.status(200).send(result.dividers))
-// 		.catch((error) => {
-// 			console.log(error);
-// 			res.status(500).send(error);
-// 		});
-// };
-
 export default {
 	getDividers,
 	createDivider,

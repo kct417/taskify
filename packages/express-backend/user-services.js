@@ -15,6 +15,7 @@ export const findUser = (username) => {
 // should check for existing user and divider
 export const updateDividers = async (username, divider, updateType) => {
 	try {
+		// check for environment prerequisites
 		const user = await findUser(username);
 		if (!user) {
 			throw new Error(`User '${username}' not found`);
@@ -24,6 +25,7 @@ export const updateDividers = async (username, divider, updateType) => {
 		let arrayFilters = [];
 		let existingDivider;
 		switch (updateType) {
+			// calls mongoose set method filtering by divider id
 			case 'set':
 				existingDivider = user.dividers.find((d) =>
 					d._id.equals(divider._id),
@@ -40,6 +42,7 @@ export const updateDividers = async (username, divider, updateType) => {
 
 				arrayFilters.push({ 'divider._id': divider._id });
 				break;
+			// calls mongoose push method filtering by divider name
 			case 'push':
 				if (
 					user.dividers.some(
@@ -53,6 +56,7 @@ export const updateDividers = async (username, divider, updateType) => {
 
 				updateOperation = { $push: { dividers: divider } };
 				break;
+			// calls mongoose pull method filtering by divider id
 			case 'pull':
 				existingDivider = user.dividers.find((d) =>
 					d._id.equals(divider._id),
@@ -94,6 +98,7 @@ export const updateFolders = async (
 	updateType,
 ) => {
 	try {
+		// check for environment prerequisites
 		const user = await findUser(username);
 		if (!user) {
 			throw new Error(`User '${username}' not found`);
@@ -110,6 +115,7 @@ export const updateFolders = async (
 		let arrayFilters = [{ 'divider.dividerName': dividerName }];
 		let existingFolder;
 		switch (updateType) {
+			// calls mongoose set method filtering by folder id
 			case 'set':
 				existingFolder = divider.folders.find((f) =>
 					f._id.equals(folder._id),
@@ -124,6 +130,7 @@ export const updateFolders = async (
 
 				arrayFilters.push({ 'folder._id': folder._id });
 				break;
+			// calls mongoose push method filtering by folder name
 			case 'push':
 				if (
 					divider.folders.some(
@@ -139,6 +146,7 @@ export const updateFolders = async (
 					$push: { 'dividers.$[divider].folders': folder },
 				};
 				break;
+			// calls mongoose pull method filtering by folder id
 			case 'pull':
 				existingFolder = divider.folders.find((f) =>
 					f._id.equals(folder._id),
@@ -183,6 +191,7 @@ export const updateTasks = async (
 	updateType,
 ) => {
 	try {
+		// check for environment prerequisites
 		const user = await findUser(username);
 		if (!user) {
 			throw new Error(`User '${username}' not found`);
@@ -207,6 +216,7 @@ export const updateTasks = async (
 		];
 		let existingTask;
 		switch (updateType) {
+			// calls mongoose set method filtering by task id
 			case 'set':
 				existingTask = folder.tasks.find((t) => t._id.equals(task._id));
 				if (!existingTask) {
@@ -222,6 +232,7 @@ export const updateTasks = async (
 
 				arrayFilters.push({ 'task._id': task._id });
 				break;
+			// calls mongoose push method filtering by task name
 			case 'push':
 				if (folder.tasks.some((t) => t.taskName === task.taskName)) {
 					throw new Error(`Task ${task.taskName} already exists`);
@@ -233,6 +244,7 @@ export const updateTasks = async (
 					},
 				};
 				break;
+			// calls mongoose pull method filtering by task id
 			case 'pull':
 				existingTask = folder.tasks.find((t) => t._id.equals(task._id));
 				if (!existingTask) {
@@ -269,96 +281,3 @@ export const updateTasks = async (
 		return null;
 	}
 };
-
-// export const updateFolderOrder = async (
-// 	username,
-// 	dividerName,
-// 	folder,
-// 	newIndex,
-// ) => {
-// 	try {
-// 		const user = await findUser(username);
-// 		if (!user) {
-// 			throw new Error(`User '${username}' not found`);
-// 		}
-
-// 		const divider = user.dividers.find(
-// 			(d) => d.dividerName === dividerName,
-// 		);
-// 		if (!divider) {
-// 			throw new Error(`Divider '${dividerName}' not found`);
-// 		}
-
-// 		const folderIndex = divider.folders.findIndex((f) =>
-// 			f._id.equals(folder._id),
-// 		);
-// 		if (folderIndex === -1) {
-// 			throw new Error(`Folder ${folder.folderName} not found`);
-// 		}
-
-// 		const updatedDivider = divider.folders
-// 			.splice(folderIndex, 1)
-// 			.splice(newIndex, 0, folder);
-// 		updatedDivider['_id'] = divider._id;
-
-// 		const updatedUser = await updateDividers(
-// 			username,
-// 			updatedDivider,
-// 			'set',
-// 		);
-
-// 		return updatedUser;
-// 	} catch (err) {
-// 		console.error(err);
-// 		return null;
-// 	}
-// };
-
-// export const updateTaskOrder = async (
-// 	username,
-// 	dividerName,
-// 	folderName,
-// 	task,
-// 	newIndex,
-// ) => {
-// 	try {
-// 		const user = await findUser(username);
-// 		if (!user) {
-// 			throw new Error(`User '${username}' not found`);
-// 		}
-
-// 		const divider = user.dividers.find(
-// 			(d) => d.dividerName === dividerName,
-// 		);
-// 		if (!divider) {
-// 			throw new Error(`Divider '${dividerName}' not found`);
-// 		}
-
-// 		const folder = divider.folders.find((f) => f.folderName === folderName);
-// 		if (!folder) {
-// 			throw new Error(`Folder '${folderName}' not found`);
-// 		}
-
-// 		const taskIndex = folder.tasks.findIndex((t) => t._id.equals(task._id));
-// 		if (taskIndex === -1) {
-// 			throw new Error(`Task ${task.taskName} not found`);
-// 		}
-
-// 		const updatedFolder = folder.tasks
-// 			.splice(taskIndex, 1)
-// 			.splice(newIndex, 0, task);
-// 		updatedFolder['_id'] = folder._id;
-
-// 		const updatedUser = await updateFolders(
-// 			username,
-// 			dividerName,
-// 			updatedFolder,
-// 			'set',
-// 		);
-
-// 		return updatedUser;
-// 	} catch (err) {
-// 		console.error(err);
-// 		return null;
-// 	}
-// };
