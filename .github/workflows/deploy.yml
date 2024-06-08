@@ -62,3 +62,4 @@ jobs:
             - run: flyctl deploy --remote-only -a ${{ secrets.FLY_APP_NAME }}
               env:
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+              working-directory: ./packages/express-backend
